@@ -14,6 +14,7 @@ namespace ConsoleServer
             ServiceHost host = new ServiceHost(typeof(ShareWare.ServiceLibrary.ShareService));
             host.Open();
             Console.ReadKey();
+
         }
     }
 }
