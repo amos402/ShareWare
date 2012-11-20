@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -13,8 +15,9 @@ using System.Text;
 namespace ShareWare.ServiceLibrary
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
-   // [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
+    // [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
+    //[ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class ShareService : IShareService
     {
 
@@ -88,6 +91,16 @@ namespace ShareWare.ServiceLibrary
             return true;
         }
 
+        private string GetClientIp()
+        {
+            //提供方法执行的上下文环境
+            OperationContext context = OperationContext.Current;
+            //获取传进的消息属性
+            MessageProperties properties = context.IncomingMessageProperties;
+            //获取消息发送的远程终结点IP和端口
+            RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+            return endpoint.Address;
+        }
 
         public int Login(string userName, string passWord)
         {
@@ -96,13 +109,8 @@ namespace ShareWare.ServiceLibrary
                        select c;
             if (user.Count() == 1)
             {
-                //提供方法执行的上下文环境
-                OperationContext context = OperationContext.Current;
-                //获取传进的消息属性
-                MessageProperties properties = context.IncomingMessageProperties;
-                //获取消息发送的远程终结点IP和端口
-                RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-                user.First().UserIP = endpoint.Address;
+
+                user.First().UserIP = GetClientIp();
 
 
                 var client = OperationContext.Current.GetCallbackChannel<IClient>();
@@ -121,36 +129,146 @@ namespace ShareWare.ServiceLibrary
 
         public int UploadShareInfo(List<ShareFile.FileInfoTransfer> fileList, int userId)
         {
+
+            DataTable dt1 = new DataTable();
+            dt1.Columns.AddRange(new DataColumn[]{
+                new DataColumn("Hash",typeof(string)),  
+                new DataColumn("Name",typeof(string)),  
+                new DataColumn("Size",typeof(long))});
+
+
+            DataTable dt2 = new DataTable();
+            dt2.Columns.AddRange(new DataColumn[]{
+                new DataColumn("ID", typeof(int)) { AutoIncrement = true},
+                new DataColumn("UserID",typeof(int)),
+                new DataColumn("Name",typeof(string)),
+                new DataColumn("Hash",typeof(string)) {AllowDBNull = true}
+            });
+
+
+            foreach (var item in fileList)
+            {
+                DataRow r1 = dt1.NewRow();
+                r1[0] = item.Hash;
+                r1[1] = item.Name;
+                r1[2] = item.Size;
+                dt1.Rows.Add(r1);
+
+                DataRow r2 = dt2.NewRow();
+                r2[1] = userId;
+                r2[2] = item.Name;
+                r2[3] = item.Hash;
+                dt2.Rows.Add(r2);
+
+            }
+
+            var conn = _context.Database.Connection;
+            conn.Open();
+            SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)_context.Database.Connection);
             try
             {
 
-                foreach (var item in fileList)
-                {
-                    var info = from c in _context.FileInfo.Local where (c.Hash == item.Hash) select c;
+                bulkCopy.DestinationTableName = "FileInfo";
+                bulkCopy.BatchSize = dt1.Rows.Count;
 
-                    if (info.Count() == 0)
-                    {
-                        _context.FileInfo.Add(new ShareWare.FileInfo() { Hash = item.Hash, Name = item.Name, Size = (int)item.Size });
-
-                    }
-                    _context.FileOwner.Add(new FileOwner() { Hash = item.Hash, UserID = userId, Name = item.Name });
-
-                }
+                bulkCopy.WriteToServer(dt1);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.InnerException.Message);
+
+                // Console.WriteLine(e.Message);
             }
+
+
+            try
+            {
+                bulkCopy.DestinationTableName = "FileOwner";
+                bulkCopy.BatchSize = dt2.Rows.Count;
+
+                bulkCopy.WriteToServer(dt2);
+
+            }
+            catch (Exception e)
+            {
+
+                //Console.WriteLine(e.Message);
+            }
+            conn.Close();
+
+
+            #region MyRegion
+            //try
+            //{
+
+            //    foreach (var item in fileList)
+            //    {
+            //        var info = from c in _context.FileInfo.Local where (c.Hash == item.Hash) select c;
+
+            //        if (info.Count() == 0)
+            //        {
+            //            _context.FileInfo.Local.Add(new ShareWare.FileInfo() { Hash = item.Hash, Name = item.Name, Size = (int)item.Size });
+
+            //        }
+
+            //        var info1 = from c in _context.FileOwner.Local where (c.Hash == item.Hash && c.Name == item.Name) select c;
+            //        if (info1.Count() == 0)
+            //        {
+            //            _context.FileOwner.Local.Add(new FileOwner() { Hash = item.Hash, UserID = userId, Name = item.Name });
+            //        }
+
+
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.InnerException.Message);
+            //}
+
+            //try
+            //{
+            //    _context.SaveChanges();
+            //}
+            //catch (Exception e)
+            //{
+
+            //    Console.WriteLine(e.InnerException.Message);
+            //}
+
+            #endregion
             return 0;
         }
 
 
-        public void SearchFile(string fileName)
+        public List<FileOwner> SearchFile(string fileName)
         {
-            var result = from c in _context.FileOwner.Local where (c.Name.Contains(fileName)) select c;
+            var result = from c in _context.FileOwner where (c.Name.Contains(fileName)) select c;
             var list = result.ToList();
-            
+            var newList = new List<FileOwner>();
+            foreach (var item in list)
+            {
+                newList.Add(new FileOwner(){
+                    ID = item.ID,
+                    UserID = item.UserID,
+                    Hash = item.Hash,
+                     Name = item.Name
+                });
+            }
 
+            return newList;
+
+        }
+
+
+        public void DownloadRequest(FileOwner fileOnwer, int nPort)
+        {
+            var users = from c in _context.Users
+                        where (fileOnwer.UserID == c.UserID)
+                        select c;
+            string ip = GetClientIp();
+            foreach (var item in users)
+            {
+                _userDict[item].DownloadPerformance(fileOnwer.Hash, ip, nPort);
+            }
         }
     }
 }

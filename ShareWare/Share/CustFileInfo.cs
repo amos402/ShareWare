@@ -13,5 +13,10 @@ namespace ShareWare.ShareFile
        
         public FileInfo File { get; set; }
         public string Hash { get; set; }
+
+        public override string ToString()
+        {
+            return File.FullName;
+        }
     }
 }

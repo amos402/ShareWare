@@ -19,7 +19,7 @@ namespace ConsoleApplication1
             set { _userId = value; }
         }
 
-        public ShareWareClient(ref ShareServiceClient client)
+        public ShareWareClient(ShareServiceClient client)
         {
             _client = client;
         }
@@ -36,17 +36,8 @@ namespace ConsoleApplication1
             return false;
         }
 
-        public void UploadFileInfo()
+        public void UploadFileInfo(List<FileInfoTransfer> fileList)
         {
-            ShareFiles sh = new ShareFiles();
-            List<ShareWare.ShareFile.FileInfoTransfer> fileList = new List<ShareWare.ShareFile.FileInfoTransfer>();
-            foreach (var item in sh.ShareFileDict)
-            {
-                foreach (var item1 in item.Value)
-                {
-                    fileList.Add(new ShareWare.ShareFile.FileInfoTransfer() { Name = item1.File.Name, Hash = item1.Hash, Size = item1.File.Length });
-                }
-            }
 
             _client.UploadShareInfo(fileList, _userId);
 

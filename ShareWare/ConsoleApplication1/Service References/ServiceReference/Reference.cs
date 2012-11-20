@@ -115,17 +115,23 @@ namespace ConsoleApplication1.ServiceReference {
         System.Threading.Tasks.Task<int> UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        void SearchFile(string fileName);
+        System.Collections.Generic.List<ShareWare.FileOwner> SearchFile(string fileName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        System.Threading.Tasks.Task SearchFileAsync(string fileName);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileOwner>> SearchFileAsync(string fileName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
+        void DownloadRequest(ShareWare.FileOwner fileOnwer, int nPort);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
+        System.Threading.Tasks.Task DownloadRequestAsync(ShareWare.FileOwner fileOnwer, int nPort);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IShareServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/GetFilePath")]
-        void GetFilePath();
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/DownloadPerformance")]
+        void DownloadPerformance(string szHash, string szIp, int nPort);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -204,12 +210,20 @@ namespace ConsoleApplication1.ServiceReference {
             return base.Channel.UploadShareInfoAsync(fileList, userId);
         }
         
-        public void SearchFile(string fileName) {
-            base.Channel.SearchFile(fileName);
+        public System.Collections.Generic.List<ShareWare.FileOwner> SearchFile(string fileName) {
+            return base.Channel.SearchFile(fileName);
         }
         
-        public System.Threading.Tasks.Task SearchFileAsync(string fileName) {
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileOwner>> SearchFileAsync(string fileName) {
             return base.Channel.SearchFileAsync(fileName);
+        }
+        
+        public void DownloadRequest(ShareWare.FileOwner fileOnwer, int nPort) {
+            base.Channel.DownloadRequest(fileOnwer, nPort);
+        }
+        
+        public System.Threading.Tasks.Task DownloadRequestAsync(ShareWare.FileOwner fileOnwer, int nPort) {
+            return base.Channel.DownloadRequestAsync(fileOnwer, nPort);
         }
     }
 }

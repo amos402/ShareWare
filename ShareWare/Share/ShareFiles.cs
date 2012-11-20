@@ -47,7 +47,7 @@ namespace ShareWare.ShareFile
         public ShareFiles()
         {
             GetSharePath();
-            ListFile();
+            //ListFile();
 
         }
 
@@ -65,7 +65,7 @@ namespace ShareWare.ShareFile
                     {
                         if (name != "R")
                         {
-                            continue;
+                            //continue;
                         }
 
                         DirectoryInfo source = new DirectoryInfo(path);
@@ -87,6 +87,11 @@ namespace ShareWare.ShareFile
             }
         }
 
+        public void AddSharePath(string name, string path)
+        {
+            _shareName.Add(name, path);
+        }
+
         bool GetAll(DirectoryInfo dir, ref List<CustFileInfo> FileList)//搜索文件夹中的文件
         {
 
@@ -98,12 +103,12 @@ namespace ShareWare.ShareFile
                 string hash = "";
                 try
                 {
-                    hash = HashHelper.ComputeSHA1(path);
+                    //hash = HashHelper.ComputeSHA1(path);
+                    hash = Guid.NewGuid().ToString();
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    // hash = "";
                 }
 
 
@@ -118,7 +123,9 @@ namespace ShareWare.ShareFile
             return true;
         }
 
-        private void ListFile()
+        
+
+        public void ListFile()
         {
             foreach (KeyValuePair<string, string> item in _shareName)
             {
@@ -129,7 +136,15 @@ namespace ShareWare.ShareFile
                     GetAll(dirInfo, ref Flst);
 
                     //_fileList.Add(Flst);
-                    _shareFileDict.Add(_shareName, Flst);
+                    if (_shareFileDict.ContainsKey(_shareName))
+                    {
+                        _shareFileDict[_shareName].AddRange(Flst);
+                    }
+                    else
+                    {
+                        _shareFileDict.Add(_shareName, Flst);
+                    }
+                   
                     //openWith.Add(item, Flst);
 
 

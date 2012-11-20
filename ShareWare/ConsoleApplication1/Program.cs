@@ -15,7 +15,7 @@ namespace ConsoleApplication1
 {
     class Program
     {
-       public static ShareWareEntities _context = new ShareWareEntities();
+        public static ShareWareEntities _context = new ShareWareEntities();
         public static int Login(string userName, string passWord)
         {
             var user = from c in _context.Users
@@ -35,105 +35,135 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
 
-/*
-            #region MyRegion
-            int nId = Login("Amos", "asd");
+            /*
+                        #region MyRegion
+                        int nId = Login("Amos", "asd");
 
-            ShareFiles sh = new ShareFiles();
+                        ShareFiles sh = new ShareFiles();
 
-            try
-            {
-                foreach (var item in sh.ShareFileDict)
-                {
-                    foreach (var item1 in item.Value)
-                    {
-                        var info = from c in _context.FileInfo.Local where (c.Hash == item1.Hash) select c;
-
-                        if (info.Count() == 0)
+                        try
                         {
-                            _context.FileInfo.Add(new ShareWare.FileInfo() { Hash = item1.Hash, Name = item1.File.Name, Size = (int)item1.File.Length });
+                            foreach (var item in sh.ShareFileDict)
+                            {
+                                foreach (var item1 in item.Value)
+                                {
+                                    var info = from c in _context.FileInfo.Local where (c.Hash == item1.Hash) select c;
 
+                                    if (info.Count() == 0)
+                                    {
+                                        _context.FileInfo.Add(new ShareWare.FileInfo() { Hash = item1.Hash, Name = item1.File.Name, Size = (int)item1.File.Length });
+
+                                    }
+                                    _context.FileOwner.Add(new FileOwner() { Hash = item1.Hash, UserID = 1, Name = item1.File.Name });
+
+                                }
+
+                            }
+
+                            _context.SaveChanges();
                         }
-                        _context.FileOwner.Add(new FileOwner() { Hash = item1.Hash, UserID = 1, Name = item1.File.Name });
-
-                    }
-
-                }
-
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException.Message);
-            }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.InnerException.Message);
+                        }
 
 
-            List<CustFileInfo> list = sh.SearchFile("asdasdasdasd");
-            FileStream stream = new FileStream(@"R:\person.dat", FileMode.OpenOrCreate);
-            BinaryFormatter bFormat = new BinaryFormatter();
+                        List<CustFileInfo> list = sh.SearchFile("asdasdasdasd");
+                        FileStream stream = new FileStream(@"R:\person.dat", FileMode.OpenOrCreate);
+                        BinaryFormatter bFormat = new BinaryFormatter();
 
 
 
 
-            bFormat.Serialize(stream, sh);
-            stream.Close();
+                        bFormat.Serialize(stream, sh);
+                        stream.Close();
 
 
-            FileStream inStream = new FileStream(@"R:\person.dat", FileMode.Open);
-            var table = bFormat.Deserialize(inStream);
-            //table.GetType()
-            Type type = table.GetType(); 
-            #endregion
-           */
+                        FileStream inStream = new FileStream(@"R:\person.dat", FileMode.Open);
+                        var table = bFormat.Deserialize(inStream);
+                        //table.GetType()
+                        Type type = table.GetType(); 
+                        #endregion
+                       */
+
+            //Thread.Sleep(1000);
+
+            //CallBack callBack = new CallBack();
+            //ShareServiceClient client = new ShareServiceClient(new InstanceContext(callBack));
+
+
+
+            //    var state = client.State;
+            //    //int nId1 = client.Login("Amos", "asd");
+            //    CompositeType type = new CompositeType();
+            //    type.BoolValue = true;
+            //    type.StringValue = "dadmamsdasmdasda";
+
+            //   // CompositeType shit = client.GetDataUsingDataContract(type);
+
+            //    ShareWareClient swc = new ShareWareClient(ref client);
+            //    bool done = swc.Login("Amos", "asd");
+            //    swc.UploadFileInfo();
+
+            //    //ShareFiles sh = new ShareFiles();
+            //    //List<ShareWare.ShareFile.FileInfoTransfer> fileList = new List<ShareWare.ShareFile.FileInfoTransfer>();
+            //    //foreach (var item in sh.ShareFileDict)
+            //    //{
+            //    //    foreach (var item1 in item.Value)
+            //    //    {
+            //    //        fileList.Add(new ShareWare.ShareFile.FileInfoTransfer() { Name = item1.File.Name, Hash = item1.Hash, Size = item1.File.Length});
+            //    //    }
+            //    //}
+
+            //    //swc.UploadFileInfo();
+            //    //Thread.Sleep(60000);
+            //    swc.SearchFile("person");
+            //    Console.WriteLine("Done");
+
 
             Thread.Sleep(1000);
 
+            //FileStream stream = new FileStream(@"R:\data.damn", FileMode.Open);
+            //BinaryFormatter bFormat = new BinaryFormatter();
+
+            //var fileList = (List<FileInfoTransfer>)bFormat.Deserialize(stream);
+
             CallBack callBack = new CallBack();
             ShareServiceClient client = new ShareServiceClient(new InstanceContext(callBack));
+            //ShareWareClient swc = new ShareWareClient(client);
+            //bool done = swc.Login("Amos", "asd");
+            //swc.UploadFileInfo(fileList);
+            //swc.SearchFile("[dmhy][Phi.Brain][07][720p_mkv][jp_cn]");
             
 
+            int id = client.Login("Amos", "asd");
 
-                var state = client.State;
-                //int nId1 = client.Login("Amos", "asd");
-                CompositeType type = new CompositeType();
-                type.BoolValue = true;
-                type.StringValue = "dadmamsdasmdasda";
+            Console.WriteLine("Lonin ID : {0}", id);
+            Console.WriteLine("Searching : [TSDM字幕组][自新世界][Shinsekai_Yori][06][BIG5]");
 
-               // CompositeType shit = client.GetDataUsingDataContract(type);
+            //client.UploadShareInfo(fileList, id);
+            var file = client.SearchFile(
+                "[TSDM字幕组][自新世界][Shinsekai_Yori][06][BIG5][480P][PC&amp;PSP][MP4]");
+           
 
-                ShareWareClient swc = new ShareWareClient(ref client);
-                bool done = swc.Login("Amos", "asd");
-                swc.UploadFileInfo();
+            client.DownloadRequest(file[0], 5000);
+           
+            Console.ReadLine();
 
-                //ShareFiles sh = new ShareFiles();
-                //List<ShareWare.ShareFile.FileInfoTransfer> fileList = new List<ShareWare.ShareFile.FileInfoTransfer>();
-                //foreach (var item in sh.ShareFileDict)
-                //{
-                //    foreach (var item1 in item.Value)
-                //    {
-                //        fileList.Add(new ShareWare.ShareFile.FileInfoTransfer() { Name = item1.File.Name, Hash = item1.Hash, Size = item1.File.Length});
-                //    }
-                //}
-
-                //swc.UploadFileInfo();
-                //Thread.Sleep(60000);
-                swc.SearchFile("person");
-                Console.WriteLine("Done");
-                Console.ReadLine();
-            
 
         }
     }
 
-        
+
 
     public class CallBack : IShareServiceCallback
     {
 
-        public void GetFilePath()
+
+        public void DownloadPerformance(string szHash, string szIp, int nPort)
         {
-            
-            throw new NotImplementedException();
+            Console.WriteLine("send to {0} {1} {2}", szHash, szIp, nPort);
+            //throw new NotImplementedException();
         }
     }
 

@@ -15,6 +15,7 @@ namespace ConsoleServer
             host.Open();
             Console.ReadKey();
 
+            Console.WriteLine();
         }
     }
 }

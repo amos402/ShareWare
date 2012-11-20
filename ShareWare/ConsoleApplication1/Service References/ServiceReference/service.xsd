@@ -96,12 +96,31 @@
   </xs:element>
   <xs:element name="SearchFileResponse">
     <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="SearchFileResult" nillable="true" type="q5:ArrayOfFileOwner" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="fileOnwer" nillable="true" type="q6:FileOwner" />
+        <xs:element minOccurs="0" name="nPort" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadRequestResponse">
+    <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFilePath">
+  <xs:element name="DownloadPerformance">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="szHash" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="szIp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nPort" type="xs:int" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

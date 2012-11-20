@@ -32,17 +32,15 @@ namespace ShareWare.ServiceLibrary
         [OperationContract]
         int UploadShareInfo(List<FileInfoTransfer> fileList, int userId);
 
-        [OperationContract(IsOneWay = false)]
-        void SearchFile(string fileName);
+        [OperationContract]
+        List<FileOwner> SearchFile(string fileName);
+
+        [OperationContract]
+        void DownloadRequest(FileOwner fileOnwer, int nPort);
 
     }
 
 
-    public interface IClient
-    {
-        [OperationContract(IsOneWay = true)]
-        void GetFilePath();
-    }
     // 使用下面示例中说明的数据约定将复合类型添加到服务操作。
     // 可以将 XSD 文件添加到项目中。在生成项目后，可以通过命名空间“ShareWareServiceLibrary.ContractType”直接使用其中定义的数据类型。
     [DataContract]
