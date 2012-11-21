@@ -20,6 +20,39 @@ namespace ShareWare.ServiceLibrary
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class ShareService : IShareService
     {
+        public ShareService()
+        {
+            OperationContext.Current.Channel.Closing += Channel_Closing;
+        }
+
+        private void Channel_Closing(object sender, EventArgs e)
+        {
+            ClientEventArgs eventArgs = e as ClientEventArgs;
+            if (eventArgs != null)
+            {
+
+            }
+
+            var client = sender as IClient;
+            if (client != null)
+            {
+                //var result = from c in _userDict
+                //             where (c.Value == client)
+                //             select c.Key;
+                try
+                {
+                    var keyPair = _userDict.Single(item => (item.Value == client));
+                    _userDict.Remove(keyPair.Key);
+
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex);
+                }
+            }
+
+        }
 
         UserDAL user = new UserDAL();
         //string m_cnStr = ConfigurationManager.ConnectionStrings["ShareWareSqlProvider"].ConnectionString;
@@ -104,26 +137,38 @@ namespace ShareWare.ServiceLibrary
 
         public int Login(string userName, string passWord)
         {
-            var user = from c in _context.Users
-                       where (c.UserName == userName && c.Password == passWord)
-                       select c;
-            if (user.Count() == 1)
+            //var user = from c in _context.Users
+            //           where (c.UserName == userName && c.Password == passWord)
+            //           select c;
+            Users user = null;
+            try
+            {
+                user = _context.Users.Single(us => us.UserName == userName && us.Password == passWord);
+            }
+            catch (InvalidOperationException)
             {
 
-                user.First().UserIP = GetClientIp();
-
-
-                var client = OperationContext.Current.GetCallbackChannel<IClient>();
-                ClientCallbackList.Add(client);
-
-                _userDict.Add(user.First(), client);
-
-                _userList.Add(user.First());
-
-                return user.First().UserID;
+                return -1;
             }
 
-            return -1;
+            user.UserIP = GetClientIp();
+            var client = OperationContext.Current.GetCallbackChannel<IClient>();
+            ClientCallbackList.Add(client);
+
+            try
+            {
+                _userDict.Add(user, client);
+            }
+            catch (ArgumentException)
+            {
+                if (_userDict.ContainsKey(user))
+                {
+                    Channel_Closing(_userDict[user], new ClientEventArgs() { Message = "You have lonin at another location."});
+                    _userDict[user] = client;
+                }
+            }
+
+            return user.UserID;
 
         }
 
@@ -246,11 +291,12 @@ namespace ShareWare.ServiceLibrary
             var newList = new List<FileOwner>();
             foreach (var item in list)
             {
-                newList.Add(new FileOwner(){
+                newList.Add(new FileOwner()
+                {
                     ID = item.ID,
                     UserID = item.UserID,
                     Hash = item.Hash,
-                     Name = item.Name
+                    Name = item.Name
                 });
             }
 
