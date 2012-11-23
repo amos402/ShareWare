@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Collections;
 using System.Data;
+using System.Diagnostics;
+using System.Threading;
 
 namespace ShareWare.ShareFile
 {
@@ -92,6 +94,19 @@ namespace ShareWare.ShareFile
             _shareName.Add(name, path);
         }
 
+
+        PerformanceCounter _performCounter;
+
+        private void CheckIdle(float percent, int sleepTime)
+        {
+            _performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+
+            while (_performCounter.NextValue() > percent)
+            {
+                Thread.Sleep(sleepTime);
+            }
+        }
+
         bool GetAll(DirectoryInfo dir, ref List<CustFileInfo> FileList)//搜索文件夹中的文件
         {
 
@@ -133,16 +148,18 @@ namespace ShareWare.ShareFile
                 List<CustFileInfo> Flst = new List<CustFileInfo>();
                 try
                 {
-                    GetAll(dirInfo, ref Flst);
-
-                    //_fileList.Add(Flst);
-                    if (_shareFileDict.ContainsKey(_shareName))
+                   
+                    if (GetAll(dirInfo, ref Flst))
                     {
-                        _shareFileDict[_shareName].AddRange(Flst);
-                    }
-                    else
-                    {
-                        _shareFileDict.Add(_shareName, Flst);
+                        //_fileList.Add(Flst);
+                        if (_shareFileDict.ContainsKey(_shareName))
+                        {
+                            _shareFileDict[_shareName].AddRange(Flst);
+                        }
+                        else
+                        {
+                            _shareFileDict.Add(_shareName, Flst);
+                        } 
                     }
                    
                     //openWith.Add(item, Flst);
@@ -152,10 +169,31 @@ namespace ShareWare.ShareFile
                 catch (Exception e)
                 {
                     System.Console.WriteLine("Something wrong {0}", e); //打印异常返回信息
-                    //throw;
+                    
                 }
 
             }
+
+        }
+
+        public void ListFileThread()
+        {
+            PerformanceCounter pc = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+            
+            while (true)
+            {
+                Thread addThread = new Thread(new ThreadStart(ListFile));
+                addThread.IsBackground = true;
+                addThread.Start();
+                
+                Thread.Sleep(1000);
+             
+                
+            }
+
+            //WaitCallback workItem = new WaitCallback(ListFile, );
+           // Task tak = Task.Factory.StartNew(() => ListFile());
+            //tak.AsyncState
 
         }
 
