@@ -26,7 +26,7 @@ namespace ConsoleApplication1
 
         public bool Login(string userName, string passWord)
         {
-            _userId = _client.Login(userName, passWord);
+           // _userId = _client.Login(userName, passWord);
 
             if (_userId != -1)
             {

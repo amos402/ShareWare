@@ -11,19 +11,18 @@ namespace ShareWare
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class FileInfo
     {
         public FileInfo()
         {
             this.FileOwner = new HashSet<FileOwner>();
         }
-
+    
         public string Hash { get; set; }
-        public string Name { get; set; }
         public Nullable<long> Size { get; set; }
         public Nullable<bool> Pass { get; set; }
-
+    
         public virtual ICollection<FileOwner> FileOwner { get; set; }
     }
 }

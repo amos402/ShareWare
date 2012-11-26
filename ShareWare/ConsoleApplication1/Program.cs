@@ -3,34 +3,22 @@ using ShareWare;
 using ShareWare.ShareFile;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ConsoleApplication1
 {
     class Program
     {
-        public static ShareWareEntities _context = new ShareWareEntities();
-        public static int Login(string userName, string passWord)
-        {
-            var user = from c in _context.Users
-                       where (c.UserName == userName && c.Password == passWord)
-                       select c;
-            if (user.Count() == 1)
-            {
-                string asd = user.GetType().ToString();
-                return user.First().UserID;
 
-            }
-
-            return -1;
-
-        }
 
         static void Main(string[] args)
         {
@@ -119,39 +107,73 @@ namespace ConsoleApplication1
             //    //Thread.Sleep(60000);
             //    swc.SearchFile("person");
             //    Console.WriteLine("Done");
+            //string[] hash = HashHelper.ComputeSHA1ByParts(@"R:\temp.torrent");
 
-
+            //int asd = hash[0].Count();
+            //var fileName = @"R:\DataTriggerDemo.rar";
+            //var hash = HashHelper.ComputeMD5(fileName);
+            //var hashList = HashHelper.ComputeSHA1ByParts(fileName, 16);
             Thread.Sleep(1000);
 
-            //FileStream stream = new FileStream(@"R:\data.damn", FileMode.Open);
-            //BinaryFormatter bFormat = new BinaryFormatter();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            ShareFiles sh = new ShareFiles();
 
-            //var fileList = (List<FileInfoTransfer>)bFormat.Deserialize(stream);
+            sh.AddSharePath(@"asd", @"R:\");
+
+            //sh.AddSharePath("asd", @"D:\asd");
+            //sh.OnePathComplete += ((sender, e) => Console.WriteLine("asdasdad"));
+            //sh.OnePathComplete += ((asd, e) => Console.WriteLine(asd));
+            //Thread t = sh.ListFile();
+            //t.Join();
+            sw.Stop();
+
+
+            //sh.Serialize(@"config\known.met");
+
+            //var asd = ShareFiles.Deserialize(@"config\known.met");
 
             CallBack callBack = new CallBack();
             ShareServiceClient client = new ShareServiceClient(new InstanceContext(callBack));
-            //ShareWareClient swc = new ShareWareClient(client);
-            //bool done = swc.Login("Amos", "asd");
-            //swc.UploadFileInfo(fileList);
-            //swc.SearchFile("[dmhy][Phi.Brain][07][720p_mkv][jp_cn]");
-            
 
-            int id = client.Login("Amos", "asd");
+            //bool res = client.Register("shit", "asdd", "asdasd@ad.com");
+            int id = client.Login("Amos", "asd", GetFirstMac());
+
+            sh = ShareFiles.Deserialize(@"R:\shit.damn.fuck");
+
+            client.UploadShareInfo(sh.FileList, id);
 
             Console.WriteLine("Lonin ID : {0}", id);
-            Console.WriteLine("Searching : [TSDM字幕组][自新世界][Shinsekai_Yori][06][BIG5]");
 
             //client.UploadShareInfo(fileList, id);
-            var file = client.SearchFile(
-                "[TSDM字幕组][自新世界][Shinsekai_Yori][06][BIG5][480P][PC&amp;PSP][MP4]");
-           
-
+            Console.ReadKey();
+            var file = client.SearchFile("Data");
+            
+            
             client.DownloadRequest(file[0], 5000);
-           
+
             Console.ReadLine();
 
 
         }
+
+        public static string GetFirstMac()
+        {
+            string mac = null;
+            ManagementObjectSearcher query = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection queryCollection = query.Get();
+            foreach (ManagementObject mo in queryCollection)
+            {
+                if (mo["IPEnabled"].ToString() == "True")
+                {
+                    mac = mo["MacAddress"].ToString();
+                    break;
+                }
+            }
+            return (mac);
+        }
+
+
     }
 
 
@@ -163,7 +185,26 @@ namespace ConsoleApplication1
         public void DownloadPerformance(string szHash, string szIp, int nPort)
         {
             Console.WriteLine("send to {0} {1} {2}", szHash, szIp, nPort);
-            //throw new NotImplementedException();
+        }
+
+
+        public void NewUser(int id, string name)
+        {
+            Console.WriteLine("New user : {0}  {1}", id, name);
+        }
+
+        public void RefreshUserList(List<string> userList)
+        {
+            Console.WriteLine("Online users :");
+            foreach (var item in userList)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        public void UserLeave(string name)
+        {
+            Console.WriteLine("{0} Leave", name);
         }
     }
 

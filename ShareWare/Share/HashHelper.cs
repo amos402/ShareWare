@@ -106,6 +106,7 @@ namespace ShareWare.ShareFile
                     //计算文件的SHA1值
                     System.Security.Cryptography.SHA1 calculator = System.Security.Cryptography.SHA1.Create();
                     Byte[] buffer = calculator.ComputeHash(fs);
+                    
                     calculator.Clear();
                     //将字节数组转换成十六进制的字符串形式
                     StringBuilder stringBuilder = new StringBuilder();
@@ -121,6 +122,55 @@ namespace ShareWare.ShareFile
 
             return hashSHA1;
         }//ComputeSHA1
+
+        public static List<string> ComputeSHA1ByParts(string fileName, int partSize)
+        {
+            List<string> hashList = null;
+            
+            //检查文件是否存在，如果文件存在则进行计算，否则返回空值
+            if (System.IO.File.Exists(fileName))
+            {
+                using (System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
+                {
+                    //计算文件的SHA1值
+                    System.Security.Cryptography.SHA1 calculator = System.Security.Cryptography.SHA1.Create();
+
+                    long nSize = fs.Length;
+
+                    hashList = new List<string>();
+                    int bufSize = partSize * 1024 * 1024;
+                    byte[] buffer = new byte[bufSize];
+                    byte[] hashBuf;
+                    int nLen = 0;
+                    int nPos = 0;
+                    int nCount = 0;
+                    StringBuilder strBuild = new StringBuilder();
+
+                    do
+                    {
+                        nLen = fs.Read(buffer, 0, bufSize);
+                        nPos += nLen;
+
+                        hashBuf = calculator.ComputeHash(buffer);
+                        strBuild.Clear();
+                        foreach (var item in hashBuf)
+                        {
+                            strBuild.Append(item.ToString("x2"));
+                        }
+                       hashList.Add(strBuild.ToString());
+                        nCount++;
+
+                    } while (nPos != nSize);
+
+                    calculator.Clear();
+                    //hashSHA1 = stringBuilder.ToString();
+
+                }//关闭文件流
+            }
+           
+            return hashList;
+
+        }
 
     }//end class: HashHelper
 

@@ -22,8 +22,7 @@
           <Key>
             <PropertyRef Name="Hash" />
           </Key>
-          <Property Name="Hash" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="Name" Type="varchar" MaxLength="260" />
+          <Property Name="Hash" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="Size" Type="bigint" />
           <Property Name="Pass" Type="bit" />
         </EntityType>
@@ -33,18 +32,20 @@
           </Key>
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="260" />
-          <Property Name="Hash" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="260" />
+          <Property Name="Hash" Type="nvarchar" MaxLength="50" />
+          <Property Name="Path" Type="nvarchar" MaxLength="260" />
+          <Property Name="IsFolder" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="varchar" Nullable="false" MaxLength="20" />
           <Property Name="Password" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="MAC" Type="varchar" Nullable="false" MaxLength="16" />
-          <Property Name="Mail" Type="nchar" MaxLength="10" />
+          <Property Name="MAC" Type="varchar" MaxLength="20" />
+          <Property Name="Mail" Type="varchar" MaxLength="50" />
           <Property Name="UserIP" Type="varchar" MaxLength="20" />
         </EntityType>
         <Association Name="FK_FileOwner_FileInfo">
@@ -93,8 +94,7 @@
           <Key>
             <PropertyRef Name="Hash" />
           </Key>
-          <Property Name="Hash" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="Name" Type="String" MaxLength="260" Unicode="false" FixedLength="false" />
+          <Property Name="Hash" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="Size" Type="Int64" />
           <Property Name="Pass" Type="Boolean" />
           <NavigationProperty Name="FileOwner" Relationship="ShareWareModel.FK_FileOwner_FileInfo" FromRole="FileInfo" ToRole="FileOwner" />
@@ -105,8 +105,10 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="260" Unicode="false" FixedLength="false" />
-          <Property Name="Hash" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" MaxLength="260" Unicode="true" FixedLength="false" />
+          <Property Name="Hash" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Path" Type="String" MaxLength="260" Unicode="true" FixedLength="false" />
+          <Property Name="IsFolder" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="FileInfo" Relationship="ShareWareModel.FK_FileOwner_FileInfo" FromRole="FileOwner" ToRole="FileInfo" />
           <NavigationProperty Name="Users" Relationship="ShareWareModel.FK_FileOwner_Users" FromRole="FileOwner" ToRole="Users" />
         </EntityType>
@@ -114,11 +116,11 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
-          <Property Name="MAC" Type="String" Nullable="false" MaxLength="16" Unicode="false" FixedLength="false" />
-          <Property Name="Mail" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="MAC" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Mail" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="UserIP" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="FileOwner" Relationship="ShareWareModel.FK_FileOwner_Users" FromRole="Users" ToRole="FileOwner" />
         </EntityType>
@@ -156,7 +158,6 @@
             <EntityTypeMapping TypeName="ShareWareModel.FileInfo">
               <MappingFragment StoreEntitySet="FileInfo">
                 <ScalarProperty Name="Hash" ColumnName="Hash" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Size" ColumnName="Size" />
                 <ScalarProperty Name="Pass" ColumnName="Pass" />
               </MappingFragment>
@@ -169,6 +170,8 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="IsFolder" ColumnName="IsFolder" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

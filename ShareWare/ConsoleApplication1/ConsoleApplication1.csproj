@@ -43,8 +43,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,17 +62,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Settings1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings1.settings</DependentUpon>
-    </Compile>
     <Compile Include="ShareWareClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Properties\DataSources\ShareWare.FileOwner.datasource" />
+    <None Include="Service References\ServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ServiceReference\ConsoleApplication1.ServiceReference.CompositeType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceReference\ConsoleApplication1.ServiceReference.FileOwner.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\ServiceReference\service.wsdl" />
@@ -88,16 +92,8 @@
     <None Include="Service References\ServiceReference\ShareWare.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Settings1.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShareWareDAL\ShareWareDAL.csproj">
-      <Project>{94f71305-c139-4706-a053-0e588ec4cdd3}</Project>
-      <Name>ShareWareDAL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Share\ShareFile.csproj">
       <Project>{8502b2af-4c2d-4116-8d6f-27c8edc9f94a}</Project>
       <Name>ShareFile</Name>

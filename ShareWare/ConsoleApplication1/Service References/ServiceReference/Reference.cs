@@ -74,6 +74,397 @@ namespace ConsoleApplication1.ServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FileOwner", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
+    [System.SerializableAttribute()]
+    public partial class FileOwner : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ConsoleApplication1.ServiceReference.FileInfo FileInfoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HashField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsFolderField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int UserIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ConsoleApplication1.ServiceReference.Users UsersField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ConsoleApplication1.ServiceReference.FileInfo FileInfo {
+            get {
+                return this.FileInfoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileInfoField, value) != true)) {
+                    this.FileInfoField = value;
+                    this.RaisePropertyChanged("FileInfo");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Hash {
+            get {
+                return this.HashField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HashField, value) != true)) {
+                    this.HashField = value;
+                    this.RaisePropertyChanged("Hash");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ID {
+            get {
+                return this.IDField;
+            }
+            set {
+                if ((this.IDField.Equals(value) != true)) {
+                    this.IDField = value;
+                    this.RaisePropertyChanged("ID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsFolder {
+            get {
+                return this.IsFolderField;
+            }
+            set {
+                if ((this.IsFolderField.Equals(value) != true)) {
+                    this.IsFolderField = value;
+                    this.RaisePropertyChanged("IsFolder");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Path {
+            get {
+                return this.PathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PathField, value) != true)) {
+                    this.PathField = value;
+                    this.RaisePropertyChanged("Path");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int UserID {
+            get {
+                return this.UserIDField;
+            }
+            set {
+                if ((this.UserIDField.Equals(value) != true)) {
+                    this.UserIDField = value;
+                    this.RaisePropertyChanged("UserID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ConsoleApplication1.ServiceReference.Users Users {
+            get {
+                return this.UsersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsersField, value) != true)) {
+                    this.UsersField = value;
+                    this.RaisePropertyChanged("Users");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FileInfo", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
+    [System.SerializableAttribute()]
+    public partial class FileInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> FileOwnerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HashField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<bool> PassField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<long> SizeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> FileOwner {
+            get {
+                return this.FileOwnerField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileOwnerField, value) != true)) {
+                    this.FileOwnerField = value;
+                    this.RaisePropertyChanged("FileOwner");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Hash {
+            get {
+                return this.HashField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HashField, value) != true)) {
+                    this.HashField = value;
+                    this.RaisePropertyChanged("Hash");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<bool> Pass {
+            get {
+                return this.PassField;
+            }
+            set {
+                if ((this.PassField.Equals(value) != true)) {
+                    this.PassField = value;
+                    this.RaisePropertyChanged("Pass");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<long> Size {
+            get {
+                return this.SizeField;
+            }
+            set {
+                if ((this.SizeField.Equals(value) != true)) {
+                    this.SizeField = value;
+                    this.RaisePropertyChanged("Size");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Users", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
+    [System.SerializableAttribute()]
+    public partial class Users : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> FileOwnerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MACField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PasswordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int UserIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserIPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> FileOwner {
+            get {
+                return this.FileOwnerField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileOwnerField, value) != true)) {
+                    this.FileOwnerField = value;
+                    this.RaisePropertyChanged("FileOwner");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MAC {
+            get {
+                return this.MACField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MACField, value) != true)) {
+                    this.MACField = value;
+                    this.RaisePropertyChanged("MAC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Mail {
+            get {
+                return this.MailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MailField, value) != true)) {
+                    this.MailField = value;
+                    this.RaisePropertyChanged("Mail");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Password {
+            get {
+                return this.PasswordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PasswordField, value) != true)) {
+                    this.PasswordField = value;
+                    this.RaisePropertyChanged("Password");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int UserID {
+            get {
+                return this.UserIDField;
+            }
+            set {
+                if ((this.UserIDField.Equals(value) != true)) {
+                    this.UserIDField = value;
+                    this.RaisePropertyChanged("UserID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserIP {
+            get {
+                return this.UserIPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserIPField, value) != true)) {
+                    this.UserIPField = value;
+                    this.RaisePropertyChanged("UserIP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserName {
+            get {
+                return this.UserNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserNameField, value) != true)) {
+                    this.UserNameField = value;
+                    this.RaisePropertyChanged("UserName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference.IShareService", CallbackContract=typeof(ConsoleApplication1.ServiceReference.IShareServiceCallback))]
     public interface IShareService {
@@ -90,23 +481,17 @@ namespace ConsoleApplication1.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IShareService/GetDataUsingDataContractResponse")]
         System.Threading.Tasks.Task<ConsoleApplication1.ServiceReference.CompositeType> GetDataUsingDataContractAsync(ConsoleApplication1.ServiceReference.CompositeType composite);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Login", ReplyAction="http://tempuri.org/IShareService/LoginResponse")]
-        int Login(string userName, string passWord);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Register", ReplyAction="http://tempuri.org/IShareService/RegisterResponse")]
+        bool Register(string userName, string passWord, string mail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Register", ReplyAction="http://tempuri.org/IShareService/RegisterResponse")]
+        System.Threading.Tasks.Task<bool> RegisterAsync(string userName, string passWord, string mail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Login", ReplyAction="http://tempuri.org/IShareService/LoginResponse")]
-        System.Threading.Tasks.Task<int> LoginAsync(string userName, string passWord);
+        int Login(string userName, string passWord, string mac);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SendShareFile", ReplyAction="http://tempuri.org/IShareService/SendShareFileResponse")]
-        bool SendShareFile(System.Collections.Generic.List<System.Collections.Generic.List<ShareWare.FileInfo>> list);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SendShareFile", ReplyAction="http://tempuri.org/IShareService/SendShareFileResponse")]
-        System.Threading.Tasks.Task<bool> SendShareFileAsync(System.Collections.Generic.List<System.Collections.Generic.List<ShareWare.FileInfo>> list);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SendClientInfo", ReplyAction="http://tempuri.org/IShareService/SendClientInfoResponse")]
-        bool SendClientInfo();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SendClientInfo", ReplyAction="http://tempuri.org/IShareService/SendClientInfoResponse")]
-        System.Threading.Tasks.Task<bool> SendClientInfoAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Login", ReplyAction="http://tempuri.org/IShareService/LoginResponse")]
+        System.Threading.Tasks.Task<int> LoginAsync(string userName, string passWord, string mac);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/UploadShareInfo", ReplyAction="http://tempuri.org/IShareService/UploadShareInfoResponse")]
         int UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId);
@@ -115,16 +500,16 @@ namespace ConsoleApplication1.ServiceReference {
         System.Threading.Tasks.Task<int> UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        System.Collections.Generic.List<ShareWare.FileOwner> SearchFile(string fileName);
+        System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> SearchFile(string fileName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileOwner>> SearchFileAsync(string fileName);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner>> SearchFileAsync(string fileName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
-        void DownloadRequest(ShareWare.FileOwner fileOnwer, int nPort);
+        int DownloadRequest(ConsoleApplication1.ServiceReference.FileOwner fileOnwer, int nPort);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
-        System.Threading.Tasks.Task DownloadRequestAsync(ShareWare.FileOwner fileOnwer, int nPort);
+        System.Threading.Tasks.Task<int> DownloadRequestAsync(ConsoleApplication1.ServiceReference.FileOwner fileOnwer, int nPort);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -132,6 +517,15 @@ namespace ConsoleApplication1.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/DownloadPerformance")]
         void DownloadPerformance(string szHash, string szIp, int nPort);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/NewUser")]
+        void NewUser(int id, string name);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UserLeave")]
+        void UserLeave(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/RefreshUserList")]
+        void RefreshUserList(System.Collections.Generic.List<string> userList);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -178,28 +572,20 @@ namespace ConsoleApplication1.ServiceReference {
             return base.Channel.GetDataUsingDataContractAsync(composite);
         }
         
-        public int Login(string userName, string passWord) {
-            return base.Channel.Login(userName, passWord);
+        public bool Register(string userName, string passWord, string mail) {
+            return base.Channel.Register(userName, passWord, mail);
         }
         
-        public System.Threading.Tasks.Task<int> LoginAsync(string userName, string passWord) {
-            return base.Channel.LoginAsync(userName, passWord);
+        public System.Threading.Tasks.Task<bool> RegisterAsync(string userName, string passWord, string mail) {
+            return base.Channel.RegisterAsync(userName, passWord, mail);
         }
         
-        public bool SendShareFile(System.Collections.Generic.List<System.Collections.Generic.List<ShareWare.FileInfo>> list) {
-            return base.Channel.SendShareFile(list);
+        public int Login(string userName, string passWord, string mac) {
+            return base.Channel.Login(userName, passWord, mac);
         }
         
-        public System.Threading.Tasks.Task<bool> SendShareFileAsync(System.Collections.Generic.List<System.Collections.Generic.List<ShareWare.FileInfo>> list) {
-            return base.Channel.SendShareFileAsync(list);
-        }
-        
-        public bool SendClientInfo() {
-            return base.Channel.SendClientInfo();
-        }
-        
-        public System.Threading.Tasks.Task<bool> SendClientInfoAsync() {
-            return base.Channel.SendClientInfoAsync();
+        public System.Threading.Tasks.Task<int> LoginAsync(string userName, string passWord, string mac) {
+            return base.Channel.LoginAsync(userName, passWord, mac);
         }
         
         public int UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId) {
@@ -210,19 +596,19 @@ namespace ConsoleApplication1.ServiceReference {
             return base.Channel.UploadShareInfoAsync(fileList, userId);
         }
         
-        public System.Collections.Generic.List<ShareWare.FileOwner> SearchFile(string fileName) {
+        public System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> SearchFile(string fileName) {
             return base.Channel.SearchFile(fileName);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileOwner>> SearchFileAsync(string fileName) {
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner>> SearchFileAsync(string fileName) {
             return base.Channel.SearchFileAsync(fileName);
         }
         
-        public void DownloadRequest(ShareWare.FileOwner fileOnwer, int nPort) {
-            base.Channel.DownloadRequest(fileOnwer, nPort);
+        public int DownloadRequest(ConsoleApplication1.ServiceReference.FileOwner fileOnwer, int nPort) {
+            return base.Channel.DownloadRequest(fileOnwer, nPort);
         }
         
-        public System.Threading.Tasks.Task DownloadRequestAsync(ShareWare.FileOwner fileOnwer, int nPort) {
+        public System.Threading.Tasks.Task<int> DownloadRequestAsync(ConsoleApplication1.ServiceReference.FileOwner fileOnwer, int nPort) {
             return base.Channel.DownloadRequestAsync(fileOnwer, nPort);
         }
     }

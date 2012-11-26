@@ -11,6 +11,15 @@ namespace ShareWare
     {
         [OperationContract(IsOneWay = true)]
         void DownloadPerformance(string szHash, string szIp, int nPort);
+
+        [OperationContract(IsOneWay = true)]
+        void NewUser(int id, string name);
+
+        [OperationContract(IsOneWay = true)]
+        void UserLeave(string name);
+
+        [OperationContract(IsOneWay = true)]
+        void RefreshUserList(List<string> userList);
     }
 
 }

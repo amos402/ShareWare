@@ -21,9 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServer", "ConsoleServer\ConsoleServer.csproj", "{1673AFB1-62FD-4C16-B363-98B002A724A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{37E98F14-7060-4FC4-91C0-844E9D4177D1}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://amos402.tfspreview.com/defaultcollection
 		SccLocalPath0 = .
@@ -45,6 +47,12 @@ Global
 		SccProjectUniqueName6 = ShareWareServiceLibrary\\ShareWareServiceLibrary.csproj
 		SccProjectName6 = ShareWareServiceLibrary
 		SccLocalPath6 = ShareWareServiceLibrary
+		SccProjectUniqueName7 = WpfApplication1\\WpfApplication1.csproj
+		SccProjectName7 = WpfApplication1
+		SccLocalPath7 = WpfApplication1
+		SccProjectUniqueName8 = Client\\Client.csproj
+		SccProjectName8 = Client
+		SccLocalPath8 = Client
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +87,10 @@ Global
 		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

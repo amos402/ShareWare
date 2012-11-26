@@ -20,46 +20,15 @@ namespace ShareWare.ServiceLibrary
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class ShareService : IShareService
     {
-        public ShareService()
-        {
-            OperationContext.Current.Channel.Closing += Channel_Closing;
-        }
-
-        private void Channel_Closing(object sender, EventArgs e)
-        {
-            ClientEventArgs eventArgs = e as ClientEventArgs;
-            if (eventArgs != null)
-            {
-
-            }
-
-            var client = sender as IClient;
-            if (client != null)
-            {
-                //var result = from c in _userDict
-                //             where (c.Value == client)
-                //             select c.Key;
-                try
-                {
-                    var keyPair = _userDict.Single(item => (item.Value == client));
-                    _userDict.Remove(keyPair.Key);
-
-                }
-                catch (Exception ex)
-                {
-
-                    Console.WriteLine(ex);
-                }
-            }
-
-        }
-
-        UserDAL user = new UserDAL();
+        // UserDAL user = new UserDAL();
         //string m_cnStr = ConfigurationManager.ConnectionStrings["ShareWareSqlProvider"].ConnectionString;
         static ShareWareEntities _context = new ShareWareEntities();
         static List<Users> _userList = new List<Users>();
         static Dictionary<Users, IClient> _userDict = new Dictionary<Users, IClient>();
 
+        public delegate void ServerEventHandler(object sender, ServerEventArgs e);
+        public event ServerEventHandler UserLogin;
+        public event ServerEventHandler UserLeave;
 
         private static List<IClient> _clientCallbackList = new List<IClient>();
 
@@ -69,7 +38,67 @@ namespace ShareWare.ServiceLibrary
             set { ShareService._clientCallbackList = value; }
         }
 
-        List<string> userList = new List<string>();
+
+        public ShareService()
+        {
+            OperationContext.Current.Channel.Closing += Channel_Closing;
+            UserLogin += ShareService_UserLogin;
+            UserLeave += ShareService_UserLeave;
+
+        }
+
+        void BroadcastEvent(object sender, ServerEventArgs e, ServerEventHandler handler)
+        {
+            foreach (ServerEventHandler item in handler.GetInvocationList())
+            {
+                item.BeginInvoke(sender, e, null, null);
+            }
+        }
+
+        void ShareService_UserLogin(object sender, ServerEventArgs e)
+        {
+            Users user = e.User;
+            foreach (var item in _userDict.Values)
+            {
+                item.NewUser(user.UserID, user.UserName);
+            }
+        }
+
+        void ShareService_UserLeave(object sender, ServerEventArgs e)
+        {
+            if (e.User.UserName != null)
+            {
+                foreach (var item in _userDict.Values)
+                {
+                    item.UserLeave(e.User.UserName);
+                }
+            }
+        }
+
+
+        private void Channel_Closing(object sender, EventArgs e)
+        {
+            var client = sender as IClient;
+            if (client != null)
+            {
+                try
+                {
+                    var keyPair = _userDict.Single(item => (item.Value == client));
+                    ServerEventArgs sea = new ServerEventArgs();
+                    sea.User = keyPair.Key;
+                    BroadcastEvent(sender, sea, UserLeave);
+                    _userDict.Remove(keyPair.Key);
+
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex);
+                }
+            }
+        }
+
+
 
         public string GetData(int value)
         {
@@ -89,41 +118,6 @@ namespace ShareWare.ServiceLibrary
             return composite;
         }
 
-
-        //public int Login(string userName, string passWord)
-        //{
-
-        //    bool bHave = user.CheckUser(userName, passWord);
-        //    if (bHave)
-        //    {
-        //        userList.Add(userName);
-        //    }
-        //    return bHave ? true : false;
-
-        //}
-
-
-        public bool SendShareFile(List<List<FileInfo>> list)
-        {
-            FileInfo info = (FileInfo)list[0][0];
-            //throw new NotImplementedException();
-            return true;
-        }
-
-
-
-        public bool SendClientInfo()
-        {
-            //提供方法执行的上下文环境
-            OperationContext context = OperationContext.Current;
-            //获取传进的消息属性
-            MessageProperties properties = context.IncomingMessageProperties;
-            //获取消息发送的远程终结点IP和端口
-            RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-            Console.WriteLine(string.Format("Hello ,You are  from {0}:{1}", endpoint.Address, endpoint.Port));
-            return true;
-        }
-
         private string GetClientIp()
         {
             //提供方法执行的上下文环境
@@ -132,14 +126,39 @@ namespace ShareWare.ServiceLibrary
             MessageProperties properties = context.IncomingMessageProperties;
             //获取消息发送的远程终结点IP和端口
             RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-            return endpoint.Address;
+            if (endpoint != null)
+            {
+                return endpoint.Address;
+            }
+            else
+            {
+                return "0.0.0.0";
+            }
         }
 
-        public int Login(string userName, string passWord)
+        public void BroadcastEvent(ServerEventArgs e, ServerEventHandler handler)
         {
-            //var user = from c in _context.Users
-            //           where (c.UserName == userName && c.Password == passWord)
-            //           select c;
+
+        }
+
+        public bool Register(string userName, string passWord, string mail)
+        {
+            _context.Users.Add(new Users() { UserName = userName, Password = passWord, Mail = mail });
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public int Login(string userName, string passWord, string mac)
+        {
             Users user = null;
             try
             {
@@ -152,85 +171,169 @@ namespace ShareWare.ServiceLibrary
             }
 
             user.UserIP = GetClientIp();
+            user.MAC = mac;
             var client = OperationContext.Current.GetCallbackChannel<IClient>();
             ClientCallbackList.Add(client);
 
             try
             {
-                _userDict.Add(user, client);
+                lock (_userDict)
+                {
+                    _userDict.Add(user, client);
+                }
+
             }
-            catch (ArgumentException)
+            catch (Exception)
             {
                 if (_userDict.ContainsKey(user))
                 {
-                    Channel_Closing(_userDict[user], new ClientEventArgs() { Message = "You have lonin at another location."});
+                    Channel_Closing(_userDict[user], new ServerEventArgs() { Message = "You have lognin at another location.", User = user });
                     _userDict[user] = client;
                 }
             }
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+
+
+            BroadcastEvent(this, new ServerEventArgs() { User = user }, UserLogin);
+
+            List<string> userList = (from c in _userDict.Keys select c.UserName).ToList();
+            client.RefreshUserList(userList);
 
             return user.UserID;
 
         }
 
+        public void Logout()
+        {
+            IClient client = OperationContext.Current.GetCallbackChannel<IClient>();
+            Channel_Closing(client, null);
+        }
+
+        protected class CompareFileInfo : IEqualityComparer<ShareWare.FileInfo>
+        {
+            public bool Equals(ShareWare.FileInfo x, ShareWare.FileInfo y)
+            {
+                return x.Hash == y.Hash && x.Size == y.Size;
+            }
+
+            public int GetHashCode(FileInfo obj)
+            {
+                return 0;
+            }
+        }
+
+
         public int UploadShareInfo(List<ShareFile.FileInfoTransfer> fileList, int userId)
         {
 
-            DataTable dt1 = new DataTable();
-            dt1.Columns.AddRange(new DataColumn[]{
-                new DataColumn("Hash",typeof(string)),  
-                new DataColumn("Name",typeof(string)),  
-                new DataColumn("Size",typeof(long))});
+            var asd = (from b in fileList.AsEnumerable() select b.Hash);
+            var res = (from c in _context.FileInfo select c.Hash);
+
+            var shit = new ArrayList();
+            foreach (var item in res)
+            {
+                if (!asd.Contains(item))
+                {
+                    shit.Add(item);
+                }
+            }
 
 
-            DataTable dt2 = new DataTable();
-            dt2.Columns.AddRange(new DataColumn[]{
+            DataTable fileInfo = new DataTable();
+            fileInfo.Columns.AddRange(new DataColumn[]{
+                new DataColumn("Hash", typeof(string)) {Unique = true},  
+                new DataColumn("Name", typeof(string)),  
+                new DataColumn("Size", typeof(long))}
+                );
+
+            
+            DataTable fileOwner = new DataTable();
+            fileOwner.Columns.AddRange(new DataColumn[]{
                 new DataColumn("ID", typeof(int)) { AutoIncrement = true},
-                new DataColumn("UserID",typeof(int)),
-                new DataColumn("Name",typeof(string)),
-                new DataColumn("Hash",typeof(string)) {AllowDBNull = true}
+                new DataColumn("UserID", typeof(int)),
+                new DataColumn("Name", typeof(string)),
+                new DataColumn("Hash", typeof(string)) {AllowDBNull = true},
+                new DataColumn("Path", typeof(string)) {AllowDBNull = true},
+                new DataColumn("IsFolder", typeof(bool))
             });
 
-
+          
             foreach (var item in fileList)
             {
-                DataRow r1 = dt1.NewRow();
-                r1[0] = item.Hash;
-                r1[1] = item.Name;
-                r1[2] = item.Size;
-                dt1.Rows.Add(r1);
+                string guid = null;
+                try
+                {
+                    DataRow r1 = fileInfo.NewRow();
+                    if (item.Hash == null && item.IsFolder == true)
+                    {
+                        guid = Guid.NewGuid().ToString();
+                    }
+                    else
+                    {
+                        guid = item.Hash;
+                    }
+                    r1[0] = guid;
+                    r1[1] = item.Size;
+                    fileInfo.Rows.Add(r1);
+                }
+                catch (Exception)
+                {
 
-                DataRow r2 = dt2.NewRow();
-                r2[1] = userId;
-                r2[2] = item.Name;
-                r2[3] = item.Hash;
-                dt2.Rows.Add(r2);
+                    //throw;
+                }
+
+               
+                try
+                {
+                    DataRow r2 = fileOwner.NewRow();
+                    r2[1] = userId;
+                    r2[2] = item.Name;
+                    r2[3] = guid;
+                    r2[4] = item.Path;
+                    r2[5] = item.IsFolder;
+                    fileOwner.Rows.Add(r2);
+                }
+                catch (Exception)
+                {
+
+                    // throw;
+                }
 
             }
 
             var conn = _context.Database.Connection;
             conn.Open();
-            SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)_context.Database.Connection);
+            SqlBulkCopy bulkCopy = new SqlBulkCopy(_context.Database.Connection.ConnectionString, SqlBulkCopyOptions.KeepIdentity);
             try
             {
 
                 bulkCopy.DestinationTableName = "FileInfo";
-                bulkCopy.BatchSize = dt1.Rows.Count;
+                bulkCopy.BatchSize = fileInfo.Rows.Count;
 
-                bulkCopy.WriteToServer(dt1);
+                bulkCopy.WriteToServer(fileInfo);
             }
             catch (Exception e)
             {
 
-                // Console.WriteLine(e.Message);
+                //Console.WriteLine(e.Message);
             }
 
 
             try
             {
                 bulkCopy.DestinationTableName = "FileOwner";
-                bulkCopy.BatchSize = dt2.Rows.Count;
+                bulkCopy.BatchSize = fileOwner.Rows.Count;
 
-                bulkCopy.WriteToServer(dt2);
+                bulkCopy.WriteToServer(fileOwner);
 
             }
             catch (Exception e)
@@ -286,7 +389,9 @@ namespace ShareWare.ServiceLibrary
 
         public List<FileOwner> SearchFile(string fileName)
         {
-            var result = from c in _context.FileOwner where (c.Name.Contains(fileName)) select c;
+            var result = from c in _context.FileOwner
+                         where (c.Name.Contains(fileName))
+                         select new { c.ID, c.UserID, c.Name, c.Hash, c.Path, c.IsFolder };
             var list = result.ToList();
             var newList = new List<FileOwner>();
             foreach (var item in list)
@@ -296,7 +401,10 @@ namespace ShareWare.ServiceLibrary
                     ID = item.ID,
                     UserID = item.UserID,
                     Hash = item.Hash,
-                    Name = item.Name
+                    Name = item.Name,
+                    IsFolder = item.IsFolder,
+                    Path = item.Path
+
                 });
             }
 
@@ -305,7 +413,7 @@ namespace ShareWare.ServiceLibrary
         }
 
 
-        public void DownloadRequest(FileOwner fileOnwer, int nPort)
+        public int DownloadRequest(FileOwner fileOnwer, int nPort)
         {
             var users = from c in _context.Users
                         where (fileOnwer.UserID == c.UserID)
@@ -315,6 +423,8 @@ namespace ShareWare.ServiceLibrary
             {
                 _userDict[item].DownloadPerformance(fileOnwer.Hash, ip, nPort);
             }
+
+            return users.Count();
         }
     }
 }

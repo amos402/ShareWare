@@ -18,6 +18,8 @@ namespace ShareWare
         public int UserID { get; set; }
         public string Name { get; set; }
         public string Hash { get; set; }
+        public string Path { get; set; }
+        public bool IsFolder { get; set; }
     
         public virtual FileInfo FileInfo { get; set; }
         public virtual Users Users { get; set; }

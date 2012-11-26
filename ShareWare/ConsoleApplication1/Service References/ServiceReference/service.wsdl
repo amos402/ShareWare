@@ -38,8 +38,9 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ServiceLibrary" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ShareFile" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IShareService_GetData_InputMessage">
@@ -54,23 +55,17 @@
   <wsdl:message name="IShareService_GetDataUsingDataContract_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetDataUsingDataContractResponse" />
   </wsdl:message>
+  <wsdl:message name="IShareService_Register_InputMessage">
+    <wsdl:part name="parameters" element="tns:Register" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_Register_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterResponse" />
+  </wsdl:message>
   <wsdl:message name="IShareService_Login_InputMessage">
     <wsdl:part name="parameters" element="tns:Login" />
   </wsdl:message>
   <wsdl:message name="IShareService_Login_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoginResponse" />
-  </wsdl:message>
-  <wsdl:message name="IShareService_SendShareFile_InputMessage">
-    <wsdl:part name="parameters" element="tns:SendShareFile" />
-  </wsdl:message>
-  <wsdl:message name="IShareService_SendShareFile_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SendShareFileResponse" />
-  </wsdl:message>
-  <wsdl:message name="IShareService_SendClientInfo_InputMessage">
-    <wsdl:part name="parameters" element="tns:SendClientInfo" />
-  </wsdl:message>
-  <wsdl:message name="IShareService_SendClientInfo_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SendClientInfoResponse" />
   </wsdl:message>
   <wsdl:message name="IShareService_UploadShareInfo_InputMessage">
     <wsdl:part name="parameters" element="tns:UploadShareInfo" />
@@ -93,6 +88,15 @@
   <wsdl:message name="IShareService_DownloadPerformance_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:DownloadPerformance" />
   </wsdl:message>
+  <wsdl:message name="IShareService_NewUser_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NewUser" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_UserLeave_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UserLeave" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_RefreshUserList_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RefreshUserList" />
+  </wsdl:message>
   <wsdl:portType name="IShareService">
     <wsdl:operation name="GetData">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/GetData" message="tns:IShareService_GetData_InputMessage" />
@@ -102,17 +106,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/GetDataUsingDataContract" message="tns:IShareService_GetDataUsingDataContract_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/GetDataUsingDataContractResponse" message="tns:IShareService_GetDataUsingDataContract_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="Register">
+      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/Register" message="tns:IShareService_Register_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/RegisterResponse" message="tns:IShareService_Register_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="Login">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/Login" message="tns:IShareService_Login_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/LoginResponse" message="tns:IShareService_Login_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SendShareFile">
-      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/SendShareFile" message="tns:IShareService_SendShareFile_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/SendShareFileResponse" message="tns:IShareService_SendShareFile_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SendClientInfo">
-      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/SendClientInfo" message="tns:IShareService_SendClientInfo_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/SendClientInfoResponse" message="tns:IShareService_SendClientInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UploadShareInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/UploadShareInfo" message="tns:IShareService_UploadShareInfo_InputMessage" />
@@ -128,6 +128,15 @@
     </wsdl:operation>
     <wsdl:operation name="DownloadPerformance">
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/DownloadPerformance" message="tns:IShareService_DownloadPerformance_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NewUser">
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/NewUser" message="tns:IShareService_NewUser_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserLeave">
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/UserLeave" message="tns:IShareService_UserLeave_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RefreshUserList">
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/RefreshUserList" message="tns:IShareService_RefreshUserList_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IShareService" type="tns:IShareService">
@@ -152,26 +161,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="Register">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/Register" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="Login">
       <soap12:operation soapAction="http://tempuri.org/IShareService/Login" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SendShareFile">
-      <soap12:operation soapAction="http://tempuri.org/IShareService/SendShareFile" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SendClientInfo">
-      <soap12:operation soapAction="http://tempuri.org/IShareService/SendClientInfo" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -208,6 +208,24 @@
     </wsdl:operation>
     <wsdl:operation name="DownloadPerformance">
       <soap12:operation soapAction="http://tempuri.org/IShareService/DownloadPerformance" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewUser">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/NewUser" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserLeave">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/UserLeave" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefreshUserList">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/RefreshUserList" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

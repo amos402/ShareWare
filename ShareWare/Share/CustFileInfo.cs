@@ -10,9 +10,12 @@ namespace ShareWare.ShareFile
     [Serializable]
     public class CustFileInfo
     {
-       
-        public FileInfo File { get; set; }
+
+        public FileSystemInfo File { get; set; }
         public string Hash { get; set; }
+        public List<string> HashList { get; set; }
+        public long? Size { get; set; }
+        public bool IsFolder { get; set; }
 
         public override string ToString()
         {

@@ -20,14 +20,14 @@ namespace ShareWare.ServiceLibrary
         CompositeType GetDataUsingDataContract(CompositeType composite);
 
         // TODO: 在此添加您的服务操作
-       [OperationContract(IsOneWay = false)]
-        int Login(string userName, string passWord);
+        [OperationContract(IsOneWay = false)]
+        bool Register(string userName, string passWord, string mail);
 
-        [OperationContract]
-        bool SendShareFile(List<List<FileInfo>> list);
+        [OperationContract(IsOneWay = false)]
+        int Login(string userName, string passWord, string mac);
 
-        [OperationContract]
-        bool SendClientInfo();
+        [OperationContract(IsOneWay = true)]
+        void Logout();
 
         [OperationContract]
         int UploadShareInfo(List<FileInfoTransfer> fileList, int userId);
@@ -36,13 +36,20 @@ namespace ShareWare.ServiceLibrary
         List<FileOwner> SearchFile(string fileName);
 
         [OperationContract]
-        void DownloadRequest(FileOwner fileOnwer, int nPort);
+        int DownloadRequest(FileOwner fileOnwer, int nPort);
 
     }
 
 
     // 使用下面示例中说明的数据约定将复合类型添加到服务操作。
     // 可以将 XSD 文件添加到项目中。在生成项目后，可以通过命名空间“ShareWareServiceLibrary.ContractType”直接使用其中定义的数据类型。
+    public class ServerEventArgs : EventArgs
+    {
+        public string Message { get; set; }
+        public Users User { get; set; }
+    }
+
+
     [DataContract]
     public class CompositeType
     {
