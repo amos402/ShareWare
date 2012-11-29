@@ -16,6 +16,12 @@ namespace ShareWare.ShareFile
         public List<string> HashList { get; set; }
         public long? Size { get; set; }
         public bool IsFolder { get; set; }
+        public bool Uploaded { get; set; }
+
+        public CustFileInfo()
+        {
+            Uploaded = false;
+        }
 
         public override string ToString()
         {

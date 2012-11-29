@@ -93,13 +93,7 @@ namespace ConsoleApplication1.ServiceReference {
         private int IDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsFolderField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string PathField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int UserIDField;
@@ -157,19 +151,6 @@ namespace ConsoleApplication1.ServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsFolder {
-            get {
-                return this.IsFolderField;
-            }
-            set {
-                if ((this.IsFolderField.Equals(value) != true)) {
-                    this.IsFolderField = value;
-                    this.RaisePropertyChanged("IsFolder");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public string Name {
             get {
                 return this.NameField;
@@ -178,19 +159,6 @@ namespace ConsoleApplication1.ServiceReference {
                 if ((object.ReferenceEquals(this.NameField, value) != true)) {
                     this.NameField = value;
                     this.RaisePropertyChanged("Name");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Path {
-            get {
-                return this.PathField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.PathField, value) != true)) {
-                    this.PathField = value;
-                    this.RaisePropertyChanged("Path");
                 }
             }
         }
@@ -247,6 +215,9 @@ namespace ConsoleApplication1.ServiceReference {
         private string HashField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsFolderField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<bool> PassField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -284,6 +255,19 @@ namespace ConsoleApplication1.ServiceReference {
                 if ((object.ReferenceEquals(this.HashField, value) != true)) {
                     this.HashField = value;
                     this.RaisePropertyChanged("Hash");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsFolder {
+            get {
+                return this.IsFolderField;
+            }
+            set {
+                if ((this.IsFolderField.Equals(value) != true)) {
+                    this.IsFolderField = value;
+                    this.RaisePropertyChanged("IsFolder");
                 }
             }
         }
@@ -493,11 +477,17 @@ namespace ConsoleApplication1.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Login", ReplyAction="http://tempuri.org/IShareService/LoginResponse")]
         System.Threading.Tasks.Task<int> LoginAsync(string userName, string passWord, string mac);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/UploadShareInfo", ReplyAction="http://tempuri.org/IShareService/UploadShareInfoResponse")]
-        int UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/Logout")]
+        void Logout();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/UploadShareInfo", ReplyAction="http://tempuri.org/IShareService/UploadShareInfoResponse")]
-        System.Threading.Tasks.Task<int> UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/Logout")]
+        System.Threading.Tasks.Task LogoutAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadShareInfo")]
+        void UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadShareInfo")]
+        System.Threading.Tasks.Task UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
         System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> SearchFile(string fileName);
@@ -588,12 +578,20 @@ namespace ConsoleApplication1.ServiceReference {
             return base.Channel.LoginAsync(userName, passWord, mac);
         }
         
-        public int UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId) {
-            return base.Channel.UploadShareInfo(fileList, userId);
+        public void Logout() {
+            base.Channel.Logout();
         }
         
-        public System.Threading.Tasks.Task<int> UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList, int userId) {
-            return base.Channel.UploadShareInfoAsync(fileList, userId);
+        public System.Threading.Tasks.Task LogoutAsync() {
+            return base.Channel.LogoutAsync();
+        }
+        
+        public void UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
+            base.Channel.UploadShareInfo(fileList);
+        }
+        
+        public System.Threading.Tasks.Task UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
+            return base.Channel.UploadShareInfoAsync(fileList);
         }
         
         public System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> SearchFile(string fileName) {

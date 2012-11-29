@@ -11,7 +11,6 @@
       <xs:element name="_x003C_Hash_x003E_k__BackingField" nillable="true" type="xs:string" />
       <xs:element name="_x003C_IsFolder_x003E_k__BackingField" type="xs:boolean" />
       <xs:element name="_x003C_Name_x003E_k__BackingField" nillable="true" type="xs:string" />
-      <xs:element name="_x003C_Path_x003E_k__BackingField" nillable="true" type="xs:string" />
       <xs:element name="_x003C_Size_x003E_k__BackingField" nillable="true" type="xs:long" />
     </xs:sequence>
   </xs:complexType>

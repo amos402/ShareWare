@@ -11,7 +11,6 @@ namespace ShareWare.ShareFile
     {
         public string Name { get; set; }
         public string Hash { get; set; }
-        public string Path { get; set; }
         public long? Size { get; set; }
         public bool IsFolder { get; set; }
 

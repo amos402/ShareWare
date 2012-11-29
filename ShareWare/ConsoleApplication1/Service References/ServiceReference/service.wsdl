@@ -67,11 +67,11 @@
   <wsdl:message name="IShareService_Login_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoginResponse" />
   </wsdl:message>
+  <wsdl:message name="IShareService_Logout_InputMessage">
+    <wsdl:part name="parameters" element="tns:Logout" />
+  </wsdl:message>
   <wsdl:message name="IShareService_UploadShareInfo_InputMessage">
     <wsdl:part name="parameters" element="tns:UploadShareInfo" />
-  </wsdl:message>
-  <wsdl:message name="IShareService_UploadShareInfo_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UploadShareInfoResponse" />
   </wsdl:message>
   <wsdl:message name="IShareService_SearchFile_InputMessage">
     <wsdl:part name="parameters" element="tns:SearchFile" />
@@ -114,9 +114,11 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/Login" message="tns:IShareService_Login_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/LoginResponse" message="tns:IShareService_Login_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/Logout" message="tns:IShareService_Logout_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UploadShareInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/UploadShareInfo" message="tns:IShareService_UploadShareInfo_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/UploadShareInfoResponse" message="tns:IShareService_UploadShareInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SearchFile">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/SearchFile" message="tns:IShareService_SearchFile_InputMessage" />
@@ -179,14 +181,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/Logout" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="UploadShareInfo">
       <soap12:operation soapAction="http://tempuri.org/IShareService/UploadShareInfo" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SearchFile">
       <soap12:operation soapAction="http://tempuri.org/IShareService/SearchFile" style="document" />

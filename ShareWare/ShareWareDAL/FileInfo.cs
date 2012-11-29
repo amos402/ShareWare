@@ -21,6 +21,7 @@ namespace ShareWare
     
         public string Hash { get; set; }
         public Nullable<long> Size { get; set; }
+        public bool IsFolder { get; set; }
         public Nullable<bool> Pass { get; set; }
     
         public virtual ICollection<FileOwner> FileOwner { get; set; }

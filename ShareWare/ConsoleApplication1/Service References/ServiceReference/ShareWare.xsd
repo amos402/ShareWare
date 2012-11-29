@@ -11,9 +11,7 @@
       <xs:element minOccurs="0" name="FileInfo" nillable="true" type="tns:FileInfo" />
       <xs:element minOccurs="0" name="Hash" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ID" type="xs:int" />
-      <xs:element minOccurs="0" name="IsFolder" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Path" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="UserID" type="xs:int" />
       <xs:element minOccurs="0" name="Users" nillable="true" type="tns:Users" />
     </xs:sequence>
@@ -23,6 +21,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="FileOwner" nillable="true" type="tns:ArrayOfFileOwner" />
       <xs:element minOccurs="0" name="Hash" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsFolder" type="xs:boolean" />
       <xs:element minOccurs="0" name="Pass" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Size" nillable="true" type="xs:long" />
     </xs:sequence>

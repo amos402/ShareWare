@@ -12,6 +12,9 @@ namespace ShareWare
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class ShareWareEntities : DbContext
     {
@@ -28,5 +31,10 @@ namespace ShareWare
         public DbSet<FileInfo> FileInfo { get; set; }
         public DbSet<FileOwner> FileOwner { get; set; }
         public DbSet<Users> Users { get; set; }
+    
+        public virtual int InsertToFileInfo()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertToFileInfo");
+        }
     }
 }

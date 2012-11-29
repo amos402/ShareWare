@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
+using System.Transactions;
 
 namespace ShareWare.ServiceLibrary
 {
@@ -75,7 +77,6 @@ namespace ShareWare.ServiceLibrary
             }
         }
 
-
         private void Channel_Closing(object sender, EventArgs e)
         {
             var client = sender as IClient;
@@ -97,8 +98,6 @@ namespace ShareWare.ServiceLibrary
                 }
             }
         }
-
-
 
         public string GetData(int value)
         {
@@ -136,6 +135,25 @@ namespace ShareWare.ServiceLibrary
             }
         }
 
+        private int GetClientId()
+        {
+            var client = OperationContext.Current.GetCallbackChannel<IClient>();
+
+            int id = -1;
+            try
+            {
+                var keyPair = _userDict.Single(item => (item.Value == client));
+                id = keyPair.Key.UserID;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return id;
+        }
+
         public void BroadcastEvent(ServerEventArgs e, ServerEventHandler handler)
         {
 
@@ -143,17 +161,20 @@ namespace ShareWare.ServiceLibrary
 
         public bool Register(string userName, string passWord, string mail)
         {
-            _context.Users.Add(new Users() { UserName = userName, Password = passWord, Mail = mail });
-
-            try
+            using (TransactionScope transaction = new TransactionScope())
             {
-                _context.SaveChanges();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+                _context.Users.Add(new Users() { UserName = userName, Password = passWord, Mail = mail });
 
+                try
+                {
+                    _context.SaveChanges();
+                    transaction.Complete();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -218,88 +239,143 @@ namespace ShareWare.ServiceLibrary
             Channel_Closing(client, null);
         }
 
-        protected class CompareFileInfo : IEqualityComparer<ShareWare.FileInfo>
+        protected class CompareFileInfo : IEqualityComparer<ShareFile.FileInfoTransfer>
         {
-            public bool Equals(ShareWare.FileInfo x, ShareWare.FileInfo y)
+            public bool Equals(ShareFile.FileInfoTransfer x, ShareFile.FileInfoTransfer y)
             {
-                return x.Hash == y.Hash && x.Size == y.Size;
+                return x.Hash == y.Hash && x.Name == y.Name;
             }
 
-            public int GetHashCode(FileInfo obj)
+            public int GetHashCode(ShareFile.FileInfoTransfer obj)
             {
                 return 0;
             }
         }
 
-
-        public int UploadShareInfo(List<ShareFile.FileInfoTransfer> fileList, int userId)
+        protected class HashCompare : IEqualityComparer<ShareFile.FileInfoTransfer>
         {
-
-            var asd = (from b in fileList.AsEnumerable() select b.Hash);
-            var res = (from c in _context.FileInfo select c.Hash);
-
-            var shit = new ArrayList();
-            foreach (var item in res)
+            public bool Equals(ShareFile.FileInfoTransfer x, ShareFile.FileInfoTransfer y)
             {
-                if (!asd.Contains(item))
-                {
-                    shit.Add(item);
-                }
+                return x.Hash == y.Hash;
             }
+
+            public int GetHashCode(ShareFile.FileInfoTransfer obj)
+            {
+                return 0;
+            }
+        }
+
+        public void UploadShareInfo(List<ShareFile.FileInfoTransfer> fileList)
+        {
+            int userId = GetClientId();
+
+            if (userId < 0)
+            {
+                return;
+            }
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            var clearList = fileList.Distinct(new HashCompare());
+
+            //var hashList = (from b in clearList
+            //                select b.Hash)
+            //                .Except
+            //                (from c in _context.FileInfo
+            //                 select c.Hash);
+
+
+            //var infoList = (from c in clearList
+            //                where (hashList.Contains(c.Hash))
+            //                select c);
+
+
+
+            //var ownerFile = from c in _context.FileOwner
+            //                where (c.UserID == userId)
+            //                select c;
+
+            //var ownerExceptList = (from b in fileList.AsEnumerable()
+            //                       select new { b.Hash, b.Name })
+            //                .Except
+            //                (from c in ownerFile
+            //                 select new { c.Hash, c.Name });
+
+
+            //var ownerList = from c in fileList.AsEnumerable()
+            //                where ownerExceptList.Contains(new { c.Hash, c.Name })
+            //                select c;
 
 
             DataTable fileInfo = new DataTable();
-            fileInfo.Columns.AddRange(new DataColumn[]{
-                new DataColumn("Hash", typeof(string)) {Unique = true},  
-                new DataColumn("Name", typeof(string)),  
-                new DataColumn("Size", typeof(long))}
-                );
 
-            
-            DataTable fileOwner = new DataTable();
-            fileOwner.Columns.AddRange(new DataColumn[]{
-                new DataColumn("ID", typeof(int)) { AutoIncrement = true},
-                new DataColumn("UserID", typeof(int)),
-                new DataColumn("Name", typeof(string)),
-                new DataColumn("Hash", typeof(string)) {AllowDBNull = true},
-                new DataColumn("Path", typeof(string)) {AllowDBNull = true},
-                new DataColumn("IsFolder", typeof(bool))
+            fileInfo.TableName = "FileInfoTemp";
+            fileInfo.Columns.AddRange(new DataColumn[]{
+                new DataColumn("Hash", typeof(string)) {Unique = true, AllowDBNull = false},
+                new DataColumn("Size", typeof(long)) {AllowDBNull = true},
+                new DataColumn("IsFolder", typeof(bool)) { AllowDBNull = false},
+                new DataColumn("Pass", typeof(bool))
             });
 
-          
+
+            DataTable fileOwner = new DataTable();
+            var shit = from c in _context.FileOwner select c.ID;
+
+            int? nLast = null;
+            try
+            {
+                nLast = shit.Max();
+            }
+            catch (Exception)
+            {
+                nLast = nLast ?? 0;
+            }
+
+
+            fileOwner.TableName = "FileOwner";
+            fileOwner.Columns.AddRange(new DataColumn[]{
+                new DataColumn("ID", typeof(int)) { AutoIncrement = true, AutoIncrementSeed = (long)(nLast +1) },
+                new DataColumn("UserID", typeof(int)),
+                new DataColumn("Name", typeof(string)),
+                new DataColumn("Hash", typeof(string)) {AllowDBNull = true}
+            });
+
+
+            foreach (var item in clearList)
+            {
+                if (item.Hash != null)
+                {
+                    try
+                    {
+                        DataRow r1 = fileInfo.NewRow();
+                        r1[0] = item.Hash;
+                        if (item.Size == null)
+                        {
+                            r1[1] = DBNull.Value;
+                        }
+                        else
+                        {
+                            r1[1] = item.Size; ;
+                        }
+                        r1[2] = item.IsFolder;
+                        fileInfo.Rows.Add(r1);
+                    }
+                    catch (Exception)
+                    {
+
+                        //throw;
+                    }
+                }
+            }
+
             foreach (var item in fileList)
             {
-                string guid = null;
-                try
-                {
-                    DataRow r1 = fileInfo.NewRow();
-                    if (item.Hash == null && item.IsFolder == true)
-                    {
-                        guid = Guid.NewGuid().ToString();
-                    }
-                    else
-                    {
-                        guid = item.Hash;
-                    }
-                    r1[0] = guid;
-                    r1[1] = item.Size;
-                    fileInfo.Rows.Add(r1);
-                }
-                catch (Exception)
-                {
-
-                    //throw;
-                }
-
-               
                 try
                 {
                     DataRow r2 = fileOwner.NewRow();
                     r2[1] = userId;
                     r2[2] = item.Name;
-                    r2[3] = guid;
-                    r2[4] = item.Path;
-                    r2[5] = item.IsFolder;
+                    r2[3] = item.Hash;
                     fileOwner.Rows.Add(r2);
                 }
                 catch (Exception)
@@ -307,43 +383,22 @@ namespace ShareWare.ServiceLibrary
 
                     // throw;
                 }
-
             }
 
-            var conn = _context.Database.Connection;
-            conn.Open();
-            SqlBulkCopy bulkCopy = new SqlBulkCopy(_context.Database.Connection.ConnectionString, SqlBulkCopyOptions.KeepIdentity);
+
+           // BulkInser(fileInfo);
             try
             {
-
-                bulkCopy.DestinationTableName = "FileInfo";
-                bulkCopy.BatchSize = fileInfo.Rows.Count;
-
-                bulkCopy.WriteToServer(fileInfo);
+                int effect = _context.InsertToFileInfo();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
-                //Console.WriteLine(e.Message);
+                //throw;
             }
+            BulkInser(fileOwner);
 
-
-            try
-            {
-                bulkCopy.DestinationTableName = "FileOwner";
-                bulkCopy.BatchSize = fileOwner.Rows.Count;
-
-                bulkCopy.WriteToServer(fileOwner);
-
-            }
-            catch (Exception e)
-            {
-
-                //Console.WriteLine(e.Message);
-            }
-            conn.Close();
-
-
+            sw.Stop();
             #region MyRegion
             //try
             //{
@@ -383,15 +438,55 @@ namespace ShareWare.ServiceLibrary
             //}
 
             #endregion
-            return 0;
+            return;
         }
 
+        private void BulkInser(DataTable table)
+        {
+            using (SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)_context.Database.Connection))
+            {
+                _context.Database.Connection.Open();
+                try
+                {
+                    bulkCopy.DestinationTableName = table.TableName;
+                    bulkCopy.BatchSize = table.Rows.Count;
+                    bulkCopy.WriteToServer(table);
+
+                }
+                catch (Exception e)
+                {
+                    DataTable dt = table.Clone();
+                    int nHalf = table.Rows.Count / 2;
+
+                    if (nHalf == 0)
+                    {
+                        return;
+                    }
+
+                    for (int i = 0; i < nHalf; i++)
+                    {
+                        dt.ImportRow(table.Rows[i]);
+                    }
+                    BulkInser(dt);
+
+                    dt.Clear();
+                    for (int i = nHalf; i < table.Rows.Count; i++)
+                    {
+                        dt.ImportRow(table.Rows[i]);
+                    }
+
+                    BulkInser(dt);
+
+                }
+                bulkCopy.Close();
+            }
+        }
 
         public List<FileOwner> SearchFile(string fileName)
         {
             var result = from c in _context.FileOwner
                          where (c.Name.Contains(fileName))
-                         select new { c.ID, c.UserID, c.Name, c.Hash, c.Path, c.IsFolder };
+                         select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo };
             var list = result.ToList();
             var newList = new List<FileOwner>();
             foreach (var item in list)
@@ -402,9 +497,7 @@ namespace ShareWare.ServiceLibrary
                     UserID = item.UserID,
                     Hash = item.Hash,
                     Name = item.Name,
-                    IsFolder = item.IsFolder,
-                    Path = item.Path
-
+                    FileInfo = item.FileInfo
                 });
             }
 

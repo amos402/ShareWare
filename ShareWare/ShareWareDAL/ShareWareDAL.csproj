@@ -83,11 +83,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="packages.config" />
     <EntityDeploy Include="ShareWareModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ShareWareModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="packages.config" />
     <None Include="ShareWareModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ShareWareModel.edmx</DependentUpon>

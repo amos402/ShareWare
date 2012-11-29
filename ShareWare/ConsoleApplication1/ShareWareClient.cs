@@ -39,7 +39,7 @@ namespace ConsoleApplication1
         public void UploadFileInfo(List<FileInfoTransfer> fileList)
         {
 
-            _client.UploadShareInfo(fileList, _userId);
+           // _client.UploadShareInfo(fileList, _userId);
 
         }
 

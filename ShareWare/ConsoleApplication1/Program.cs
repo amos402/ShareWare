@@ -116,16 +116,20 @@ namespace ConsoleApplication1
             Thread.Sleep(1000);
 
             Stopwatch sw = new Stopwatch();
-            sw.Start();
+           
             ShareFiles sh = new ShareFiles();
 
-            sh.AddSharePath(@"asd", @"R:\");
-
+            sh.AddSharePath(@"asd", @"R:\vb");
+            //sh = ShareFiles.Deserialize(@"R:\shit.dman.fuck");
+            //sh.AddSharePath(@"shhi", @"E:\altera");
+           // sh.AddSharePath(@"shhi", @"D:\TDDOWNLOAD");
             //sh.AddSharePath("asd", @"D:\asd");
             //sh.OnePathComplete += ((sender, e) => Console.WriteLine("asdasdad"));
             //sh.OnePathComplete += ((asd, e) => Console.WriteLine(asd));
-            //Thread t = sh.ListFile();
-            //t.Join();
+            sh.Hashing += ((sender, e) => Console.WriteLine(e.Path)); sw.Start();
+           sh = ShareFiles.Deserialize(@"R:\shit.fuck");
+            Thread t = sh.ListFile();
+            t.Join();
             sw.Stop();
 
 
@@ -137,12 +141,15 @@ namespace ConsoleApplication1
             ShareServiceClient client = new ShareServiceClient(new InstanceContext(callBack));
 
             //bool res = client.Register("shit", "asdd", "asdasd@ad.com");
+           // bool asd = client.Register("Amos", "shit", "asd");
             int id = client.Login("Amos", "asd", GetFirstMac());
 
-            sh = ShareFiles.Deserialize(@"R:\shit.damn.fuck");
-
-            client.UploadShareInfo(sh.FileList, id);
-
+           // sh.Serialize(@"R:\shit.fuck");
+           // sh = ShareFiles.Deserialize(@"R:\shit.fuck");
+           
+            client.UploadShareInfo(sh.FileList);
+           // sh.SetUploaded(sh.FileList);
+           // sh.Serialize(@"R:\shit.dman.fuck");
             Console.WriteLine("Lonin ID : {0}", id);
 
             //client.UploadShareInfo(fileList, id);

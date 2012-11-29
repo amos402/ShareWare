@@ -29,8 +29,8 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void Logout();
 
-        [OperationContract]
-        int UploadShareInfo(List<FileInfoTransfer> fileList, int userId);
+        [OperationContract(IsOneWay = true)]
+        void UploadShareInfo(List<FileInfoTransfer> fileList);
 
         [OperationContract]
         List<FileOwner> SearchFile(string fileName);
