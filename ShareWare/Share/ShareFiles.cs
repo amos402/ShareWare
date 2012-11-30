@@ -47,7 +47,7 @@ namespace ShareWare.ShareFile
         PerformanceCounter _performCounter;
 
         //[NonSerialized]
-       
+
 
         static AutoResetEvent event1 = new AutoResetEvent(true);
 
@@ -330,16 +330,40 @@ namespace ShareWare.ShareFile
             }
         }
 
-        public List<CustFileInfo> SearchFile(string szFile)
+        public List<CustFileInfo> SearchFile(string fileName)
         {
             List<CustFileInfo> list = new List<CustFileInfo>();
             foreach (var item in _shareFileDict)
             {
-                var result = from c in item.Value where c.File.Name.Contains(szFile) select c;
+                var result = from c in item.Value
+                             where c.File.Name.Contains(fileName)
+                             select c;
                 list.AddRange(result);
-
             }
             return list;
+        }
+
+        public CustFileInfo FindFile(string hash)
+        {
+            CustFileInfo file = null;
+            foreach (var item in _shareFileDict.Values)
+            {
+                file = item.Find(T =>
+                {
+                    if (T.Hash == hash)
+                    {
+                        return true;
+                    }
+                    return false;
+                });
+
+                if (file != null)
+                {
+                    break;
+                }
+            }
+
+            return file;
         }
 
         protected class HashNameCompare : IEqualityComparer<ShareFile.FileInfoTransfer>
@@ -416,11 +440,21 @@ namespace ShareWare.ShareFile
 
         public static ShareFiles Deserialize(string path)
         {
-            FileStream stream = new FileStream(path, FileMode.Open);
-            BinaryFormatter bFormat = new BinaryFormatter();
-            ShareFiles sh = (ShareFiles)bFormat.Deserialize(stream);
-            stream.Close();
-            return sh;
+            try
+            {
+                FileStream stream = new FileStream(path, FileMode.Open);
+                BinaryFormatter bFormat = new BinaryFormatter();
+                ShareFiles sh = (ShareFiles)bFormat.Deserialize(stream);
+                stream.Close();
+                return sh;
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+
+            return new ShareFiles();
 
         }
 

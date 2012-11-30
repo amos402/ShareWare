@@ -67,6 +67,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Properties\DataSources\ShareWare.FileOwner.datasource" />
+    <None Include="Properties\DataSources\ShareWare.ShareFile.FileInfoTransfer.datasource" />
     <None Include="Service References\ServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>

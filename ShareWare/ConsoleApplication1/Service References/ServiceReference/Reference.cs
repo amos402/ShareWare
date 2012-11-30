@@ -489,6 +489,18 @@ namespace ConsoleApplication1.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadShareInfo")]
         System.Threading.Tasks.Task UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadShareInfo", ReplyAction="http://tempuri.org/IShareService/DownloadShareInfoResponse")]
+        System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> DownloadShareInfo();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadShareInfo", ReplyAction="http://tempuri.org/IShareService/DownloadShareInfoResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer>> DownloadShareInfoAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/RemoveOldFile")]
+        void RemoveOldFile(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/RemoveOldFile")]
+        System.Threading.Tasks.Task RemoveOldFileAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
         System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> SearchFile(string fileName);
         
@@ -592,6 +604,22 @@ namespace ConsoleApplication1.ServiceReference {
         
         public System.Threading.Tasks.Task UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
             return base.Channel.UploadShareInfoAsync(fileList);
+        }
+        
+        public System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> DownloadShareInfo() {
+            return base.Channel.DownloadShareInfo();
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer>> DownloadShareInfoAsync() {
+            return base.Channel.DownloadShareInfoAsync();
+        }
+        
+        public void RemoveOldFile(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
+            base.Channel.RemoveOldFile(fileList);
+        }
+        
+        public System.Threading.Tasks.Task RemoveOldFileAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
+            return base.Channel.RemoveOldFileAsync(fileList);
         }
         
         public System.Collections.Generic.List<ConsoleApplication1.ServiceReference.FileOwner> SearchFile(string fileName) {

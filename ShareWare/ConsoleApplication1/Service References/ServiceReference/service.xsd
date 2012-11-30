@@ -76,6 +76,25 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="DownloadShareInfo">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadShareInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ShareWare.ShareFile" minOccurs="0" name="DownloadShareInfoResult" nillable="true" type="q4:ArrayOfFileInfoTransfer" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveOldFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ShareWare.ShareFile" minOccurs="0" name="fileList" nillable="true" type="q5:ArrayOfFileInfoTransfer" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SearchFile">
     <xs:complexType>
       <xs:sequence>
@@ -86,14 +105,14 @@
   <xs:element name="SearchFileResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="SearchFileResult" nillable="true" type="q4:ArrayOfFileOwner" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="SearchFileResult" nillable="true" type="q6:ArrayOfFileOwner" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="DownloadRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="fileOnwer" nillable="true" type="q5:FileOwner" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="fileOnwer" nillable="true" type="q7:FileOwner" />
         <xs:element minOccurs="0" name="nPort" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -132,7 +151,7 @@
   <xs:element name="RefreshUserList">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="userList" nillable="true" type="q6:ArrayOfstring" />
+        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="userList" nillable="true" type="q8:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

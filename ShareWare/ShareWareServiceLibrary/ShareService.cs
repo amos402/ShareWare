@@ -1,4 +1,5 @@
 ﻿using ShareWare.DAL;
+using ShareWare.ShareFile;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -386,7 +387,7 @@ namespace ShareWare.ServiceLibrary
             }
 
 
-           // BulkInser(fileInfo);
+            BulkInser(fileInfo);
             try
             {
                 int effect = _context.InsertToFileInfo();
@@ -482,6 +483,67 @@ namespace ShareWare.ServiceLibrary
             }
         }
 
+        public void RemoveOldFile(List<FileInfoTransfer> fileList)
+        {
+           
+            int id = GetClientId();
+            foreach (var item in fileList)
+            {
+                var res = from c in _context.FileOwner
+                        where c.UserID == id && c.Hash == item.Hash
+                        select c;
+                foreach (var file in res)
+                {
+                    _context.FileOwner.Remove(file);
+                }
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+
+                    // throw;
+                }
+
+            }
+
+        }
+
+        public List<FileInfoTransfer> DownloadShareInfo()
+        {
+            List<FileInfoTransfer> list = new List<FileInfoTransfer>();
+            int id = GetClientId();
+            var result = from c in _context.FileOwner
+                         where (c.UserID == id)
+                         select c;
+            int nCount = 0;
+            foreach (var item in result)
+            {
+
+                if (item.FileInfo == null)
+                {
+                    nCount++;
+                }
+
+                FileInfoTransfer file = new FileInfoTransfer();
+                try
+                {
+                    file.Hash = item.Hash;
+                    file.Name = item.Name;
+                    file.Size = item.FileInfo.Size;
+                    file.IsFolder = item.FileInfo.IsFolder;
+                    list.Add(file);
+                }
+                catch (Exception)
+                {
+
+                    //throw;
+                }
+            }
+            return list;
+        }
+
         public List<FileOwner> SearchFile(string fileName)
         {
             var result = from c in _context.FileOwner
@@ -497,7 +559,7 @@ namespace ShareWare.ServiceLibrary
                     UserID = item.UserID,
                     Hash = item.Hash,
                     Name = item.Name,
-                    FileInfo = item.FileInfo
+                    //FileInfo = item.FileInfo
                 });
             }
 

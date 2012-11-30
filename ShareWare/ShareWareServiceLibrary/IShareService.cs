@@ -33,6 +33,11 @@ namespace ShareWare.ServiceLibrary
         void UploadShareInfo(List<FileInfoTransfer> fileList);
 
         [OperationContract]
+        List<FileInfoTransfer> DownloadShareInfo();
+
+        [OperationContract(IsOneWay = true)]
+        void RemoveOldFile(List<ShareFile.FileInfoTransfer> fileList);
+        [OperationContract]
         List<FileOwner> SearchFile(string fileName);
 
         [OperationContract]

@@ -116,18 +116,18 @@ namespace ConsoleApplication1
             Thread.Sleep(1000);
 
             Stopwatch sw = new Stopwatch();
-           
-            ShareFiles sh = new ShareFiles();
 
-            sh.AddSharePath(@"asd", @"R:\vb");
+            ShareFiles sh = ShareFiles.Deserialize(@"R:\1shit.fuck");
+            //sh.AddSystemSharePath();
+            sh.AddSharePath(@"asd", @"R:\WpfApplication4");
             //sh = ShareFiles.Deserialize(@"R:\shit.dman.fuck");
             //sh.AddSharePath(@"shhi", @"E:\altera");
-           // sh.AddSharePath(@"shhi", @"D:\TDDOWNLOAD");
+            // sh.AddSharePath(@"shhi", @"D:\TDDOWNLOAD");
             //sh.AddSharePath("asd", @"D:\asd");
             //sh.OnePathComplete += ((sender, e) => Console.WriteLine("asdasdad"));
             //sh.OnePathComplete += ((asd, e) => Console.WriteLine(asd));
             sh.Hashing += ((sender, e) => Console.WriteLine(e.Path)); sw.Start();
-           sh = ShareFiles.Deserialize(@"R:\shit.fuck");
+            //sh = ShareFiles.Deserialize(@"R:\shit.fuck");
             Thread t = sh.ListFile();
             t.Join();
             sw.Stop();
@@ -137,26 +137,30 @@ namespace ConsoleApplication1
 
             //var asd = ShareFiles.Deserialize(@"config\known.met");
 
-            CallBack callBack = new CallBack();
+            CallBack callBack = new CallBack(sh);
             ShareServiceClient client = new ShareServiceClient(new InstanceContext(callBack));
 
             //bool res = client.Register("shit", "asdd", "asdasd@ad.com");
-           // bool asd = client.Register("Amos", "shit", "asd");
+            // bool asd = client.Register("Amos", "shit", "asd");
             int id = client.Login("Amos", "asd", GetFirstMac());
+            //Console.ReadKey();
+            // sh.Serialize(@"R:\shit.fuck");
+            // sh = ShareFiles.Deserialize(@"R:\shit.fuck");
+            // var holy = sh.FindFile("0515338f-21bb-4e22-8ead-486c160be927");
 
-           // sh.Serialize(@"R:\shit.fuck");
-           // sh = ShareFiles.Deserialize(@"R:\shit.fuck");
-           
+            var info = client.DownloadShareInfo();
             client.UploadShareInfo(sh.FileList);
-           // sh.SetUploaded(sh.FileList);
-           // sh.Serialize(@"R:\shit.dman.fuck");
+            client.RemoveOldFile(sh.RemoveList);
+            sh.SetUploaded(sh.FileList);
+            // sh.Serialize(@"R:\1shit.fuck");
             Console.WriteLine("Lonin ID : {0}", id);
 
             //client.UploadShareInfo(fileList, id);
             Console.ReadKey();
-            var file = client.SearchFile("Data");
-            
-            
+            Thread.Sleep(1000);
+            var file = client.SearchFile("WpfApplication4");
+
+
             client.DownloadRequest(file[0], 5000);
 
             Console.ReadLine();
@@ -180,7 +184,6 @@ namespace ConsoleApplication1
             return (mac);
         }
 
-
     }
 
 
@@ -188,10 +191,20 @@ namespace ConsoleApplication1
     public class CallBack : IShareServiceCallback
     {
 
+        private ShareFiles _shFile;
+        public CallBack(ShareFiles shFile)
+        {
+            _shFile = shFile;
+        }
 
         public void DownloadPerformance(string szHash, string szIp, int nPort)
         {
             Console.WriteLine("send to {0} {1} {2}", szHash, szIp, nPort);
+            var file = _shFile.FindFile(szHash);
+            if (file != null)
+            {
+                Console.WriteLine(file.File.FullName);
+            }
         }
 
 
