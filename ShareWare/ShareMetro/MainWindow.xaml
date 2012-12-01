@@ -8,10 +8,9 @@
         Title="The ShareWare"
         Height="645.5"
         Width="1019.5"
-         Icon="aa.png"
         ShowTitleBar="True"
         ShowIconOnTitleBar="true"
-        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize">
+        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="logo.jpg">
 
     <Window.Resources>
         <ResourceDictionary>
