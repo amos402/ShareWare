@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustFileInfo.cs" />
+    <Compile Include="FileInfoData.cs" />
     <Compile Include="FileInfoTransfer.cs" />
     <Compile Include="HashHelper.cs" />
     <Compile Include="ShareFileEvent.cs" />

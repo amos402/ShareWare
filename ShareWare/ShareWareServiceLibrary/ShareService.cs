@@ -195,6 +195,7 @@ namespace ShareWare.ServiceLibrary
             user.UserIP = GetClientIp();
             user.MAC = mac;
             var client = OperationContext.Current.GetCallbackChannel<IClient>();
+
             ClientCallbackList.Add(client);
 
             try
@@ -485,13 +486,13 @@ namespace ShareWare.ServiceLibrary
 
         public void RemoveOldFile(List<FileInfoTransfer> fileList)
         {
-           
+
             int id = GetClientId();
             foreach (var item in fileList)
             {
                 var res = from c in _context.FileOwner
-                        where c.UserID == id && c.Hash == item.Hash
-                        select c;
+                          where c.UserID == id && c.Hash == item.Hash
+                          select c;
                 foreach (var file in res)
                 {
                     _context.FileOwner.Remove(file);
@@ -544,29 +545,27 @@ namespace ShareWare.ServiceLibrary
             return list;
         }
 
-        public List<FileOwner> SearchFile(string fileName)
+        public List<FileInfoData> SearchFile(string fileName)
         {
             var result = from c in _context.FileOwner
                          where (c.Name.Contains(fileName))
-                         select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo };
+                         select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo, c.Users };
             var list = result.ToList();
-            var newList = new List<FileOwner>();
+            var newList = new List<FileInfoData>();
             foreach (var item in list)
             {
-                newList.Add(new FileOwner()
+                newList.Add(new FileInfoData()
                 {
-                    ID = item.ID,
-                    UserID = item.UserID,
-                    Hash = item.Hash,
                     Name = item.Name,
-                    //FileInfo = item.FileInfo
+                    Hash = item.Hash,
+                    UserId = item.UserID,
+                    UserName = item.Users.UserName,
+                    Size = item.FileInfo.Size,
+                    IsFolder = item.FileInfo.IsFolder
                 });
             }
-
             return newList;
-
         }
-
 
         public int DownloadRequest(FileOwner fileOnwer, int nPort)
         {
@@ -581,6 +580,7 @@ namespace ShareWare.ServiceLibrary
 
             return users.Count();
         }
+
     }
 }
 

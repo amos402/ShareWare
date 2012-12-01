@@ -38,7 +38,7 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void RemoveOldFile(List<ShareFile.FileInfoTransfer> fileList);
         [OperationContract]
-        List<FileOwner> SearchFile(string fileName);
+        List<FileInfoData> SearchFile(string fileName);
 
         [OperationContract]
         int DownloadRequest(FileOwner fileOnwer, int nPort);
