@@ -130,7 +130,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <ListBox Grid.Row="0" Margin="0,244.977,0,53.807" HorizontalAlignment="Right" Width="207.977">
+                        <ListBox Grid.Row="0" Margin="0,244.977,0,53.807" HorizontalAlignment="Right" Width="207.977" ItemsSource="{Binding MainTab.OnlineUser}">
                         </ListBox>
                         <TextBox Margin="89.5,0.5,260,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Height="32"/>
                         <Button Style="{DynamicResource MetroCircleButtonStyle}"

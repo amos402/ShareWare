@@ -16,6 +16,10 @@ namespace ShareMetro
         public ObservableCollection<string> OnlineUser { get; set; }
 
 
+        public MainPage()
+        {
+            OnlineUser = new ObservableCollection<string>();
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)

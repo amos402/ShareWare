@@ -12,9 +12,11 @@ namespace ShareMetro
     {
 
         private ShareFiles _shFile;
-        public CallBack()
+        private MainPage _mainTab;
+        public CallBack(MainPage mainTab)
         {
             //_shFile = shFile;
+            _mainTab = mainTab;
         }
 
         public void DownloadPerformance(string szHash, string szIp, int nPort)
@@ -30,7 +32,7 @@ namespace ShareMetro
 
         public void NewUser(int id, string name)
         {
-            //Console.WriteLine("New user : {0}  {1}", id, name);
+            _mainTab.OnlineUser.Add(name);
         }
 
         public void RefreshUserList(List<string> userList)
@@ -38,7 +40,7 @@ namespace ShareMetro
             // Console.WriteLine("Online users :");
             foreach (var item in userList)
             {
-                //     Console.WriteLine(item);
+                _mainTab.OnlineUser.Add(item);
             }
         }
 

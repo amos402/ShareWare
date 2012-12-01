@@ -119,7 +119,7 @@ namespace ConsoleApplication1
 
             ShareFiles sh = ShareFiles.Deserialize(@"R:\1shit.fuck");
             //sh.AddSystemSharePath();
-            sh.AddSharePath(@"asd", @"R:\WpfApplication4");
+            sh.AddSharePath(@"RamDisk", @"R:\");
             //sh = ShareFiles.Deserialize(@"R:\shit.dman.fuck");
             //sh.AddSharePath(@"shhi", @"E:\altera");
             // sh.AddSharePath(@"shhi", @"D:\TDDOWNLOAD");
@@ -133,7 +133,7 @@ namespace ConsoleApplication1
             sw.Stop();
 
 
-            //sh.Serialize(@"config\known.met");
+            sh.Serialize(@"config\known.met");
 
             //var asd = ShareFiles.Deserialize(@"config\known.met");
 

@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Management;
 using System.Threading.Tasks;
 using ShareWare;
+using System;
+using System.Threading;
 
 namespace ShareMetro
 {
@@ -50,15 +52,19 @@ namespace ShareMetro
             MainTab = new MainPage();
             LoginCmd = new DelegateCommand<object>(OnLogin, arg => true);
             SearchCmd = new DelegateCommand<object>(OnSearch, arg => true);
-            callBack = new CallBack();
+            callBack = new CallBack(MainTab);
             _client = new ShareServiceClient(new InstanceContext(callBack));
+            Login += GetShareInfo;
         }
 
         #endregion
+        private string _shareInfoPath = @"config\known.met";
+
+        public event EventHandler<ModelEvent> Login;
 
         private CallBack callBack;
         private ShareServiceClient _client;
-        public ShareServiceClient Client
+        internal ShareServiceClient Client
         {
             get { return _client; }
             set { _client = value; }
@@ -69,6 +75,8 @@ namespace ShareMetro
         public int Index { get; set; }
         public bool HideMenu { get; set; }
         private List<FileInfoData> _fileList;
+
+        private ShareFiles _sh;
 
         public List<FileInfoData> FileList
         {
@@ -119,7 +127,7 @@ namespace ShareMetro
         {
             _loginTab.IsBusy = true;
 
-            var task = _client.LoginAsync(_loginTab.UserName, _loginTab.Password, GetFirstMac());
+            Task<int> task = _client.LoginAsync(_loginTab.UserName, _loginTab.Password, GetFirstMac());
             task.ContinueWith(T =>
             {
                 if (T.Result < 0)
@@ -129,17 +137,54 @@ namespace ShareMetro
                 _id = T.Result;
                 HideMenu = true;
                 Index = 1;
+
+                if (Login != null)
+                {
+                    ExecuteEventAsync(this, new ModelEvent(), Login, null);
+                }
+
             });
             LoginTab.ButtonVisiable = false;
         }
 
         public void OnSearch(object obj)
         {
-            var task = _client.SearchFileAsync(MainTab.FileName);
+            Task<List<FileInfoData>> task = _client.SearchFileAsync(MainTab.FileName);
             task.ContinueWith(T =>
                 {
                     FileList = T.Result;
                 });
+        }
+
+
+        private void ExecuteEventAsync(object sender, ModelEvent e, EventHandler<ModelEvent> handler, AsyncCallback callBack)
+        {
+            foreach (EventHandler<ModelEvent> item in handler.GetInvocationList())
+            {
+                item.BeginInvoke(sender, e, callBack, null);
+            }
+        }
+
+       
+
+        private void GetShareInfo(object sender, ModelEvent e)
+        {
+            _sh = ShareFiles.Deserialize(_shareInfoPath);
+            //_sh.AddSharePath("RamDisk", @"R:\");
+            Thread t = _sh.ListFile();
+            t.Join();
+            _client.UploadShareInfo(_sh.FileList);
+            _sh.SetUploaded(_sh.FileList);
+
+            SaveShareInfo();
+        }
+
+        private void SaveShareInfo()
+        {
+            if (_sh != null)
+            {
+                _sh.Serialize(_shareInfoPath);
+            }
         }
 
         public static string GetFirstMac()
