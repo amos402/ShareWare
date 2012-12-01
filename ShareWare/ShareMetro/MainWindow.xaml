@@ -74,7 +74,7 @@
             <TabControl HorizontalAlignment="Left" Width="1003.5" Height="616.5" VerticalAlignment="Top"  SelectedIndex="{Binding Index}">
                 <TabItem Header=" 登陆 &amp; 注册 ">
                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Grid Margin="0,-148,-479,138" VerticalAlignment="Bottom" HorizontalAlignment="Right" BindingGroup="{Binding LoginTab}">
+                        <Grid Margin="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" BindingGroup="{Binding LoginTab}">
                             <Controls:Tile Title="My _Cupcakes"
                         		Count="23" Margin="251,174.63,0,204" Height="Auto" Width="172" HorizontalAlignment="Left">
                                 <Controls:MetroImage/>
@@ -105,7 +105,7 @@
                             <TextBlock Margin="453.999,219.078,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1" d:LayoutOverrides="VerticalAlignment"><Run Language="zh-cn" Text="密   码:"/></TextBlock>
                             <TextBlock Margin="452.999,177.413,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1"><Run Language="zh-cn" Text="用户名"/><Run Language="zh-cn" Text=":"/></TextBlock>
                             <Controls:ProgressRing HorizontalAlignment="Left" Margin="340,138,0,-3.63" VerticalAlignment="Top" IsActive="{Binding LoginTab.IsBusy}"/>
-                            <GroupBox Header="" Margin="205,61,212,191"/>
+                            <GroupBox Header="" Margin="209.694,122.505,207.805,129.625"/>
                         </Grid>
                         <!--<Slider Height="23" HorizontalAlignment="Left" Margin="273,119,0,0" Name="slider1" VerticalAlignment="Top" Width="218" Maximum="100" Value="50" />-->
                     </Grid>
