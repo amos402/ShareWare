@@ -29,7 +29,7 @@ namespace ShareMetro
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            var x = pivot.Items;
+           // var x = pivot.Items;
            
             Flyouts[0].IsOpen = !Flyouts[0].IsOpen;
             Flyouts[2].IsOpen = !Flyouts[2].IsOpen;
