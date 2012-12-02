@@ -10,7 +10,7 @@
         Width="1019.5"
         ShowTitleBar="True"
         ShowIconOnTitleBar="true"
-        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="logo.jpg">
+        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="images/logo.jpg">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -127,7 +127,6 @@
                                     <GridViewColumn Header="文件名" DisplayMemberBinding="{Binding Name}" />
                                     <GridViewColumn Header="大小" DisplayMemberBinding="{Binding Size}" />
                                     <GridViewColumn Header="类型" DisplayMemberBinding="{Binding IsFolder}" />
-                                    <GridViewColumn Header="用户名" DisplayMemberBinding="{Binding UserName}" />
                                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Hash}" />
                                 </GridView>
                             </ListView.View>
@@ -149,7 +148,7 @@
                 			Height="33.5"
                 			Width="33.5"
                 			VerticalAlignment="Top" HorizontalAlignment="Left" Margin="48.5,0,0,0" d:LayoutOverrides="VerticalAlignment">
-                            <Image Height="10.692" Width="12.973" Source="后退.png">
+                            <Image Height="10.692" Width="12.973" Source="images/front.png">
                                 <Image.OpacityMask>
                                     <SolidColorBrush Color="White" Opacity="0.55"/>
                                 </Image.OpacityMask>
@@ -159,7 +158,7 @@
                 			Height="33.5"
                 			Width="33.5"
                 			VerticalAlignment="Top" HorizontalAlignment="Left" Margin="11.5,0,0,0" d:LayoutOverrides="VerticalAlignment">
-                            <Image Height="10.692" Width="12.973" Source="后退.png" RenderTransformOrigin="0.5,0.5">
+                            <Image Height="10.692" Width="12.973" Source="images/front.png" RenderTransformOrigin="0.5,0.5">
                                 <Image.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -203,7 +202,7 @@
                             <ColumnDefinition Width="Auto" MinWidth="999.5" />
                         </Grid.ColumnDefinitions>
 
-                        <ListView ItemsSource="{Binding Albums}" BorderThickness="0" Margin="18.5,53,228.5,8" IsSynchronizedWithCurrentItem="False">
+                        <ListView  BorderThickness="0" Margin="18.5,53,228.5,8" IsSynchronizedWithCurrentItem="False">
                             <ListView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="下载" FontSize="12"/>
@@ -218,8 +217,8 @@
                                     <GridView.ColumnHeaderContextMenu>
                                         <ContextMenu/>
                                     </GridView.ColumnHeaderContextMenu>
-                                    <GridViewColumn Header="artist" DisplayMemberBinding="{Binding Title}" />
-                                    <GridViewColumn Header="url" DisplayMemberBinding="{Binding Price}" />
+                                    <GridViewColumn Header="artist" />
+                                    <GridViewColumn Header="url" />
                                 </GridView>
                             </ListView.View>
                         </ListView>
