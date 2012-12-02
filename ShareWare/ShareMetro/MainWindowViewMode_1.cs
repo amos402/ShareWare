@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
-using ShareMetro.Models;
 using Microsoft.Practices.Prism.Commands;
 using ShareMetro.ServiceReference;
 using ShareWare.ShareFile;
@@ -15,54 +14,66 @@ using System.Threading.Tasks;
 using ShareWare;
 using System;
 using System.Threading;
+using System.Timers;
+using System.Windows;
 
 namespace ShareMetro
 {
     public partial class MainWindowViewModel : INotifyPropertyChanged
     {
+        #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-        #region MyRegion
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 
-        //public ObservableCollection<PanoramaGroup> Groups { get; set; }
-        //readonly PanoramaGroup _albums;
-        //readonly PanoramaGroup _artists;
+        #endregion
 
-
-        //public bool Busy { get; set; }
-
-        //public int SelectedIndex { get; set; }
-        //public List<Album> Albums { get; set; }
-        //public List<Artist> Artists { get; set; }
-
+        private Dispatcher _dispatcher;
         public MainWindowViewModel(Dispatcher dispatcher)
         {
-
-            //SampleData.Seed();
-            //Albums = SampleData.Albums;
-            //Artists = SampleData.Artists;
-            //Busy = true;
-            //_albums = new PanoramaGroup("trending tracks");
-            //_artists = new PanoramaGroup("trending artists");
-            //Groups = new ObservableCollection<PanoramaGroup> { _albums, _artists };
-
-            //_artists.SetSource(SampleData.Artists.Take(25));
-            //_albums.SetSource(SampleData.Albums.Take(25));
-            //Busy = false;
+            _dispatcher = dispatcher;
             LoginTab = new LoginPage() { ButtonVisiable = true };
             MainTab = new MainPage();
             LoginCmd = new DelegateCommand<object>(OnLogin, arg => true);
             SearchCmd = new DelegateCommand<object>(OnSearch, arg => true);
-            callBack = new CallBack(MainTab);
-            _client = new ShareServiceClient(new InstanceContext(callBack));
-            Login += GetShareInfo;
+            _callBack = new CallBack(MainTab);
+            _client = new ShareServiceClient(new InstanceContext(_callBack));
+            _client.InnerChannel.Closing += InnerChannel_Closing;
+            ErrorOccur += OnErrorOccur;
+            LoginSuccess += GetShareInfo;
+            LoginSuccess += ClientTick;
+            LoginFailed += OnLoginFailed;
         }
 
-        #endregion
+        void OnErrorOccur(object sender, ModelEvent e)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        void OnLoginFailed(object sender, EventArgs e)
+        {
+            MessageBox.Show("fuck");
+        }
+
+
         private string _shareInfoPath = @"config\known.met";
+        private static Mutex searchMut = new Mutex();
+        private static int _tickTime = 60000;
 
-        public event EventHandler<ModelEvent> Login;
 
-        private CallBack callBack;
+        public event EventHandler<ModelEvent> LoginSuccess;
+        public event EventHandler LoginFailed;
+        public event EventHandler ServerTimeout;
+        public event EventHandler<ModelEvent> ErrorOccur;
+
+        private CallBack _callBack;
         private ShareServiceClient _client;
         internal ShareServiceClient Client
         {
@@ -74,11 +85,11 @@ namespace ShareMetro
 
         public int Index { get; set; }
         public bool HideMenu { get; set; }
-        private List<FileInfoData> _fileList;
 
+        private ObservableCollection<FileInfoData> _fileList = new ObservableCollection<FileInfoData>();
         private ShareFiles _sh;
 
-        public List<FileInfoData> FileList
+        public ObservableCollection<FileInfoData> FileList
         {
             get { return _fileList; }
             set
@@ -88,16 +99,12 @@ namespace ShareMetro
             }
         }
 
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
 
+
+        #region Command
         public ICommand LoginCmd { get; set; }
         public ICommand SearchCmd { get; set; }
+        #endregion
 
         private LoginPage _loginTab;
         public LoginPage LoginTab
@@ -111,7 +118,6 @@ namespace ShareMetro
         }
 
         private MainPage _mainTab;
-
         public MainPage MainTab
         {
             get { return _mainTab; }
@@ -123,39 +129,93 @@ namespace ShareMetro
         }
 
 
-        public void OnLogin(object obj)
+        private void OnLogin(object obj)
         {
             _loginTab.IsBusy = true;
 
-            Task<int> task = _client.LoginAsync(_loginTab.UserName, _loginTab.Password, GetFirstMac());
-            task.ContinueWith(T =>
+            try
             {
-                if (T.Result < 0)
-                {
-                    return;
-                }
-                _id = T.Result;
-                HideMenu = true;
-                Index = 1;
+                Task<int> task = _client.LoginAsync(_loginTab.UserName, _loginTab.Password, GetFirstMac());
 
-                if (Login != null)
+                task.ContinueWith(T =>
                 {
-                    ExecuteEventAsync(this, new ModelEvent(), Login, null);
-                }
+                    AggregateException ex = T.Exception;
+                    if (ex != null)
+                    {
+                        if (ex.InnerExceptions.Count > 0)
+                        {
+                            LoginFailed(this, null);
+                            return;
+                        }
+                    }
+                    if (T.Result < 0)
+                    {
+                        return;
+                    }
 
-            });
-            LoginTab.ButtonVisiable = false;
-        }
+                    _id = T.Result;
+                    HideMenu = true;
+                    Index = 1;
+                    if (LoginSuccess != null)
+                    {
+                        ExecuteEventAsync(this, new ModelEvent(), LoginSuccess, null);
+                    }
 
-        public void OnSearch(object obj)
-        {
-            Task<List<FileInfoData>> task = _client.SearchFileAsync(MainTab.FileName);
-            task.ContinueWith(T =>
-                {
-                    FileList = T.Result;
                 });
+            }
+            catch (Exception e)
+            {
+
+                if (ErrorOccur != null)
+                {
+                    ErrorOccur(this, new ModelEvent() { ModelException = e }); 
+                }
+            }
+
         }
 
+        private void OnSearch(object obj)
+        {
+            try
+            {
+                Task<List<FileInfoData>> task = _client.SearchFileAsync(MainTab.FileName);
+                FileList.Clear();
+                task.ContinueWith(T =>
+                    {
+                        ThreadPool.QueueUserWorkItem(delegate
+                        {
+                            searchMut.WaitOne();
+                            if (T.Result != null)
+                            {
+                                foreach (var item in T.Result)
+                                {
+                                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate
+                                    {
+                                        if (item != null)
+                                        {
+                                            FileList.Add(item);
+                                        }
+                                        Thread.Sleep(30);
+                                    });
+                                } 
+                            }
+                            searchMut.ReleaseMutex();
+                        });
+                    });
+            }
+            catch (Exception e)
+            {
+                if (ErrorOccur != null)
+                {
+                    ErrorOccur(this, new ModelEvent() { ModelException = e });
+                }
+            }
+        }
+
+        private void InnerChannel_Closing(object sender, EventArgs e)
+        {
+            Console.WriteLine(sender);
+        }
 
         private void ExecuteEventAsync(object sender, ModelEvent e, EventHandler<ModelEvent> handler, AsyncCallback callBack)
         {
@@ -165,16 +225,40 @@ namespace ShareMetro
             }
         }
 
-       
+        private static System.Timers.Timer _tickTimer;
+
+        private void ClientTick(object sender, EventArgs e)
+        {
+            _tickTimer = new System.Timers.Timer(_tickTime);
+            _tickTimer.Interval = _tickTime;
+            _tickTimer.Elapsed += OnClientTick;
+            _tickTimer.Start();
+
+        }
+        private void OnClientTick(object source, ElapsedEventArgs e)
+        {
+            try
+            {
+                 _client.TickTack();
+                Console.WriteLine(_client.InnerChannel.State);
+                Console.WriteLine(_client.InnerDuplexChannel.State);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
         private void GetShareInfo(object sender, ModelEvent e)
         {
             _sh = ShareFiles.Deserialize(_shareInfoPath);
-            //_sh.AddSharePath("RamDisk", @"R:\");
+           _sh.AddSharePath("RamDisk", @"R:\");
+            //_sh.AddSharePath("damn", @"D:\TDDOWNLOAD");
             Thread t = _sh.ListFile();
             t.Join();
             _client.UploadShareInfo(_sh.FileList);
-            _sh.SetUploaded(_sh.FileList);
+            _client.RemoveOldFile(_sh.RemoveList);
+           // _sh.SetUploaded(_sh.FileList);
 
             SaveShareInfo();
         }
