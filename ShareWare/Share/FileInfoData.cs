@@ -18,7 +18,7 @@ namespace ShareWare
         public string Hash { get; set; }
 
         [DataMember]
-        public long Size { get; set; }
+        public long? Size { get; set; }
 
         [DataMember]
         public int UserId { get; set; }

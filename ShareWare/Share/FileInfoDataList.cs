@@ -11,7 +11,7 @@ namespace ShareWare.ShareFile
     {
         public string Name { get; set; }
         public string Hash { get; set; }
-        public long Size { get; set; }
+        public long? Size { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; }
         public bool IsFolder { get; set; }
@@ -23,7 +23,7 @@ namespace ShareWare.ShareFile
                 {
                     return "文件夹";
                 }
-                else return Name.Substring(Name.LastIndexOf("."));
+                else return Name.Substring(Name.LastIndexOf(".") + 1);
             }
         }
         public int Source { get; set; }
