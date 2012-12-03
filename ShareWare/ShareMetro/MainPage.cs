@@ -12,6 +12,7 @@ namespace ShareMetro
     {
 
         public string FileName { get; set; }
+        public bool IsBusy { get; set; }
 
         public ObservableCollection<string> OnlineUser { get; set; }
 
@@ -19,6 +20,7 @@ namespace ShareMetro
         public MainPage()
         {
             OnlineUser = new ObservableCollection<string>();
+            IsBusy = false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

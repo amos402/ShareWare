@@ -2,8 +2,8 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ServiceLibrary" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ShareFile" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
   <xs:element name="GetData">
     <xs:complexType>
       <xs:sequence>
@@ -30,6 +30,11 @@
       <xs:sequence>
         <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ShareWare.ServiceLibrary" minOccurs="0" name="GetDataUsingDataContractResult" nillable="true" type="q2:CompositeType" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TickTack">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
   <xs:element name="Register">
@@ -76,6 +81,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="UploadShareInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UploadShareInfoResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="DownloadShareInfo">
     <xs:complexType>
       <xs:sequence />
@@ -98,21 +110,21 @@
   <xs:element name="SearchFile">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="fileName" nillable="true" type="xs:string" />
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="nameList" nillable="true" type="q6:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SearchFileResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="SearchFileResult" nillable="true" type="q6:ArrayOfFileInfoData" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="SearchFileResult" nillable="true" type="q7:ArrayOfFileInfoData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="DownloadRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="fileOnwer" nillable="true" type="q7:FileOwner" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="fileOnwer" nillable="true" type="q8:FileOwner" />
         <xs:element minOccurs="0" name="nPort" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -151,7 +163,7 @@
   <xs:element name="RefreshUserList">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="userList" nillable="true" type="q8:ArrayOfstring" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="userList" nillable="true" type="q9:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

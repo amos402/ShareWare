@@ -39,7 +39,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>mahapps.metro.logo2.ico</ApplicationIcon>
+    <ApplicationIcon>images\mahapps.metro.logo2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -104,11 +104,9 @@
     <Compile Include="CallBack.cs" />
     <Compile Include="LoginPage.cs" />
     <Compile Include="MainPage.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="MainWindowViewMode_1.cs" />
     <Compile Include="ModelEvent.cs" />
-    <Compile Include="Models\Album.cs" />
-    <Compile Include="Models\Artist.cs" />
-    <Compile Include="Models\Genre.cs" />
+    <Compile Include="OptionPage.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="Service References\ServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -151,7 +149,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\app.manifest" />
     <None Include="Properties\DataSources\ShareWare.FileInfoData.datasource" />
@@ -209,7 +209,7 @@
   <ItemGroup>
     <Resource Include="5.jpg" />
     <Resource Include="aa.png" />
-    <Resource Include="mahapps.metro.logo2.ico" />
+    <Resource Include="images\mahapps.metro.logo2.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Share\ShareFile.csproj">
@@ -242,7 +242,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo.jpg" />
+    <Resource Include="images\logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\front.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\sharewareicon.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

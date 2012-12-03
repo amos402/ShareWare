@@ -61,9 +61,12 @@ namespace ShareWare.ServiceLibrary
         void ShareService_UserLogin(object sender, ServerEventArgs e)
         {
             Users user = e.User;
-            foreach (var item in _userDict.Values)
+            foreach (var item in _userDict)
             {
-                item.NewUser(user.UserID, user.UserName);
+                if (item.Key != user)
+                {
+                    item.Value.NewUser(user.UserID, user.UserName);
+                }
             }
         }
 
@@ -149,7 +152,7 @@ namespace ShareWare.ServiceLibrary
             catch (Exception)
             {
 
-                throw;
+                return -1;
             }
 
             return id;
@@ -164,17 +167,21 @@ namespace ShareWare.ServiceLibrary
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                _context.Users.Add(new Users() { UserName = userName, Password = passWord, Mail = mail });
+                using (ShareWareEntities context = new ShareWareEntities())
+                {
+                    try
+                    {
+                        context.Users.Add(new Users() { UserName = userName, Password = passWord, Mail = mail });
+                        context.SaveChanges();
+                        transaction.Complete();
+                    }
+                    catch (Exception)
+                    {
 
-                try
-                {
-                    _context.SaveChanges();
-                    transaction.Complete();
+                        return false;
+                    }
                 }
-                catch (Exception)
-                {
-                    return false;
-                }
+
             }
             return true;
         }
@@ -267,18 +274,16 @@ namespace ShareWare.ServiceLibrary
             }
         }
 
-        public void UploadShareInfo(List<ShareFile.FileInfoTransfer> fileList)
+        public bool UploadShareInfo(List<ShareFile.FileInfoTransfer> fileList)
         {
             int userId = GetClientId();
 
             if (userId < 0)
             {
-                return;
+                return false;
             }
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
             var clearList = fileList.Distinct(new HashCompare());
+            #region MyRegion
 
             //var hashList = (from b in clearList
             //                select b.Hash)
@@ -306,7 +311,8 @@ namespace ShareWare.ServiceLibrary
 
             //var ownerList = from c in fileList.AsEnumerable()
             //                where ownerExceptList.Contains(new { c.Hash, c.Name })
-            //                select c;
+            //                select c; 
+            #endregion
 
 
             DataTable fileInfo = new DataTable();
@@ -321,12 +327,12 @@ namespace ShareWare.ServiceLibrary
 
 
             DataTable fileOwner = new DataTable();
-            var shit = from c in _context.FileOwner select c.ID;
+            var dataId = from c in _context.FileOwner select c.ID;
 
             int? nLast = null;
             try
             {
-                nLast = shit.Max();
+                nLast = dataId.Max();
             }
             catch (Exception)
             {
@@ -387,20 +393,25 @@ namespace ShareWare.ServiceLibrary
                 }
             }
 
-
-            BulkInser(fileInfo);
-            try
+            using (TransactionScope ts = new TransactionScope())
             {
-                int effect = _context.InsertToFileInfo();
-            }
-            catch (Exception)
-            {
+                try
+                {
+                    if (BulkInser(fileInfo))
+                    {
+                        int effect = _context.InsertToFileInfo();
+                        BulkInser(fileOwner);
+                    }
 
-                //throw;
-            }
-            BulkInser(fileOwner);
+                    ts.Complete();
+                }
+                catch (Exception)
+                {
 
-            sw.Stop();
+                    // throw;
+                }
+
+            }
             #region MyRegion
             //try
             //{
@@ -440,10 +451,10 @@ namespace ShareWare.ServiceLibrary
             //}
 
             #endregion
-            return;
+            return true;
         }
 
-        private void BulkInser(DataTable table)
+        private bool BulkInser(DataTable table)
         {
             using (SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)_context.Database.Connection))
             {
@@ -453,17 +464,13 @@ namespace ShareWare.ServiceLibrary
                     bulkCopy.DestinationTableName = table.TableName;
                     bulkCopy.BatchSize = table.Rows.Count;
                     bulkCopy.WriteToServer(table);
-
+                    bulkCopy.Close();
+                    return true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     DataTable dt = table.Clone();
                     int nHalf = table.Rows.Count / 2;
-
-                    if (nHalf == 0)
-                    {
-                        return;
-                    }
 
                     for (int i = 0; i < nHalf; i++)
                     {
@@ -480,8 +487,9 @@ namespace ShareWare.ServiceLibrary
                     BulkInser(dt);
 
                 }
-                bulkCopy.Close();
+
             }
+            return false;
         }
 
         public void RemoveOldFile(List<FileInfoTransfer> fileList)
@@ -545,26 +553,38 @@ namespace ShareWare.ServiceLibrary
             return list;
         }
 
-        public List<FileInfoData> SearchFile(string fileName)
+        public List<FileInfoData> SearchFile(List<string> nameList)
         {
-            var result = from c in _context.FileOwner
-                         where (c.Name.Contains(fileName))
-                         select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo, c.Users };
-            var list = result.ToList();
-            var newList = new List<FileInfoData>();
-            foreach (var item in list)
+            int id = GetClientId();
+
+            if (id < 0)
             {
-                newList.Add(new FileInfoData()
-                {
-                    Name = item.Name,
-                    Hash = item.Hash,
-                    UserId = item.UserID,
-                    UserName = item.Users.UserName,
-                    Size = item.FileInfo.Size,
-                    IsFolder = item.FileInfo.IsFolder
-                });
+                return null;
             }
-            return newList;
+            List<FileInfoData> newList = new List<FileInfoData>();
+
+            foreach (var item in nameList)
+            {
+                var result = (from c in _context.FileOwner
+                             where (c.Name.Contains(item))
+                             select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo, c.Users });
+                foreach (var file in result)
+                {
+                    newList.Add(new FileInfoData()
+                    {
+                        Name = file.Name,
+                        Hash = file.Hash,
+                        UserId = file.UserID,
+                        UserName = file.Users.UserName,
+                        Size = file.FileInfo.Size,
+                        IsFolder = file.FileInfo.IsFolder
+                    });
+                }
+            }
+
+           
+
+            return newList.Distinct().ToList();
         }
 
         public int DownloadRequest(FileOwner fileOnwer, int nPort)
@@ -581,6 +601,13 @@ namespace ShareWare.ServiceLibrary
             return users.Count();
         }
 
+
+
+        public void TickTack()
+        {
+            int t = 1;
+
+        }
     }
 }
 

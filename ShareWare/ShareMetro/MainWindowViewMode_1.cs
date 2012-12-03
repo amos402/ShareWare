@@ -48,28 +48,41 @@ namespace ShareMetro
             LoginSuccess += GetShareInfo;
             LoginSuccess += ClientTick;
             LoginFailed += OnLoginFailed;
+
         }
 
         void OnErrorOccur(object sender, ModelEvent e)
         {
-            throw new NotImplementedException();
+            switch (e.Type)
+            {
+                case ModelEventType.Exception:
+                    MessageBox.Show(e.ModelException.Message);
+                    break;
+
+                case ModelEventType.Meesage:
+                    _loginTab.FailedMessage = e.FailedMessage;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
 
 
-        void OnLoginFailed(object sender, EventArgs e)
+        void OnLoginFailed(object sender, ModelEvent e)
         {
-            MessageBox.Show("fuck");
+
         }
 
 
         private string _shareInfoPath = @"config\known.met";
         private static Mutex searchMut = new Mutex();
         private static int _tickTime = 60000;
-
+        private static System.Timers.Timer _tickTimer;
 
         public event EventHandler<ModelEvent> LoginSuccess;
-        public event EventHandler LoginFailed;
+        public event EventHandler<ModelEvent> LoginFailed;
         public event EventHandler ServerTimeout;
         public event EventHandler<ModelEvent> ErrorOccur;
 
@@ -86,9 +99,9 @@ namespace ShareMetro
         public int Index { get; set; }
         public bool HideMenu { get; set; }
 
-        private ObservableCollection<FileInfoData> _fileList = new ObservableCollection<FileInfoData>();
         private ShareFiles _sh;
 
+        private ObservableCollection<FileInfoData> _fileList = new ObservableCollection<FileInfoData>();
         public ObservableCollection<FileInfoData> FileList
         {
             get { return _fileList; }
@@ -99,11 +112,52 @@ namespace ShareMetro
             }
         }
 
+        private bool _sysShareSwitch;
 
+        public bool SysShareSwitch
+        {
+            get { return _sysShareSwitch; }
+            set
+            {
+                _sysShareSwitch = value;
+                if (_sh != null)
+                {
+                    if (_sysShareSwitch)
+                    {
 
-        #region Command
+                        _sh.AddSystemSharePath();
+
+                    }
+                    else
+                    {
+                        foreach (var item in _sh.SystemShareNameList)
+                        {
+                            _sh.RemoveSharePath(item);
+                        }
+
+                    }
+                }
+            }
+        }
+
+        public Dictionary<string, string> SharePath
+        {
+            get
+            {
+                return _sh.SharePath;
+            }
+            set
+            {
+                _sh.SharePath = value;
+                OnPropertyChanged("SharePath");
+            }
+        }
+
+        #region Commands
         public ICommand LoginCmd { get; set; }
         public ICommand SearchCmd { get; set; }
+        public ICommand AddSearchPathCmd { get; set; }
+
         #endregion
 
         private LoginPage _loginTab;
@@ -132,7 +186,8 @@ namespace ShareMetro
         private void OnLogin(object obj)
         {
             _loginTab.IsBusy = true;
-
+            _loginTab.LoginAble = false;
+            _loginTab.FailedMessage = string.Empty;
             try
             {
                 Task<int> task = _client.LoginAsync(_loginTab.UserName, _loginTab.Password, GetFirstMac());
@@ -144,12 +199,17 @@ namespace ShareMetro
                     {
                         if (ex.InnerExceptions.Count > 0)
                         {
-                            LoginFailed(this, null);
+                            ErrorOccur(this, new ModelEvent(ModelEventType.Meesage) { FailedMessage = "连接服务器出错" });
+                            _loginTab.IsBusy = false;
+                            _loginTab.LoginAble = true;
                             return;
                         }
                     }
                     if (T.Result < 0)
                     {
+                        ErrorOccur(this, new ModelEvent(ModelEventType.Meesage) { FailedMessage = "用户名或密码错误" });
+                        _loginTab.IsBusy = false;
+                        _loginTab.LoginAble = true;
                         return;
                     }
 
@@ -158,8 +218,10 @@ namespace ShareMetro
                     Index = 1;
                     if (LoginSuccess != null)
                     {
-                        ExecuteEventAsync(this, new ModelEvent(), LoginSuccess, null);
+                        ExecuteEventAsync(this, null, LoginSuccess, null);
                     }
+                    _loginTab.IsBusy = false;
+                    _loginTab.LoginAble = true;
 
                 });
             }
@@ -168,7 +230,7 @@ namespace ShareMetro
 
                 if (ErrorOccur != null)
                 {
-                    ErrorOccur(this, new ModelEvent() { ModelException = e }); 
+                    ErrorOccur(this, new ModelEvent(ModelEventType.Exception) { ModelException = e });
                 }
             }
 
@@ -176,28 +238,42 @@ namespace ShareMetro
 
         private void OnSearch(object obj)
         {
+            _mainTab.IsBusy = true;
             try
             {
-                Task<List<FileInfoData>> task = _client.SearchFileAsync(MainTab.FileName);
+                string[] sp = MainTab.FileName.Split(' ');
+                List<string> nameList = new List<string>();
+                nameList.AddRange(sp);
+                Task<List<FileInfoData>> task = _client.SearchFileAsync(nameList);
                 FileList.Clear();
                 task.ContinueWith(T =>
                     {
                         ThreadPool.QueueUserWorkItem(delegate
                         {
                             searchMut.WaitOne();
+                            _mainTab.IsBusy = false;
                             if (T.Result != null)
                             {
                                 foreach (var item in T.Result)
                                 {
-                                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate
+                                    try
                                     {
-                                        if (item != null)
+                                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                            (ThreadStart)delegate
                                         {
-                                            FileList.Add(item);
-                                        }
-                                        Thread.Sleep(30);
-                                    });
-                                } 
+                                            if (item != null)
+                                            {
+                                                FileList.Add(item);
+                                            }
+                                            Thread.Sleep(30);
+                                        });
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                        //throw;
+                                    }
+                                }
                             }
                             searchMut.ReleaseMutex();
                         });
@@ -207,9 +283,14 @@ namespace ShareMetro
             {
                 if (ErrorOccur != null)
                 {
-                    ErrorOccur(this, new ModelEvent() { ModelException = e });
+                    ErrorOccur(this, new ModelEvent(ModelEventType.Exception) { ModelException = e });
                 }
             }
+        }
+
+        private void OnAddSharePath(object obj)
+        {
+
         }
 
         private void InnerChannel_Closing(object sender, EventArgs e)
@@ -225,7 +306,6 @@ namespace ShareMetro
             }
         }
 
-        private static System.Timers.Timer _tickTimer;
 
         private void ClientTick(object sender, EventArgs e)
         {
@@ -239,7 +319,7 @@ namespace ShareMetro
         {
             try
             {
-                 _client.TickTack();
+                _client.TickTack();
                 Console.WriteLine(_client.InnerChannel.State);
                 Console.WriteLine(_client.InnerDuplexChannel.State);
             }
@@ -252,13 +332,13 @@ namespace ShareMetro
         private void GetShareInfo(object sender, ModelEvent e)
         {
             _sh = ShareFiles.Deserialize(_shareInfoPath);
-           _sh.AddSharePath("RamDisk", @"R:\");
+            _sh.AddSharePath("RamDisk", @"R:\");
             //_sh.AddSharePath("damn", @"D:\TDDOWNLOAD");
             Thread t = _sh.ListFile();
             t.Join();
             _client.UploadShareInfo(_sh.FileList);
             _client.RemoveOldFile(_sh.RemoveList);
-           // _sh.SetUploaded(_sh.FileList);
+            // _sh.SetUploaded(_sh.FileList);
 
             SaveShareInfo();
         }

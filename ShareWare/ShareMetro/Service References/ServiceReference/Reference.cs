@@ -465,6 +465,12 @@ namespace ShareMetro.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IShareService/GetDataUsingDataContractResponse")]
         System.Threading.Tasks.Task<ShareMetro.ServiceReference.CompositeType> GetDataUsingDataContractAsync(ShareMetro.ServiceReference.CompositeType composite);
         
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/TickTack")]
+        void TickTack();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/TickTack")]
+        System.Threading.Tasks.Task TickTackAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Register", ReplyAction="http://tempuri.org/IShareService/RegisterResponse")]
         bool Register(string userName, string passWord, string mail);
         
@@ -483,11 +489,11 @@ namespace ShareMetro.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/Logout")]
         System.Threading.Tasks.Task LogoutAsync();
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadShareInfo")]
-        void UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/UploadShareInfo", ReplyAction="http://tempuri.org/IShareService/UploadShareInfoResponse")]
+        bool UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadShareInfo")]
-        System.Threading.Tasks.Task UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/UploadShareInfo", ReplyAction="http://tempuri.org/IShareService/UploadShareInfoResponse")]
+        System.Threading.Tasks.Task<bool> UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadShareInfo", ReplyAction="http://tempuri.org/IShareService/DownloadShareInfoResponse")]
         System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> DownloadShareInfo();
@@ -502,10 +508,10 @@ namespace ShareMetro.ServiceReference {
         System.Threading.Tasks.Task RemoveOldFileAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        System.Collections.Generic.List<ShareWare.FileInfoData> SearchFile(string fileName);
+        System.Collections.Generic.List<ShareWare.FileInfoData> SearchFile(System.Collections.Generic.List<string> nameList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileInfoData>> SearchFileAsync(string fileName);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileInfoData>> SearchFileAsync(System.Collections.Generic.List<string> nameList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
         int DownloadRequest(ShareMetro.ServiceReference.FileOwner fileOnwer, int nPort);
@@ -574,6 +580,14 @@ namespace ShareMetro.ServiceReference {
             return base.Channel.GetDataUsingDataContractAsync(composite);
         }
         
+        public void TickTack() {
+            base.Channel.TickTack();
+        }
+        
+        public System.Threading.Tasks.Task TickTackAsync() {
+            return base.Channel.TickTackAsync();
+        }
+        
         public bool Register(string userName, string passWord, string mail) {
             return base.Channel.Register(userName, passWord, mail);
         }
@@ -598,11 +612,11 @@ namespace ShareMetro.ServiceReference {
             return base.Channel.LogoutAsync();
         }
         
-        public void UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
-            base.Channel.UploadShareInfo(fileList);
+        public bool UploadShareInfo(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
+            return base.Channel.UploadShareInfo(fileList);
         }
         
-        public System.Threading.Tasks.Task UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
+        public System.Threading.Tasks.Task<bool> UploadShareInfoAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList) {
             return base.Channel.UploadShareInfoAsync(fileList);
         }
         
@@ -622,12 +636,12 @@ namespace ShareMetro.ServiceReference {
             return base.Channel.RemoveOldFileAsync(fileList);
         }
         
-        public System.Collections.Generic.List<ShareWare.FileInfoData> SearchFile(string fileName) {
-            return base.Channel.SearchFile(fileName);
+        public System.Collections.Generic.List<ShareWare.FileInfoData> SearchFile(System.Collections.Generic.List<string> nameList) {
+            return base.Channel.SearchFile(nameList);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileInfoData>> SearchFileAsync(string fileName) {
-            return base.Channel.SearchFileAsync(fileName);
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileInfoData>> SearchFileAsync(System.Collections.Generic.List<string> nameList) {
+            return base.Channel.SearchFileAsync(nameList);
         }
         
         public int DownloadRequest(ShareMetro.ServiceReference.FileOwner fileOnwer, int nPort) {

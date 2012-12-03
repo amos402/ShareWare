@@ -12,6 +12,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace ConsoleApplication1
@@ -128,8 +129,8 @@ namespace ConsoleApplication1
             //sh.OnePathComplete += ((asd, e) => Console.WriteLine(asd));
             sh.Hashing += ((sender, e) => Console.WriteLine(e.Path)); sw.Start();
             //sh = ShareFiles.Deserialize(@"R:\shit.fuck");
-            Thread t = sh.ListFile();
-            t.Join();
+            //Thread t = sh.ListFile();
+            //t.Join();
             sw.Stop();
 
 
@@ -139,29 +140,57 @@ namespace ConsoleApplication1
 
             CallBack callBack = new CallBack(sh);
             ShareServiceClient client = new ShareServiceClient(new InstanceContext(callBack));
-
+            
             //bool res = client.Register("shit", "asdd", "asdasd@ad.com");
             // bool asd = client.Register("Amos", "shit", "asd");
-            int id = client.Login("Amos", "asd", GetFirstMac());
+            int id;
+            try
+            {
+              var s = client.LoginAsync("Amos", "asd", GetFirstMac());
+              AggregateException ex;
+              s.ContinueWith(T =>
+                  {
+                      try
+                      {
+                          ex = T.Exception;
+                      }
+                      catch (Exception)
+                      {
+
+                          throw;
+                      }
+                  });
+            }
+            catch (EndpointNotFoundException)
+            {
+                Console.WriteLine("asdddddddddddddddddddddddddddddddddd");
+            }
             //Console.ReadKey();
             // sh.Serialize(@"R:\shit.fuck");
             // sh = ShareFiles.Deserialize(@"R:\shit.fuck");
             // var holy = sh.FindFile("0515338f-21bb-4e22-8ead-486c160be927");
 
-            var info = client.DownloadShareInfo();
-            client.UploadShareInfo(sh.FileList);
-            client.RemoveOldFile(sh.RemoveList);
-            sh.SetUploaded(sh.FileList);
-            // sh.Serialize(@"R:\1shit.fuck");
-            Console.WriteLine("Lonin ID : {0}", id);
+            //var info = client.DownloadShareInfo();
 
-            //client.UploadShareInfo(fileList, id);
-            Console.ReadKey();
-            Thread.Sleep(1000);
-            var file = client.SearchFile("WpfApplication4");
+            //using (TransactionScope ts = new TransactionScope())
+            //{
+            //    client.UploadShareInfo(sh.FileList);
+            //    throw new Exception("Test Exception");
+            //    ts.Complete();
+            //}
+            
+            //client.RemoveOldFile(sh.RemoveList);
+            //sh.SetUploaded(sh.FileList);
+            //// sh.Serialize(@"R:\1shit.fuck");
+            //Console.WriteLine("Lonin ID : {0}", id);
+
+            ////client.UploadShareInfo(fileList, id);
+            //Console.ReadKey();
+            //Thread.Sleep(1000);
+            //var file = client.SearchFile("WpfApplication4");
 
 
-            client.DownloadRequest(file[0], 5000);
+            ////client.DownloadRequest(file[0], 5000);
 
             Console.ReadLine();
 

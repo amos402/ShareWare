@@ -8,12 +8,14 @@
   <xs:element name="ArrayOfFileInfoData" nillable="true" type="tns:ArrayOfFileInfoData" />
   <xs:complexType name="FileInfoData">
     <xs:sequence>
+      <xs:element minOccurs="0" name="Extension" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Hash" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsFolder" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Size" nillable="true" type="xs:long" />
       <xs:element minOccurs="0" name="Source" type="xs:int" />
       <xs:element minOccurs="0" name="UserId" type="xs:int" />
+      <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FileInfoData" nillable="true" type="tns:FileInfoData" />

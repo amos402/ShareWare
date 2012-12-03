@@ -34,11 +34,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MahApps.Metro", "MahApps.Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MahApps.Metro.Resources", "MahApps.Metro.Resources\MahApps.Metro.Resources.csproj", "{E708AC99-605B-42A0-8D20-ABCA8FE42DD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication2", "ConsoleApplication2\ConsoleApplication2.csproj", "{0DB03814-133B-4017-9A73-3ED4FF598019}"
-	ProjectSection(ProjectDependencies) = postProject
-		{15B3E0D2-6217-493A-A690-158C497F5318} = {15B3E0D2-6217-493A-A690-158C497F5318}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{5EFE021E-7A79-4FB1-A04A-961958BDDD8A}"
 	ProjectSection(SolutionItems) = preProject
 		Lib\GrayscaleEffect.dll = Lib\GrayscaleEffect.dll
@@ -49,7 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{5EFE021E-7A7
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://amos402.tfspreview.com/defaultcollection
 		SccLocalPath0 = .
@@ -89,9 +84,6 @@ Global
 		SccProjectUniqueName12 = MahApps.Metro.Resources\\MahApps.Metro.Resources.csproj
 		SccProjectName12 = MahApps.Metro.Resources
 		SccLocalPath12 = MahApps.Metro.Resources
-		SccProjectUniqueName13 = ConsoleApplication2\\ConsoleApplication2.csproj
-		SccProjectName13 = ConsoleApplication2
-		SccLocalPath13 = ConsoleApplication2
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -220,16 +212,6 @@ Global
 		{E708AC99-605B-42A0-8D20-ABCA8FE42DD2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E708AC99-605B-42A0-8D20-ABCA8FE42DD2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E708AC99-605B-42A0-8D20-ABCA8FE42DD2}.Release|x86.ActiveCfg = Release|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{0DB03814-133B-4017-9A73-3ED4FF598019}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

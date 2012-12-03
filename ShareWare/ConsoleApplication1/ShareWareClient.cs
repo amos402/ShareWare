@@ -45,7 +45,7 @@ namespace ConsoleApplication1
 
         public void SearchFile(string fileName)
         {
-            _client.SearchFile(fileName);
+           // _client.SearchFile(fileName);
         }
 
 

@@ -20,6 +20,9 @@ namespace ShareWare.ServiceLibrary
         CompositeType GetDataUsingDataContract(CompositeType composite);
 
         // TODO: 在此添加您的服务操作
+        [OperationContract(IsOneWay = true)]
+        void TickTack();
+
         [OperationContract(IsOneWay = false)]
         bool Register(string userName, string passWord, string mail);
 
@@ -29,8 +32,8 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void Logout();
 
-        [OperationContract(IsOneWay = true)]
-        void UploadShareInfo(List<FileInfoTransfer> fileList);
+        [OperationContract(IsOneWay = false)]
+        bool UploadShareInfo(List<FileInfoTransfer> fileList);
 
         [OperationContract]
         List<FileInfoTransfer> DownloadShareInfo();
@@ -38,7 +41,7 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void RemoveOldFile(List<ShareFile.FileInfoTransfer> fileList);
         [OperationContract]
-        List<FileInfoData> SearchFile(string fileName);
+        List<FileInfoData> SearchFile(List<string> nameList);
 
         [OperationContract]
         int DownloadRequest(FileOwner fileOnwer, int nPort);

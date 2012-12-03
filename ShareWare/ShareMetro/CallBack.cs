@@ -16,6 +16,7 @@ namespace ShareMetro
         public CallBack(MainPage mainTab)
         {
             //_shFile = shFile;
+            
             _mainTab = mainTab;
         }
 
@@ -46,6 +47,7 @@ namespace ShareMetro
 
         public void UserLeave(string name)
         {
+            _mainTab.OnlineUser.Remove(name);
             //  Console.WriteLine("{0} Leave", name);
         }
     }

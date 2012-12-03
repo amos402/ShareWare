@@ -10,7 +10,7 @@
         Width="1019.5"
         ShowTitleBar="True"
         ShowIconOnTitleBar="true"
-        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="sharewareicon.jpg">
+        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="images/sharewareicon.jpg">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
             <SolidColorBrush x:Key="LinkButtonForeground" Color="#1297FB"/>
             <SolidColorBrush x:Key="LinkButtonForegroundHighlighted" Color="#55AAFF"/>
@@ -49,9 +50,10 @@
 
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
+            <Controls:ProgressIndicator ProgressColour="{StaticResource AccentColorBrush}" Height="6" Width="600" />
             <Button Content="Set" IsTabStop="False"/>
             <Button Content="About us" IsTabStop="False"/>
-            <Controls:ProgressRing HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsActive="True" d:LayoutOverrides="Height" Width="10"/>
+
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
 
@@ -98,11 +100,11 @@
                             <CheckBox Content="记住密码" Margin="0,0,359.803,258.495" HorizontalAlignment="Right" Width="79.277" VerticalAlignment="Bottom"/>
                             <CheckBox Content="自动登录" HorizontalAlignment="Right" Margin="0,0,269.803,258.495" Width="79.277" VerticalAlignment="Bottom"/>
                             <Button Content="注册" Height="27.96" Margin="0,0,400.53,204" VerticalAlignment="Bottom" Foreground="#FF686868" FontFamily="Microsoft YaHei UI" FontSize="14.667" FontWeight="Normal" HorizontalAlignment="Right" Width="90.775"/>
-                            <Button Content="登陆" HorizontalAlignment="Right" Height="27.96" Margin="0,0,277.303,204" VerticalAlignment="Bottom" Width="82.775" Foreground="#FF686868" FontFamily="Microsoft JhengHei UI" FontSize="14.667"  Command="{Binding LoginCmd}" Visibility="{Binding LoginTab.ButtonVisiable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <Button Content="登陆" HorizontalAlignment="Right" Height="27.96" Margin="0,0,277.303,204" VerticalAlignment="Bottom" Width="82.775" Foreground="#FF686868" FontFamily="Microsoft JhengHei UI" FontSize="14.667"  Command="{Binding LoginCmd}" IsEnabled="{Binding LoginTab.LoginAble}"/>
                             <TextBlock Margin="453.999,229.578,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1" d:LayoutOverrides="VerticalAlignment"><Run Language="zh-cn" Text="密   码:"/></TextBlock>
                             <TextBlock Margin="452.999,177.413,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1"><Run Language="zh-cn" Text="用户名"/><Run Language="zh-cn" Text=":"/></TextBlock>
-                            <Controls:ProgressRing HorizontalAlignment="Stretch" Margin="486,384,435.5,96.63" VerticalAlignment="Stretch" IsActive="{Binding LoginTab.IsBusy}" d:LayoutOverrides="Height" Width="78"/>
-                            <TextBlock Margin="399.196,144.354,390.794,0" TextWrapping="Wrap" Text="登陆失败信息" RenderTransformOrigin="0.5,0.5" Foreground="Red" Height="15.24" VerticalAlignment="Top">
+                            <Controls:ProgressRing IsActive="{Binding LoginTab.IsBusy}" HorizontalAlignment="Stretch" Margin="464.195,0,475.305,109.315" VerticalAlignment="Bottom" d:LayoutOverrides="Width"/>
+                            <TextBlock Margin="399.196,144.354,390.794,0" TextWrapping="Wrap" Text="{Binding LoginTab.FailedMessage}" RenderTransformOrigin="0.5,0.5" Foreground="Red" Height="15.24" VerticalAlignment="Top">
                                 <TextBlock.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -112,7 +114,7 @@
                                     </TransformGroup>
                                 </TextBlock.RenderTransform>
                             </TextBlock>
-                            <Image Width="180" HorizontalAlignment="Left" Margin="251,174.63,0,204" Height="180" Source="icon.jpg"/>
+                            <Image Width="180" HorizontalAlignment="Left" Margin="251,174.63,0,204" Height="180" Source="images/placeholder_person.gif"/>
                         </Grid>
                         <!--<Slider Height="23" HorizontalAlignment="Left" Margin="273,119,0,0" Name="slider1" VerticalAlignment="Top" Width="218" Maximum="100" Value="50" />-->
                     </Grid>
@@ -188,6 +190,7 @@
                         <Button Content="搜" HorizontalAlignment="Right" Height="32" Margin="0,1,2,0" VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" Opacity="0.2" FontSize="17.333" FontFamily="Microsoft YaHei UI"   Command="{Binding SearchCmd}"/>
                         <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="48.5,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
                         <Button Content="暂          停" HorizontalAlignment="Left" Height="32.5" Margin="257,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                        <Controls:ProgressRing  HorizontalAlignment="Left" Margin="346.023,224.977,0,268.338" VerticalAlignment="Stretch" d:LayoutOverrides="Height" IsActive="{Binding MainTab.IsBusy}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header=" 下载DowN">
@@ -378,46 +381,64 @@
                 <TabItem Width="132" Header=" 设置 SeT">
                     <Grid Height="555" Margin="0,0.815,-2.5,0.815">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.686*"/>
-                            <ColumnDefinition Width="0.314*"/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TabControl Margin="8,8,152.11,243.92">
+                        <TabControl Margin="8,8,0,0" Height="547" VerticalAlignment="Top">
                             <TabItem Header="个人资料">
-                                <Grid Margin="0,0,-468,-250.5">
-                                    <Image HorizontalAlignment="Left" Margin="260.25,108.63,0,215.08" Width="180" Source="icon.jpg"/>
+                                <Grid Margin="0,0,-6,-6.5">
+                                    <Image HorizontalAlignment="Left" Margin="260.25,108.63,0,215" Width="180" Source="images/placeholder_person.gif"/>
                                     <Label Content="昵       称：" Height="28" Margin="457.5,114.63,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
                                     <TextBox Margin="545.501,116.63,0,0" TextWrapping="Wrap" Text="TextBox" HorizontalAlignment="Left" Width="178.553" VerticalAlignment="Top"/>
                                     <Label Content="性       别：" Height="28" Margin="457.5,165.13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
-                                    <CheckBox Content="男.MaN" HorizontalAlignment="Right" Margin="0,171.076,374.579,0" VerticalAlignment="Top"/>
-                                    <CheckBox Content="女.WomaN" HorizontalAlignment="Right" Margin="0,171.076,273.579,0" VerticalAlignment="Top"/>
-                                    <TextBox HorizontalAlignment="Right" Margin="0,208.63,267.446,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="178.553"/>
-                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,267.446,222.133" Width="178.553" VerticalAlignment="Bottom"/>
-                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,267.446,175.133" Width="178.553" VerticalAlignment="Bottom"/>
-                                    <Label Content="修改密码：" Margin="457.5,0,0,222.133" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
-                                    <Label Content="确认密码：" Margin="457.5,0,0,175.133" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
-                                    <Button Content="上传头像" HorizontalAlignment="Left" Margin="260.25,0,0,175.58" Width="180" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Height="29.5" VerticalAlignment="Bottom"/>
-                                    <Separator Background="#FFB2B2B2" Margin="245.25,0,251.25,152.13" VerticalAlignment="Bottom"/>
-                                    <Separator Background="#FFB2B2B2" Margin="245.25,91.5,251.25,0" VerticalAlignment="Top"/>
+                                    <CheckBox Content="男.MaN" HorizontalAlignment="Right" Margin="0,171.076,379.317,0" VerticalAlignment="Top"/>
+                                    <CheckBox Content="女.WomaN" HorizontalAlignment="Right" Margin="0,171.076,278.317,0" VerticalAlignment="Top"/>
+                                    <TextBox HorizontalAlignment="Right" Margin="0,208.63,272.184,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="178.553"/>
+                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,222.053" Width="178.553" VerticalAlignment="Bottom"/>
+                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,175.053" Width="178.553" VerticalAlignment="Bottom"/>
+                                    <Label Content="修改密码：" Margin="457.5,0,0,222.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
+                                    <Label Content="确认密码：" Margin="457.5,0,0,175.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
+                                    <Button Content="上传头像" HorizontalAlignment="Left" Margin="260.25,0,0,175.5" Width="180" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Height="29.5" VerticalAlignment="Bottom"/>
+                                    <Separator Background="#FFB2B2B2" Margin="245.25,0,255.988,152.05" VerticalAlignment="Bottom"/>
+                                    <Separator Background="#FFB2B2B2" Margin="245.25,91.5,255.988,0" VerticalAlignment="Top"/>
                                     <Label Content="Q       Q：" Height="28" Margin="457.5,206.63,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
                                 </Grid>
                             </TabItem>
                             <TabItem Header="目录">
                                 <Grid>
-                                    <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,199.917,0" VerticalAlignment="Top" FontSize="14.667"/>
-                                    <ComboBox Margin="0,38.025,-140.083,0" VerticalAlignment="Top" Height="28.5" IsEditable="True" HorizontalAlignment="Right" Width="336"/>
-                                    <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,-244.86,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
-                                    <Label Content="共享目录:" Margin="248.75,99.191,199.917,125.519" FontSize="14.667"/>
-                                    <Controls:ToggleSwitch HorizontalAlignment="Right" Width="166" Height="75"  Margin="0,0,-58.583,-154.5"  Header="共享计算机共享目录" VerticalAlignment="Bottom" d:LayoutOverrides="Height" FontSize="13.333" />
-                                    <Rectangle HorizontalAlignment="Right" Margin="0,99.191,-140.083,-46.481" Stroke="#FFCCCCCC" Width="336"/>
-                                    <ListBox Margin="0,99.191,-140.083,-46.481" ScrollViewer.VerticalScrollBarVisibility="Visible" BorderBrush="{x:Null}" HorizontalAlignment="Right" Width="335.167"/>
-                                    <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,0,-244.86,71.145" VerticalAlignment="Bottom" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
-                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,0,-244.86,28.145" VerticalAlignment="Bottom" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,0,0" VerticalAlignment="Top" FontSize="14.667" HorizontalAlignment="Left" Width="74.595"/>
+                                    <ComboBox Margin="327.345,38.025,297.917,0" VerticalAlignment="Top" Height="28.5" IsEditable="True"/>
+                                    <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Label Content="共享目录:" Margin="248.75,99.191,0,0" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Top" Width="74.595"/>
+                                    <Controls:ToggleSwitch Height="42.686"  Margin="481.178,0,404.039,142.314" VerticalAlignment="Bottom" FontSize="13.333" IsChecked="{Binding SysShareSwitch}" />
+                                    <Rectangle Margin="327.345,99.191,297.917,196.261" Stroke="#FFCCCCCC"/>
+                                    <ListView Margin="327.75,99.065,297.917,196.261" BorderThickness="1" BorderBrush="{x:Null}" ItemsSource="{Binding SharePath}">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="共享名称" Width="70" DisplayMemberBinding="{Binding Key}"/>
+                                                <GridViewColumn Header="路径" Width="100" DisplayMemberBinding="{Binding Value}"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                    <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,99.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,142.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Label Content="共享计算机共享目录:" Margin="327.75,0,0,148.07" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Bottom" Width="148.595"/>
                                 </Grid>
                             </TabItem>
+                            <Grid Margin="0,0,-470.738,-247.235">
+                                <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,0,0" VerticalAlignment="Top" FontSize="14.667" HorizontalAlignment="Left" Width="74.595"/>
+                                <ComboBox Margin="327.345,38.025,330.655,0" VerticalAlignment="Top" Height="28.5" IsEditable="True"/>
+                                <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                <Label Content="共享目录:" Margin="248.75,99.191,0,0" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Top" Width="74.595"/>
+                                <Controls:ToggleSwitch Height="75"  Margin="415.845,0,412.155,92.735"  Header="共享计算机共享目录" VerticalAlignment="Bottom" FontSize="13.333" d:LayoutOverrides="Height" />
+                                <Rectangle Margin="327.345,99.191,330.655,200.754" Stroke="#FFCCCCCC"/>
+                                <ListBox Margin="328.178,99.191,330.655,200.754" ScrollViewer.VerticalScrollBarVisibility="Visible" BorderBrush="{x:Null}"/>
+                                <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,156.065,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,199.065,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                            </Grid>
                         </TabControl>
-                        <Button Content="应用" Height="34.5" Margin="77,19.253,0,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Grid.Column="1" HorizontalAlignment="Left" Width="59.883"/>
-                        <Button Content="保存" Height="34.5" Margin="0,19.253,96.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Grid.Column="1" HorizontalAlignment="Right" Width="59.883"/>
-                        <Button Content="取消" Height="34.5" Margin="0,19.253,17.245,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Grid.Column="1" HorizontalAlignment="Right" Width="59.883"/>
+                        <Button Content="应用" Height="34.5" Margin="0,19.253,177.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
+                        <Button Content="保存" Height="34.5" Margin="0,19.253,96.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
+                        <Button Content="取消" Height="34.5" Margin="0,19.253,17.245,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
                     </Grid>
                 </TabItem>
             </TabControl>

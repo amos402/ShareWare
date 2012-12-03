@@ -31,8 +31,8 @@
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="0cf02e0a-ce75-4dee-9f46-1e94da912671" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
     <MetadataFile FileName="ShareWare.ServiceLibrary.xsd" MetadataType="Schema" ID="e5cd0742-cf9d-479d-85a5-f17ab1b97674" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
     <MetadataFile FileName="ShareWare.ShareFile.xsd" MetadataType="Schema" ID="b756278d-e860-44c8-b1ce-1fd2cf259774" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
-    <MetadataFile FileName="ShareWare.xsd" MetadataType="Schema" ID="94ed60f8-a969-4deb-9537-4e132da0f3fb" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="afe04025-74ae-4dc1-89ae-cbc33c865444" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
+    <MetadataFile FileName="ShareWare.xsd" MetadataType="Schema" ID="94ed60f8-a969-4deb-9537-4e132da0f3fb" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

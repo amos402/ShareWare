@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
+using System.Timers;
 
 namespace ShareWare.ShareFile
 {
@@ -43,13 +44,20 @@ namespace ShareWare.ShareFile
 
         private Dictionary<KeyValuePair<string, string>, List<CustFileInfo>> _tempList = new Dictionary<KeyValuePair<string, string>, List<CustFileInfo>>();
 
+        private List<string> _systemShareNameList;
+
+        public List<string> SystemShareNameList
+        {
+            get { return _systemShareNameList; }
+        }
+
         [NonSerialized]
         PerformanceCounter _performCounter;
 
+        [NonSerialized]
+        private Thread _listThread;
         //[NonSerialized]
 
-
-        static AutoResetEvent event1 = new AutoResetEvent(true);
 
         // [NonSerialized]
         public List<FileInfoTransfer> FileList
@@ -80,6 +88,7 @@ namespace ShareWare.ShareFile
         public void AddSystemSharePath()
         {
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("select  *  from  win32_share");
+            _systemShareNameList = new List<string>();
             foreach (ManagementObject share in searcher.Get())
             {
                 try
@@ -93,6 +102,7 @@ namespace ShareWare.ShareFile
                         if (source.Exists)
                         {
                             _sharePath.Add(name, path);
+                            _systemShareNameList.Add(name);
 
                         }
 
@@ -121,13 +131,30 @@ namespace ShareWare.ShareFile
 
         }
 
+        public bool RemoveSharePath(string shareName)
+        {
+            try
+            {
+                _sharePath.Remove(shareName);
+                var pathKey = _shareFileDict.Keys.Single(T => T.Key == shareName);
+                _shareFileDict.Remove(pathKey);
+               // _sharePath.Remove(pathKey.Key);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public void SetHashOperationIdle(float percent, int sleepTime)
         {
             _activePercent = percent;
             _sleepTime = sleepTime;
         }
 
-        private void CheckIdle(object state)
+        private void CheckIdle(object sender, ElapsedEventArgs e)
         {
             //_performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
             Console.WriteLine("checking");
@@ -135,9 +162,13 @@ namespace ShareWare.ShareFile
             while ((load = _performCounter.NextValue()) > _activePercent)
             {
                 Console.WriteLine("{0}   sleeping", load);
-                Thread.Sleep(_sleepTime);
+                //if (_listThread.ThreadState == System.Threading.ThreadState.Stopped)
+                //{
+                    
+                //}
+                //_listThread.Suspend();
             }
-            event1.Set();
+           // _listThread.Resume();
             // Console.WriteLine("working");
         }
 
@@ -239,10 +270,10 @@ namespace ShareWare.ShareFile
 
         public Thread ListFile()
         {
-            Thread listThread = new Thread(new ThreadStart(ListFileThread));
-            listThread.IsBackground = true;
-            listThread.Start();
-            return listThread;
+            _listThread = new Thread(new ThreadStart(ListFileThread));
+            _listThread.IsBackground = true;
+            _listThread.Start();
+            return _listThread;
         }
 
         private void RemoveNotExistFile()
@@ -279,7 +310,10 @@ namespace ShareWare.ShareFile
         {
             using (_performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total"))
             {
-                Timer t = new Timer(CheckIdle, null, 0, 1000);
+                System.Timers.Timer t = new System.Timers.Timer();
+                t.Interval = 1000;
+                t.Elapsed += CheckIdle;
+                t.Start();
 
                 RemoveNotExistFile();
 
@@ -324,9 +358,9 @@ namespace ShareWare.ShareFile
                     }
                 }
 
-                t.Dispose();
+                // t.Dispose();
                 _performCounter.Close();
-
+                t.Stop();
             }
         }
 

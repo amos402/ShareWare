@@ -16,8 +16,8 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ServiceLibrary" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ShareFile" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IShareService_GetData_InputMessage">
@@ -31,6 +31,9 @@
   </wsdl:message>
   <wsdl:message name="IShareService_GetDataUsingDataContract_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetDataUsingDataContractResponse" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_TickTack_InputMessage">
+    <wsdl:part name="parameters" element="tns:TickTack" />
   </wsdl:message>
   <wsdl:message name="IShareService_Register_InputMessage">
     <wsdl:part name="parameters" element="tns:Register" />
@@ -49,6 +52,9 @@
   </wsdl:message>
   <wsdl:message name="IShareService_UploadShareInfo_InputMessage">
     <wsdl:part name="parameters" element="tns:UploadShareInfo" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_UploadShareInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UploadShareInfoResponse" />
   </wsdl:message>
   <wsdl:message name="IShareService_DownloadShareInfo_InputMessage">
     <wsdl:part name="parameters" element="tns:DownloadShareInfo" />
@@ -92,6 +98,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/GetDataUsingDataContract" message="tns:IShareService_GetDataUsingDataContract_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/GetDataUsingDataContractResponse" message="tns:IShareService_GetDataUsingDataContract_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="TickTack">
+      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/TickTack" message="tns:IShareService_TickTack_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="Register">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/Register" message="tns:IShareService_Register_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/RegisterResponse" message="tns:IShareService_Register_OutputMessage" />
@@ -105,6 +114,7 @@
     </wsdl:operation>
     <wsdl:operation name="UploadShareInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/UploadShareInfo" message="tns:IShareService_UploadShareInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/UploadShareInfoResponse" message="tns:IShareService_UploadShareInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="DownloadShareInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/DownloadShareInfo" message="tns:IShareService_DownloadShareInfo_InputMessage" />
@@ -156,6 +166,12 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="TickTack">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/TickTack" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="Register">
       <soap12:operation soapAction="http://tempuri.org/IShareService/Register" style="document" />
       <wsdl:input>
@@ -185,6 +201,9 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DownloadShareInfo">
       <soap12:operation soapAction="http://tempuri.org/IShareService/DownloadShareInfo" style="document" />

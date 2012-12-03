@@ -16,17 +16,37 @@ namespace ShareMetro
 
         public LoginPage()
         {
+            LoginAble = true;
             Visable = false;
             UserName = string.Empty;
             Password = string.Empty;
-        
+
         }
 
-        public bool IsBusy { get; set; }
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                _isBusy = value;
+                if (_isBusy == true)
+                {
+                    ButtonVisiable = false;
+                }
+                else
+                {
+                    ButtonVisiable = true;
+                }
+            }
+        }
+
         public bool Visable { get; set; }
         public bool ButtonVisiable { get; set; }
+        public bool LoginAble { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string FailedMessage { get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
