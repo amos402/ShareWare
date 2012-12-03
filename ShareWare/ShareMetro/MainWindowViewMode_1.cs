@@ -16,6 +16,7 @@ using System;
 using System.Threading;
 using System.Timers;
 using System.Windows;
+using Socket_Library;
 
 namespace ShareMetro
 {
@@ -112,6 +113,17 @@ namespace ShareMetro
             }
         }
 
+        private ObservableCollection<FileInfoDataList> _fileItemInfo = new ObservableCollection<FileInfoDataList>();
+        public ObservableCollection<FileInfoDataList> FileItemInfo
+        {
+            get { return _fileItemInfo; }
+            set
+            {
+                _fileItemInfo = value;
+                OnPropertyChanged("FileItemInfo");
+            }
+        }
+
         private bool _sysShareSwitch;
 
         public bool SysShareSwitch
@@ -144,7 +156,11 @@ namespace ShareMetro
         {
             get
             {
-                return _sh.SharePath;
+                if (_sh != null)
+                {
+                    return _sh.SharePath;
+                }
+                return null;
             }
             set
             {
@@ -256,6 +272,7 @@ namespace ShareMetro
                             {
                                 foreach (var item in T.Result)
                                 {
+                                    FileInfoDataList f = new FileInfoDataList(item);
                                     try
                                     {
                                         Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
@@ -263,7 +280,7 @@ namespace ShareMetro
                                         {
                                             if (item != null)
                                             {
-                                                FileList.Add(item);
+                                                FileItemInfo.Add(f);
                                             }
                                             Thread.Sleep(30);
                                         });
@@ -332,7 +349,7 @@ namespace ShareMetro
         private void GetShareInfo(object sender, ModelEvent e)
         {
             _sh = ShareFiles.Deserialize(_shareInfoPath);
-            _sh.AddSharePath("RamDisk", @"R:\");
+            _sh.AddSharePath("RamDisk", @"D:\eclipse");
             //_sh.AddSharePath("damn", @"D:\TDDOWNLOAD");
             Thread t = _sh.ListFile();
             t.Join();
