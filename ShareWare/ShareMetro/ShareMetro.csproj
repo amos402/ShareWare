@@ -103,8 +103,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CallBack.cs" />
+    <Compile Include="ICom.cs" />
     <Compile Include="LoginPage.cs" />
     <Compile Include="MainPage.cs" />
+    <Compile Include="MainWindowViewModel_2.cs" />
     <Compile Include="MainWindowViewMode_1.cs" />
     <Compile Include="ModelEvent.cs" />
     <Compile Include="OptionPage.cs" />
@@ -220,6 +222,10 @@
     <ProjectReference Include="..\Share\ShareFile.csproj">
       <Project>{8502b2af-4c2d-4116-8d6f-27c8edc9f94a}</Project>
       <Name>ShareFile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Socket_Library\Socket_Library.csproj">
+      <Project>{760ccf43-4bda-444a-bfe8-14272e8bb93b}</Project>
+      <Name>Socket_Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

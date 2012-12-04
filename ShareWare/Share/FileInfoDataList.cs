@@ -31,6 +31,16 @@ namespace ShareWare.ShareFile
         public ImageSource largeIcon { get; set; }
         public ImageSource smallIcon { get; set; }
 
+        public FileInfoDataList(string n, string t, long s, ImageSource l, ImageSource sm)
+        {
+            Name = n;
+            Size = s;
+            Hash = "";
+            largeIcon = l;
+            smallIcon = sm;
+            if (t == "文件夹") IsFolder = true;
+            else IsFolder = false;
+        }
         public FileInfoDataList(FileInfoData f)
         {
             Name = f.Name;
