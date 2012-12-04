@@ -586,8 +586,6 @@ namespace ShareWare.ServiceLibrary
                 }
             }
 
-
-
             return newList.Distinct().ToList();
         }
 
