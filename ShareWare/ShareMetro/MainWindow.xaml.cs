@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
+using ShareWare.ShareFile;
+using Socket_Library;
 
 namespace ShareMetro
 {
@@ -29,11 +31,11 @@ namespace ShareMetro
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-           // var x = pivot.Items;
-           
+            // var x = pivot.Items;
+
             Flyouts[0].IsOpen = !Flyouts[0].IsOpen;
             Flyouts[2].IsOpen = !Flyouts[2].IsOpen;
-            
+
         }
 
         private void MiLightRed(object sender, RoutedEventArgs e)
@@ -79,9 +81,9 @@ namespace ShareMetro
         private void BtnPanoramaClick(object sender, RoutedEventArgs e)
         {
             //new ChildWindow().ShowDialog();
-         
-           //new Windows1().Show();
-            
+
+            //new Windows1().Show();
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -109,5 +111,58 @@ namespace ShareMetro
         {
             this.IgnoreTaskbarOnMaximize = !this.IgnoreTaskbarOnMaximize;
         }
+
+        private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListView item = sender as ListView;
+            if (item.DataContext != null)
+            {
+                FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                if (model.Type == "文件夹") (this.DataContext as MainWindowViewModel).LoadItems(model.Name);
+            }
+        }
+
+        private void ListViewItem_SelectionClick(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.RoutedEvent.Name == "SelectionChanged")
+            {
+                ListView item = sender as ListView;
+                if (item.DataContext != null)
+                {
+                    FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                    (this.DataContext as MainWindowViewModel).SeleteInfo = model;
+                }
+            }
+        }
+
+        private void SelectedItem(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.RoutedEvent.Name == "SelectionChanged")
+            {
+                ListView item = sender as ListView;
+                if (item.DataContext != null)
+                {
+                    DownListInfo model = item.SelectedItem as DownListInfo;
+                    (this.DataContext as MainWindowViewModel).Down_list_Selete = model;
+                }
+            }
+        }
+
+        private void Down_listview_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedItem(sender, e);
+        }
+
+        private void History_listveiw_SelectinChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedItem(sender, e);
+        }
+
+        private void Garbage_listview_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedItem(sender, e);
+        }
+
+
     }
 }
