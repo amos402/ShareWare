@@ -210,9 +210,6 @@
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </TabItem.Resources>
-                    <TabItem.Visibility>
-                        <Binding Converter="{StaticResource BooleanToVisibilityConverter}" Path=" HideMenu"/>
-                    </TabItem.Visibility>
 
                     <Grid HorizontalAlignment="Left" Width="999.5" Height="556.63" VerticalAlignment="Bottom">
                         <Grid.RowDefinitions>
@@ -342,9 +339,6 @@
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </TabItem.Resources>
-                    <TabItem.Visibility>
-                        <Binding Converter="{StaticResource BooleanToVisibilityConverter}" Path=" HideMenu"/>
-                    </TabItem.Visibility>
 
                     <Grid HorizontalAlignment="Left" Width="999.5" Height="556.63" VerticalAlignment="Bottom">
                         <Grid.RowDefinitions>
