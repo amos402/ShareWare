@@ -150,7 +150,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <ListBox Grid.Row="0" Margin="0,244.977,0,53.807" HorizontalAlignment="Right" Width="207.977"  ItemsSource="{Binding MainTab.OnlineUser}">
+                        <ListBox Grid.Row="0" Margin="0,244.977,0,53.807" HorizontalAlignment="Right" Width="207.977"  ItemsSource="{Binding MainTab.OnlineUser}" MouseDoubleClick="ListBox_MouseDouble">
                             <ListBox.ContextMenu>
                                 <ContextMenu>
                                     <ContextMenu.ItemBindingGroup>

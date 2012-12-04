@@ -163,6 +163,16 @@ namespace ShareMetro
             SelectedItem(sender, e);
         }
 
+        private void ListBox_MouseDouble(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListView item = sender as ListView;
+            if (item.DataContext != null)
+            {
+                FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                if (model.Type == "文件夹") (this.DataContext as MainWindowViewModel).LoadItems(model.Name);
+            }
+        }
+
 
     }
 }
