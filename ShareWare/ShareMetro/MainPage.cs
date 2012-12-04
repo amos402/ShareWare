@@ -1,35 +1,110 @@
-﻿using System;
+﻿using ShareWare;
+using ShareWare.ShareFile;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace ShareMetro
 {
-    public class MainPage : INotifyPropertyChanged
+    public partial class MainWindowViewModel : INotifyPropertyChanged
     {
 
         public string FileName { get; set; }
-        public bool IsBusy { get; set; }
-
-        public ObservableCollection<string> OnlineUser { get; set; }
+        public bool IsBusy_Main { get; set; }
 
 
-        public MainPage()
+
+        public ICommand SearchCmd { get; set; }
+        public ICommand DownLoadCmd { get; set; }
+
+        private ObservableCollection<FileInfoData> _fileList = new ObservableCollection<FileInfoData>();
+        public ObservableCollection<FileInfoData> FileList
         {
-            OnlineUser = new ObservableCollection<string>();
-            IsBusy = false;
+            get { return _fileList; }
+            set
+            {
+                _fileList = value;
+                OnPropertyChanged("FileList");
+            }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
+        private ObservableCollection<FileInfoDataList> _fileItemInfo = new ObservableCollection<FileInfoDataList>();
+        public ObservableCollection<FileInfoDataList> FileItemInfo
         {
-            if (PropertyChanged != null)
+            get { return _fileItemInfo; }
+            set
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                _fileItemInfo = value;
+                OnPropertyChanged("FileItemInfo");
             }
+        }
+
+        public ObservableCollection<string> OnlineUser { get; set; }
+        private void OnSearch(object obj)
+        {
+            IsBusy_Main = true;
+            try
+            {
+                string[] sp = FileName.Split(' ');
+                List<string> nameList = new List<string>();
+                nameList.AddRange(sp);
+                Task<List<FileInfoData>> task = _client.SearchFileAsync(nameList);
+                FileItemInfo.Clear();
+                task.ContinueWith(T =>
+                {
+                    ThreadPool.QueueUserWorkItem(delegate
+                    {
+                        searchMut.WaitOne();
+                        IsBusy_Main = false;
+                        if (T.Result != null)
+                        {
+                            foreach (var item in T.Result)
+                            {
+                                FileInfoDataList f = new FileInfoDataList(item);
+                                try
+                                {
+                                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                        (ThreadStart)delegate
+                                        {
+                                            if (item != null)
+                                            {
+                                                FileItemInfo.Add(f);
+                                            }
+                                            Thread.Sleep(30);
+                                        });
+                                }
+                                catch (Exception)
+                                {
+
+                                    //throw;
+                                }
+                            }
+                        }
+                        searchMut.ReleaseMutex();
+                    });
+                });
+            }
+            catch (Exception e)
+            {
+                if (ErrorOccur != null)
+                {
+                    ErrorOccur(this, new ModelEvent(ModelEventType.Exception) { ModelException = e });
+                }
+            }
+        }
+
+        private void OnDownLoad(object obj)
+        {
+
         }
     }
 }

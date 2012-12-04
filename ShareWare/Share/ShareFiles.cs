@@ -157,17 +157,17 @@ namespace ShareWare.ShareFile
         private void CheckIdle(object sender, ElapsedEventArgs e)
         {
             //_performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
-            Console.WriteLine("checking");
-            float load;
-            while ((load = _performCounter.NextValue()) > _activePercent)
-            {
-                Console.WriteLine("{0}   sleeping", load);
-                //if (_listThread.ThreadState == System.Threading.ThreadState.Stopped)
-                //{
+            //Console.WriteLine("checking");
+            //float load;
+            //while ((load = _performCounter.NextValue()) > _activePercent)
+            //{
+            //    Console.WriteLine("{0}   sleeping", load);
+            //    //if (_listThread.ThreadState == System.Threading.ThreadState.Stopped)
+            //    //{
                     
-                //}
-                //_listThread.Suspend();
-            }
+            //    //}
+            //    //_listThread.Suspend();
+            //}
            // _listThread.Resume();
             // Console.WriteLine("working");
         }

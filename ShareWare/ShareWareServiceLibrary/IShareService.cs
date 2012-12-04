@@ -1,6 +1,7 @@
 ﻿using ShareWare.ShareFile;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -45,6 +46,9 @@ namespace ShareWare.ServiceLibrary
 
         [OperationContract]
         int DownloadRequest(FileOwner fileOnwer, int nPort);
+
+        [OperationContract(IsOneWay = true)]
+        void UploadImage(Bitmap image);
 
     }
 

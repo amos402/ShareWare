@@ -114,7 +114,7 @@ namespace ConsoleApplication1
             //var fileName = @"R:\DataTriggerDemo.rar";
             //var hash = HashHelper.ComputeMD5(fileName);
             //var hashList = HashHelper.ComputeSHA1ByParts(fileName, 16);
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
 
             Stopwatch sw = new Stopwatch();
 
@@ -127,10 +127,11 @@ namespace ConsoleApplication1
             //sh.AddSharePath("asd", @"D:\asd");
             //sh.OnePathComplete += ((sender, e) => Console.WriteLine("asdasdad"));
             //sh.OnePathComplete += ((asd, e) => Console.WriteLine(asd));
-            sh.Hashing += ((sender, e) => Console.WriteLine(e.Path)); sw.Start();
+            sh.Hashing += ((sender, e) => Console.WriteLine(e.Path));
+            sw.Start();
             //sh = ShareFiles.Deserialize(@"R:\shit.fuck");
-            //Thread t = sh.ListFile();
-            //t.Join();
+            Thread t = sh.ListFile();
+            t.Join();
             sw.Stop();
 
 

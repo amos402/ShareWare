@@ -10,9 +10,7 @@
         Width="1019.5"
         ShowTitleBar="True"
         ShowIconOnTitleBar="true"
-        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize"
-
-Icon="images/sharewareicon.jpg">
+        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="images/sharewareicon.jpg">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -20,14 +18,10 @@ Icon="images/sharewareicon.jpg">
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary
-
-Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml"
-
-/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
@@ -39,11 +33,9 @@ Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedS
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <TextBlock>
-                <InlineUIContainer>
-                  <ContentPresenter/>
-                </InlineUIContainer>
-                            </TextBlock>
+                            <TextBlock><InlineUIContainer>
+        							<ContentPresenter/>
+        						</InlineUIContainer></TextBlock>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -82,68 +74,37 @@ Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedS
 
     <Controls:MetroContentControl>
         <Grid>
-            <TabControl HorizontalAlignment="Left" Width="1003.5" Height="616.5" VerticalAlignment="Top"
-
-SelectedIndex="{Binding Index}">
+            <TabControl HorizontalAlignment="Left" Width="1003.5" Height="616.5" VerticalAlignment="Top"  SelectedIndex="{Binding Index}">
                 <TabItem Header=" 登陆 &amp; 注册 ">
                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Grid Margin="0" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                             <TextBox
-              Text="{Binding UserName}"
-              Controls:TextboxHelper.Watermark="Enter Username"
-              Controls:TextboxHelper.ClearTextButton="True"
-              Margin="0,174.63,260.803,0"
-              VerticalAlignment="Top"
-              VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="214.002" />
+                        		Text="{Binding  UserName}"
+                        		Controls:TextboxHelper.Watermark="Enter Username"
+                        		Controls:TextboxHelper.ClearTextButton="True"
+                        		Margin="0,174.63,260.803,0"
+                        		VerticalAlignment="Top"
+                        		VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="214.002" />
                             <PasswordBox Controls:TextboxHelper.Watermark="Enter Password"
-              Margin="0,226.795,260.804,0"
-              VerticalAlignment="Top"
-              VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="214.001"
-                           MetroDemo:PasswordHelper.Attach="True"
-                           MetroDemo:PasswordHelper.Password="{Binding Password, Mode=TwoWay}"/>
+                        		Margin="0,226.795,260.804,0"
+                        		VerticalAlignment="Top"
+                        		VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="214.001"
+                                         MetroDemo:PasswordHelper.Attach="True"
+                                         MetroDemo:PasswordHelper.Password="{Binding  Password, Mode=TwoWay}"/>
                             <ComboBox Margin="475.499,278.155,475.305,254.475"
-              SelectedIndex="0" Height="20.98">
+                        		SelectedIndex="0" Height="20.98">
                                 <ComboBoxItem Content="ComboBoxItem" />
                                 <ComboBoxItem Content="ComboBoxItem" />
                                 <ComboBoxItem Content="ComboBoxItem" />
                             </ComboBox>
-                            <CheckBox Content="记住密码" Margin="0,0,359.803,258.495" HorizontalAlignment="Right"
-
-Width="79.277" VerticalAlignment="Bottom"/>
-                            <CheckBox Content="自动登录" HorizontalAlignment="Right" Margin="0,0,269.803,258.495"
-
-Width="79.277" VerticalAlignment="Bottom"/>
-                            <Button Content="注册" Height="27.96" Margin="0,0,400.53,204" VerticalAlignment="Bottom"
-
-Foreground="#FF686868" FontFamily="Microsoft YaHei UI" FontSize="14.667" FontWeight="Normal" HorizontalAlignment="Right"
-
-Width="90.775"/>
-                            <Button Content="登陆" HorizontalAlignment="Right" Height="27.96" Margin="0,0,277.303,204"
-
-VerticalAlignment="Bottom" Width="82.775" Foreground="#FF686868" FontFamily="Microsoft JhengHei UI" FontSize="14.667"
-
-Command="{Binding LoginCmd}" IsEnabled="{Binding LoginAble}"/>
-                            <TextBlock Margin="453.999,229.578,491.805,0" TextWrapping="Wrap" Height="20.217"
-
-VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1" d:LayoutOverrides="VerticalAlignment">
-                <Run Language="zh-
-
-cn" Text="密   码:"/>
-                            </TextBlock>
-                            <TextBlock Margin="452.999,177.413,491.805,0" TextWrapping="Wrap" Height="20.217"
-
-VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1">
-                <Run Language="zh-cn" Text="用户名"/>
-                <Run Language="zh-cn"
-
-Text=":"/>
-                            </TextBlock>
-                            <Controls:ProgressRing IsActive="{Binding IsBusy_Login}" HorizontalAlignment="Stretch"
-
-Margin="464.195,0,475.305,109.315" VerticalAlignment="Bottom" d:LayoutOverrides="Width"/>
-                            <TextBlock Margin="399.196,144.354,390.794,0" TextWrapping="Wrap" Text="{Binding 
-
-FailedMessage}" RenderTransformOrigin="0.5,0.5" Foreground="Red" Height="15.24" VerticalAlignment="Top">
+                            <CheckBox Content="记住密码" Margin="0,0,359.803,258.495" HorizontalAlignment="Right" Width="79.277" VerticalAlignment="Bottom"/>
+                            <CheckBox Content="自动登录" HorizontalAlignment="Right" Margin="0,0,269.803,258.495" Width="79.277" VerticalAlignment="Bottom"/>
+                            <Button Content="注册" Height="27.96" Margin="0,0,400.53,204" VerticalAlignment="Bottom" Foreground="#FF686868" FontFamily="Microsoft YaHei UI" FontSize="14.667" FontWeight="Normal" HorizontalAlignment="Right" Width="90.775"/>
+                            <Button Content="登陆" HorizontalAlignment="Right" Height="27.96" Margin="0,0,277.303,204" VerticalAlignment="Bottom" Width="82.775" Foreground="#FF686868" FontFamily="Microsoft JhengHei UI" FontSize="14.667"  Command="{Binding LoginCmd}" IsEnabled="{Binding  LoginAble}"/>
+                            <TextBlock Margin="453.999,229.578,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1" d:LayoutOverrides="VerticalAlignment"><Run Language="zh-cn" Text="密   码:"/></TextBlock>
+                            <TextBlock Margin="452.999,177.413,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1"><Run Language="zh-cn" Text="用户名"/><Run Language="zh-cn" Text=":"/></TextBlock>
+                            <Controls:ProgressRing IsActive="{Binding  IsBusy}" HorizontalAlignment="Stretch" Margin="464.195,0,475.305,109.315" VerticalAlignment="Bottom" d:LayoutOverrides="Width"/>
+                            <TextBlock Margin="399.196,144.354,390.794,0" TextWrapping="Wrap" Text="{Binding  FailedMessage}" RenderTransformOrigin="0.5,0.5" Foreground="Red" Height="15.24" VerticalAlignment="Top">
                                 <TextBlock.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -153,23 +114,17 @@ FailedMessage}" RenderTransformOrigin="0.5,0.5" Foreground="Red" Height="15.24" 
                                     </TransformGroup>
                                 </TextBlock.RenderTransform>
                             </TextBlock>
-                            <Image Width="180" HorizontalAlignment="Left" Margin="251,174.63,0,204" Height="180"
-
-Source="{Binding ImageSource}"/>
+                            <Image Width="180" HorizontalAlignment="Left" Margin="251,174.63,0,204" Height="180" Source="{Binding ImageSource}"/>
                         </Grid>
-                        <!--<Slider Height="23" HorizontalAlignment="Left" Margin="273,119,0,0" Name="slider1" 
-
-VerticalAlignment="Top" Width="218" Maximum="100" Value="50" />-->
+                        <!--<Slider Height="23" HorizontalAlignment="Left" Margin="273,119,0,0" Name="slider1" VerticalAlignment="Top" Width="218" Maximum="100" Value="50" />-->
                     </Grid>
                 </TabItem>
-                <TabItem Header=" 主页 IndeX" >
+                <TabItem Header=" 主页 IndeX"  >
                     <Grid Height="553.315" Width="997.5" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <ListView ItemsSource="{Binding FileItemInfo}" BorderThickness="0"
-
-Margin="11.5,39.5,220.977,53.807">
+                        <ListView ItemsSource="{Binding FileItemInfo}" BorderThickness="0" Margin="11.5,39.5,220.977,53.807" MouseDoubleClick="ListViewItem_MouseDoubleClick" SelectionChanged="ListViewItem_SelectionClick">
                             <ListView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="下载"/>
@@ -178,19 +133,24 @@ Margin="11.5,39.5,220.977,53.807">
                             </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="文件名" DisplayMemberBinding="{Binding Name}" Width="172" />
+                                    <GridViewColumn Header="文件名字" Width="240">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Width="16" Height="16" Source="{Binding smallIcon}"/>
+                                                    <TextBlock Text="{Binding Name}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
                                     <GridViewColumn Header="大小" DisplayMemberBinding="{Binding Size}" Width="150" />
                                     <GridViewColumn Header="类型" DisplayMemberBinding="{Binding Type}" Width="100" />
-                                    <GridViewColumn Header="用户名" DisplayMemberBinding="{Binding UserName}" Width="150"
-
-/>
+                                    <GridViewColumn Header="用户名" DisplayMemberBinding="{Binding UserName}" Width="150" />
                                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Hash}" Width="100" />
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <ListBox Grid.Row="0" Margin="0,244.977,0,53.807" HorizontalAlignment="Right" Width="207.977"
-
-ItemsSource="{Binding OnlineUser}">
+                        <ListBox Grid.Row="0" Margin="0,244.977,0,53.807" HorizontalAlignment="Right" Width="207.977"  ItemsSource="{Binding  OnlineUser}">
                             <ListBox.ContextMenu>
                                 <ContextMenu>
                                     <ContextMenu.ItemBindingGroup>
@@ -202,33 +162,23 @@ ItemsSource="{Binding OnlineUser}">
                                 </ContextMenu>
                             </ListBox.ContextMenu>
                         </ListBox>
-                        <TextBox Margin="89.5,0.5,260,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"
-
-Height="32"/>
-                        <TextBox Margin="0,1,41.023,0" TextWrapping="Wrap" Text="{Binding FileName}"
-
-VerticalAlignment="Top" Height="32" HorizontalAlignment="Right" Width="168.454"/>
+                        <TextBox Margin="89.5,0.5,260,0" TextWrapping="Wrap" Text="{Binding Directory}" VerticalAlignment="Top" Height="32"/>
+                        <TextBox Margin="0,1,41.023,0" TextWrapping="Wrap" Text="{Binding  FileName}" VerticalAlignment="Top" Height="32" HorizontalAlignment="Right" Width="168.454"/>
                         <Button Style="{DynamicResource MetroCircleButtonStyle}"
-          Height="33.5"
-          Width="33.5"
-          VerticalAlignment="Top" HorizontalAlignment="Left" Margin="48.5,0,0,0"
-
-d:LayoutOverrides="VerticalAlignment" Background="Black">
+                			Height="33.5"
+                			Width="33.5"
+                			VerticalAlignment="Top" HorizontalAlignment="Left" Margin="48.5,0,0,0" d:LayoutOverrides="VerticalAlignment" Background="Black">
                             <Image Height="10.692" Width="12.973" Source="images/front.png">
                                 <Image.OpacityMask>
                                     <SolidColorBrush Color="White" Opacity="0.55"/>
                                 </Image.OpacityMask>
                             </Image>
                         </Button>
-                        <Button Style="{DynamicResource MetroCircleButtonStyle}"
-          Height="33.5"
-          Width="33.5"
-          VerticalAlignment="Top" HorizontalAlignment="Left" Margin="11.5,0,0,0"
-
-d:LayoutOverrides="VerticalAlignment">
-                            <Image Height="10.692" Width="12.973" Source="images/front.png"
-
-RenderTransformOrigin="0.5,0.5">
+                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding UpCommand}"
+                			Height="33.5"
+                			Width="33.5"
+                			VerticalAlignment="Top" HorizontalAlignment="Left" Margin="11.5,0,0,0" d:LayoutOverrides="VerticalAlignment">
+                            <Image Height="10.692" Width="12.973" Source="images/front.png" RenderTransformOrigin="0.5,0.5">
                                 <Image.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -242,214 +192,26 @@ RenderTransformOrigin="0.5,0.5">
                                 </Image.OpacityMask>
                             </Image>
                         </Button>
-                        <Image HorizontalAlignment="Right" Height="201.477" Margin="0,39.5,2,0" VerticalAlignment="Top"
-
-Width="205.977" Source="{Binding ImageSource}" Stretch="Fill"/>
-                        <Controls:Tile
-           Margin="0,205.5,2,0" HorizontalAlignment="Right" Height="35.477" Width="205.977"
-
-VerticalAlignment="Top" BorderThickness="0,0,0,0" Background="#CC000000" Opacity="0.595" Title="{Binding UserName}"
-
-IsManipulationEnabled="True"/>
-                        <Button Content="GO" HorizontalAlignment="Right" Height="32.5" Margin="0,0,221.31,0"
-
-VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}"
-
-Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.205" FontSize="14.667" FontFamily="Microsoft YaHei 
-
-UI"/>
-                        <Button Content="搜" HorizontalAlignment="Right" Height="32" Margin="0,1,2,0"
-
-VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" Opacity="0.2" FontSize="17.333"
-
-FontFamily="Microsoft YaHei UI"   Command="{Binding SearchCmd}"/>
-                        <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="48.5,0,0,8"
-
-VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}"
-
-Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei 
-
-UI"/>
-                        <Button Content="暂          停" HorizontalAlignment="Left" Height="32.5" Margin="257,0,0,8"
-
-VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}"
-
-Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei 
-
-UI"/>
-                        <Controls:ProgressRing  HorizontalAlignment="Left" Margin="346.023,224.977,0,268.338"
-
-VerticalAlignment="Stretch" d:LayoutOverrides="Height" IsActive="{Binding IsBusy}"/>
+                        <Image HorizontalAlignment="Right" Height="201.477" Margin="0,39.5,2,0" VerticalAlignment="Top" Width="205.977" Source="{Binding ImageSource}" Stretch="Fill"/>
+                        <Controls:Tile Title="My _Cupcakes"
+                			 Margin="0,205.5,2,0" HorizontalAlignment="Right" Height="35.477" Width="205.977" VerticalAlignment="Top" BorderThickness="0,0,0,0" Background="#CC000000" Opacity="0.595"/>
+                        <Button Content="GO" HorizontalAlignment="Right" Height="32.5" Margin="0,0,221.31,0" VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.205" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding GoCommand}"/>
+                        <Button Content="搜" HorizontalAlignment="Right" Height="32" Margin="0,1,2,0" VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" Opacity="0.2" FontSize="17.333" FontFamily="Microsoft YaHei UI"   Command="{Binding SearchCmd}"/>
+                        <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="48.5,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding DownLoadCommand}"/>
+                        <Button Content="暂          停" HorizontalAlignment="Left" Height="32.5" Margin="257,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                        <Controls:ProgressRing  HorizontalAlignment="Left" Margin="346.023,224.977,0,268.338" VerticalAlignment="Stretch" d:LayoutOverrides="Height" IsActive="{Binding  IsBusy}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header=" 下载DowN">
                     <TabItem.Resources>
                         <ResourceDictionary>
                             <ResourceDictionary.MergedDictionaries>
-                                <ResourceDictionary
-
-Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
-                            </ResourceDictionary.MergedDictionaries>
-                        </ResourceDictionary>
-                    </TabItem.Resources>
-
-                    <Grid HorizontalAlignment="Left" Width="999.5" Height="556.63" VerticalAlignment="Bottom">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="556.63" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="999.5" />
-                        </Grid.ColumnDefinitions>
-
-                        <TabControl Margin="18.5,56.5,0,0" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top"
-
-Width="468.427">
-                            <TabItem Header="下载inG">
-                                <Grid Background="#FFE5E5E5">
-                                    <ListView BorderThickness="0" Margin="0,0,0,-385.63"
-
-IsSynchronizedWithCurrentItem="False" HorizontalAlignment="Left" Width="749.5">
-                                        <ListView.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="下载" FontSize="12"/>
-                                                <MenuItem Header="暂停" FontSize="12"/>
-                                                <MenuItem FontSize="12" Header="删除"/>
-                                                <MenuItem FontSize="12" Header="打开文件"/>
-                                                <MenuItem Header="打开文件夹"/>
-                                            </ContextMenu>
-                                        </ListView.ContextMenu>
-                                        <ListView.View>
-                                            <GridView>
-                                                <GridView.ColumnHeaderContextMenu>
-                                                    <ContextMenu/>
-                                                </GridView.ColumnHeaderContextMenu>
-                                                <GridViewColumn Header="artist" DisplayMemberBinding="{Binding Title}" />
-                                                <GridViewColumn Header="url" DisplayMemberBinding="{Binding Price}" />
-                                            </GridView>
-                                        </ListView.View>
-                                    </ListView>
-                                </Grid>
-                            </TabItem>
-                            <TabItem Header=" 已下载isH">
-                                <Grid Background="#FFE5E5E5">
-                                    <ListView BorderThickness="0" Margin="0,0,-286.573,-244.17"
-
-IsSynchronizedWithCurrentItem="False" Width="749.5" Height="435.76">
-                                        <ListView.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="下载" FontSize="12"/>
-                                                <MenuItem Header="暂停" FontSize="12"/>
-                                                <MenuItem FontSize="12" Header="删除"/>
-                                                <MenuItem FontSize="12" Header="打开文件"/>
-                                                <MenuItem Header="打开文件夹"/>
-                                            </ContextMenu>
-                                        </ListView.ContextMenu>
-                                        <ListView.View>
-                                            <GridView>
-                                                <GridView.ColumnHeaderContextMenu>
-                                                    <ContextMenu/>
-                                                </GridView.ColumnHeaderContextMenu>
-                                                <GridViewColumn Header="artist" DisplayMemberBinding="{Binding Title}" />
-                                                <GridViewColumn Header="url" DisplayMemberBinding="{Binding Price}" />
-                                            </GridView>
-                                        </ListView.View>
-                                    </ListView>
-                                </Grid>
-                            </TabItem>
-                            <TabItem Header=" 回收站clE">
-                                <Grid Background="#FFE5E5E5">
-                                    <ListView BorderThickness="0" Margin="0,0,-285.073,-273.13"
-
-IsSynchronizedWithCurrentItem="False" Height="435.76">
-                                        <ListView.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="下载" FontSize="12"/>
-                                                <MenuItem Header="暂停" FontSize="12"/>
-                                                <MenuItem FontSize="12" Header="删除"/>
-                                                <MenuItem FontSize="12" Header="打开文件"/>
-                                                <MenuItem Header="打开文件夹"/>
-                                            </ContextMenu>
-                                        </ListView.ContextMenu>
-                                        <ListView.View>
-                                            <GridView>
-                                                <GridView.ColumnHeaderContextMenu>
-                                                    <ContextMenu/>
-                                                </GridView.ColumnHeaderContextMenu>
-                                                <GridViewColumn Header="artist" DisplayMemberBinding="{Binding Title}" />
-                                                <GridViewColumn Header="url" DisplayMemberBinding="{Binding Price}" />
-                                            </GridView>
-                                        </ListView.View>
-                                    </ListView>
-                                </Grid>
-                            </TabItem>
-                        </TabControl>
-                        <StackPanel
-          Orientation="Horizontal" HorizontalAlignment="Right" Width="51.637"
-
-Margin="0,556.63,0,0">
-                            <!--<Button Content="Ok" Style="{StaticResource OkButton}" />
-                            <Button Content="Cancel" Style="{StaticResource CancelButton}" />-->
-                        </StackPanel>
-                        <StackPanel HorizontalAlignment="Right" Height="38.307" Margin="0,0,273.236,171.693"
-
-VerticalAlignment="Bottom" Width="147.401" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
-                        <StackPanel Height="100" Margin="409,151.13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
-
-Width="90"/>
-                        <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="18.5,10,0,0"
-
-VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}"
-
-Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei 
-
-UI"/>
-                        <Button Content="删          除" HorizontalAlignment="Left" Height="32.5" Margin="227,10,0,0"
-
-VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}"
-
-Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei 
-
-UI"/>
-                        <Button Content="删          除" Height="32.5" Margin="435.5,10,390.977,0" VerticalAlignment="Top"
-
-Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1"
-
-Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
-                        <StackPanel Margin="0,49,3.5,4.5" HorizontalAlignment="Right" Width="195">
-                            <TextBlock Margin="0,10,0,10" FontSize="18" Foreground="#FFB2B2B2" Text="文件名"/>
-                            <Separator Background="#FFB2B2B2" Margin="0,2,55.333,2"/>
-                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8"
-
-FontSize="13.333"/>
-                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,2,0,8"/>
-                            <Separator Background="#FFB2B2B2" Margin="0,2,6,2"/>
-                            <TextBlock Margin="0,10,0,10" FontSize="18" Foreground="#FFB2B2B2" Text="类型"/>
-                            <Separator Background="#FFB2B2B2" Margin="0,2,55.333,2"/>
-                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8"
-
-FontSize="13.333"/>
-                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,2,0,8"/>
-                        </StackPanel>
-                        <CheckBox Content="全选" HorizontalAlignment="Right" Margin="0,22.883,314.557,0"
-
-VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
-                        <CheckBox Content="反选" HorizontalAlignment="Right" Margin="0,22.883,248.557,0"
-
-VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
-                    </Grid>
-                </TabItem>
-                <TabItem Header=" 共享SharE">
-                    <TabItem.Resources>
-                        <ResourceDictionary>
-                            <ResourceDictionary.MergedDictionaries>
-                                <ResourceDictionary
-
-Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </TabItem.Resources>
                     <TabItem.Visibility>
-                        <Binding Converter="{StaticResource BooleanToVisibilityConverter}" Path="HideMenu"/>
+                        <Binding Converter="{StaticResource BooleanToVisibilityConverter}" Path=" HideMenu"/>
                     </TabItem.Visibility>
 
                     <Grid HorizontalAlignment="Left" Width="999.5" Height="556.63" VerticalAlignment="Bottom">
@@ -460,9 +222,139 @@ Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" /
                             <ColumnDefinition Width="Auto" MinWidth="999.5" />
                         </Grid.ColumnDefinitions>
 
-                        <ListView ItemsSource="{Binding Albums}" BorderThickness="0" Margin="18.5,53,228.5,132.03"
+                        <TabControl Margin="18.5,0,217.5,8">
+                            <TabItem Header="下载inG">
+                                <Grid>
+                                    <ListView BorderThickness="0" IsSynchronizedWithCurrentItem="False" HorizontalAlignment="Left" Width="759.5" Height="452.8" VerticalAlignment="Bottom" ItemsSource="{Binding DownInfo}" SelectionChanged="Down_listview_SelectionChanged">
+                                        <ListView.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="下载" FontSize="12"/>
+                                                <MenuItem Header="暂停" FontSize="12"/>
+                                                <MenuItem FontSize="12" Header="删除"/>
+                                                <MenuItem FontSize="12" Header="打开文件"/>
+                                                <MenuItem Header="打开文件夹"/>
+                                            </ContextMenu>
+                                        </ListView.ContextMenu>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridView.ColumnHeaderContextMenu>
+                                                    <ContextMenu/>
+                                                </GridView.ColumnHeaderContextMenu>
+                                                <GridViewColumn Header="状态" DisplayMemberBinding="{Binding State}" />
+                                                <GridViewColumn Header="文件文件" DisplayMemberBinding="{Binding name}" />
+                                                <GridViewColumn Header="文件类型" DisplayMemberBinding="{Binding type}" />
+                                                <GridViewColumn Header="文件大小" DisplayMemberBinding="{Binding Size, Mode= OneWay}" />
+                                                <GridViewColumn Header="已下载百分比" DisplayMemberBinding="{Binding Progress_Percentage, Mode= OneWay}" />
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                    <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                                    <Button Content="暂          停" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023"/>
+                                    <Button Content="删          除" Height="32.5" Margin="0,6.13,183.497,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right" Width="173.023" d:LayoutOverrides="HorizontalAlignment"/>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header=" 已下载isH">
+                                <Grid>
+                                    <ListView BorderThickness="0" IsSynchronizedWithCurrentItem="False" HorizontalAlignment="Left" Width="759.5" Height="452.8" VerticalAlignment="Bottom" ItemsSource="{Binding HistoricalRecords}" SelectionChanged="History_listveiw_SelectinChanged">
+                                        <ListView.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="下载" FontSize="12"/>
+                                                <MenuItem Header="暂停" FontSize="12"/>
+                                                <MenuItem FontSize="12" Header="删除"/>
+                                                <MenuItem FontSize="12" Header="打开文件"/>
+                                                <MenuItem Header="打开文件夹"/>
+                                            </ContextMenu>
+                                        </ListView.ContextMenu>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridView.ColumnHeaderContextMenu>
+                                                    <ContextMenu/>
+                                                </GridView.ColumnHeaderContextMenu>
+                                                <GridViewColumn Header="文件文件" DisplayMemberBinding="{Binding name}" />
+                                                <GridViewColumn Header="文件类型" DisplayMemberBinding="{Binding type}" />
+                                                <GridViewColumn Header="文件大小" DisplayMemberBinding="{Binding Size, Mode= OneWay}" />
+                                                <GridViewColumn Header="文件地址" DisplayMemberBinding="{Binding filename}" />
 
-IsSynchronizedWithCurrentItem="False">
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                    <Button Content="打          开" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                                    <Button Content="删          除" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023"/>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header=" 回收站clE">
+                                <Grid>
+                                    <ListView BorderThickness="0" IsSynchronizedWithCurrentItem="False" HorizontalAlignment="Left" Width="759.5" Height="452.8" VerticalAlignment="Bottom" ItemsSource="{Binding GarbageInfo}">
+                                        <ListView.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="下载" FontSize="12"/>
+                                                <MenuItem Header="暂停" FontSize="12"/>
+                                                <MenuItem FontSize="12" Header="删除"/>
+                                                <MenuItem FontSize="12" Header="打开文件"/>
+                                                <MenuItem Header="打开文件夹"/>
+                                            </ContextMenu>
+                                        </ListView.ContextMenu>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridView.ColumnHeaderContextMenu>
+                                                    <ContextMenu/>
+                                                </GridView.ColumnHeaderContextMenu>
+                                                <GridViewColumn Header="文件文件" DisplayMemberBinding="{Binding name}" />
+                                                <GridViewColumn Header="文件类型" DisplayMemberBinding="{Binding type}" />
+                                                <GridViewColumn Header="文件大小" DisplayMemberBinding="{Binding Size, Mode= OneWay}" />
+                                                <GridViewColumn Header="文件地址" DisplayMemberBinding="{Binding filename}" />
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                    <Button Content="删          除" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                                    <Button Content="还          原" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023"/>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                        <StackPanel
+                			Orientation="Horizontal" HorizontalAlignment="Right" Width="51.637" Margin="0,556.63,0,0">
+                            <!--<Button Content="Ok" Style="{StaticResource OkButton}" />
+                            <Button Content="Cancel" Style="{StaticResource CancelButton}" />-->
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Right" Height="38.307" Margin="0,0,273.236,171.693" VerticalAlignment="Bottom" Width="147.401" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+                        <StackPanel Height="100" Margin="409,151.13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90"/>
+                        <StackPanel Margin="0,49,3.5,4.5" HorizontalAlignment="Right" Width="195">
+                            <TextBlock Margin="0,10,0,10" FontSize="18" Foreground="#FFB2B2B2" Text="文件名"/>
+                            <Separator Background="#FFB2B2B2" Margin="0,2,55.333,2"/>
+                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8" FontSize="13.333"/>
+                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,2,0,8"/>
+                            <Separator Background="#FFB2B2B2" Margin="0,2,6,2"/>
+                            <TextBlock Margin="0,10,0,10" FontSize="18" Foreground="#FFB2B2B2" Text="类型"/>
+                            <Separator Background="#FFB2B2B2" Margin="0,2,55.333,2"/>
+                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8" FontSize="13.333"/>
+                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,2,0,8"/>
+                        </StackPanel>
+                        <CheckBox Content="全选" HorizontalAlignment="Right" Margin="0,22.883,314.557,0" VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
+                        <CheckBox Content="反选" HorizontalAlignment="Right" Margin="0,22.883,248.557,0" VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header=" 共享SharE">
+                    <TabItem.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </TabItem.Resources>
+                    <TabItem.Visibility>
+                        <Binding Converter="{StaticResource BooleanToVisibilityConverter}" Path=" HideMenu"/>
+                    </TabItem.Visibility>
+
+                    <Grid HorizontalAlignment="Left" Width="999.5" Height="556.63" VerticalAlignment="Bottom">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="556.63" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="999.5" />
+                        </Grid.ColumnDefinitions>
+
+                        <ListView ItemsSource="{Binding Albums}" BorderThickness="0" Margin="18.5,53,228.5,132.03" IsSynchronizedWithCurrentItem="False">
                             <ListView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="下载" FontSize="12"/>
@@ -483,63 +375,29 @@ IsSynchronizedWithCurrentItem="False">
                             </ListView.View>
                         </ListView>
                         <StackPanel
-                        Orientation="Horizontal" HorizontalAlignment="Right" Width="51.637"
-
-Margin="0,556.63,0,0">
+                                    Orientation="Horizontal" HorizontalAlignment="Right" Width="51.637" Margin="0,556.63,0,0">
                             <!--<Button Content="Ok" Style="{StaticResource OkButton}" />
                             <Button Content="Cancel" Style="{StaticResource CancelButton}" />-->
                         </StackPanel>
-                        <StackPanel HorizontalAlignment="Right" Height="38.307" Margin="0,0,273.236,171.693"
-
-VerticalAlignment="Bottom" Width="147.401" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
-                        <StackPanel Height="100" Margin="409,151.13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
-
-Width="90"/>
-                        <Button Content="共          享" HorizontalAlignment="Left" Height="32.5" Margin="18.5,10,0,0"
-
-VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}"
-
-Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei 
-
-UI"/>
-                        <Button Content="取消共享" HorizontalAlignment="Left" Height="32.5" Margin="227,10,0,0"
-
-VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}"
-
-Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei 
-
-UI"/>
-                        <Button Content="删          除" Height="32.5" Margin="435.5,10,390.977,0" VerticalAlignment="Top"
-
-Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1"
-
-Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                        <StackPanel HorizontalAlignment="Right" Height="38.307" Margin="0,0,273.236,171.693" VerticalAlignment="Bottom" Width="147.401" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+                        <StackPanel Height="100" Margin="409,151.13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90"/>
+                        <Button Content="共          享" HorizontalAlignment="Left" Height="32.5" Margin="18.5,10,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                        <Button Content="取消共享" HorizontalAlignment="Left" Height="32.5" Margin="227,10,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                        <Button Content="删          除" Height="32.5" Margin="435.5,10,390.977,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
                         <StackPanel Margin="0,49,3.5,4.5" HorizontalAlignment="Right" Width="195">
                             <TextBlock Margin="0,10,0,10" FontSize="18" Foreground="#FFB2B2B2" Text="文件名"/>
                             <Separator Background="#FFB2B2B2" Margin="0,2,55.333,2"/>
-                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8"
-
-FontSize="13.333"/>
+                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8" FontSize="13.333"/>
                             <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,2,0,8"/>
                             <Separator Background="#FFB2B2B2" Margin="0,2,6,2"/>
                             <TextBlock Margin="0,10,0,10" FontSize="18" Foreground="#FFB2B2B2" Text="类型"/>
                             <Separator Background="#FFB2B2B2" Margin="0,2,55.333,2"/>
-                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8"
-
-FontSize="13.333"/>
+                            <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,8" FontSize="13.333"/>
                             <TextBlock Foreground="#FFB2B2B2" Text="XXX.AVI" Height="13.86" Margin="0,2,0,8"/>
                         </StackPanel>
-                        <CheckBox Content="全选" HorizontalAlignment="Right" Margin="0,22.883,314.557,0"
-
-VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
-                        <CheckBox Content="反选" HorizontalAlignment="Right" Margin="0,22.883,248.557,0"
-
-VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
-                        <TextBox Height="106.7" Margin="18.5,0,228.5,14" TextWrapping="Wrap" Text="TextBox"
-
-VerticalAlignment="Bottom" BorderBrush="#FFE9E9E9" VerticalScrollBarVisibility="Visible"
-
-HorizontalScrollBarVisibility="Auto"/>
+                        <CheckBox Content="全选" HorizontalAlignment="Right" Margin="0,22.883,314.557,0" VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
+                        <CheckBox Content="反选" HorizontalAlignment="Right" Margin="0,22.883,248.557,0" VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
+                        <TextBox Height="106.7" Margin="18.5,0,228.5,14" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Bottom" BorderBrush="#FFE9E9E9" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto"/>
                     </Grid>
                 </TabItem>
                 <TabItem Width="132" Header=" 设置 SeT">
@@ -550,145 +408,59 @@ HorizontalScrollBarVisibility="Auto"/>
                         <TabControl Margin="8,8,0,0" Height="547" VerticalAlignment="Top">
                             <TabItem Header="个人资料">
                                 <Grid Margin="0,0,-6,-6.5">
-                                    <Image HorizontalAlignment="Left" Margin="260.25,108.63,0,215" Width="180"
-
-Source="{Binding ImageSource}"/>
-                                    <Label Content="昵       称：" Height="28" Margin="457.5,114.63,0,0"
-
-VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
-                                    <TextBox Margin="545.501,116.63,0,0" TextWrapping="Wrap" Text="TextBox"
-
-HorizontalAlignment="Left" Width="178.553" VerticalAlignment="Top"/>
-                                    <Label Content="性       别：" Height="28" Margin="457.5,165.13,0,0"
-
-VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
-                                    <CheckBox Content="男.MaN" HorizontalAlignment="Right" Margin="0,171.076,379.317,0"
-
-VerticalAlignment="Top"/>
-                                    <CheckBox Content="女.WomaN" HorizontalAlignment="Right" Margin="0,171.076,278.317,0"
-
-VerticalAlignment="Top"/>
-                                    <TextBox HorizontalAlignment="Right" Margin="0,208.63,272.184,0" TextWrapping="Wrap"
-
-Text="TextBox" VerticalAlignment="Top" Width="178.553"/>
-                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,222.053" Width="178.553"
-
-VerticalAlignment="Bottom"/>
-                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,175.053" Width="178.553"
-
-VerticalAlignment="Bottom"/>
-                                    <Label Content="修改密码：" Margin="457.5,0,0,222.053" HorizontalAlignment="Left"
-
-Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
-                                    <Label Content="确认密码：" Margin="457.5,0,0,175.053" HorizontalAlignment="Left"
-
-Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
-                                    <Button Content="上传头像" HorizontalAlignment="Left" Margin="260.25,0,0,175.5"
-
-Width="180" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Height="29.5" VerticalAlignment="Bottom"
-
-Command="{Binding UploadImageCmd}"/>
-                                    <Separator Background="#FFB2B2B2" Margin="245.25,0,255.988,152.05"
-
-VerticalAlignment="Bottom"/>
-                                    <Separator Background="#FFB2B2B2" Margin="245.25,91.5,255.988,0"
-
-VerticalAlignment="Top"/>
-                                    <Label Content="Q       Q：" Height="28" Margin="457.5,206.63,0,0"
-
-VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
+                                    <Image HorizontalAlignment="Left" Margin="260.25,108.63,0,215" Width="180" Source="{Binding ImageSource}"/>
+                                    <Label Content="昵       称：" Height="28" Margin="457.5,114.63,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
+                                    <TextBox Margin="545.501,116.63,0,0" TextWrapping="Wrap" Text="TextBox" HorizontalAlignment="Left" Width="178.553" VerticalAlignment="Top"/>
+                                    <Label Content="性       别：" Height="28" Margin="457.5,165.13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
+                                    <CheckBox Content="男.MaN" HorizontalAlignment="Right" Margin="0,171.076,379.317,0" VerticalAlignment="Top"/>
+                                    <CheckBox Content="女.WomaN" HorizontalAlignment="Right" Margin="0,171.076,278.317,0" VerticalAlignment="Top"/>
+                                    <TextBox HorizontalAlignment="Right" Margin="0,208.63,272.184,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="178.553"/>
+                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,222.053" Width="178.553" VerticalAlignment="Bottom"/>
+                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,175.053" Width="178.553" VerticalAlignment="Bottom"/>
+                                    <Label Content="修改密码：" Margin="457.5,0,0,222.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
+                                    <Label Content="确认密码：" Margin="457.5,0,0,175.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
+                                    <Button Content="上传头像" HorizontalAlignment="Left" Margin="260.25,0,0,175.5" Width="180" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Height="29.5" VerticalAlignment="Bottom"/>
+                                    <Separator Background="#FFB2B2B2" Margin="245.25,0,255.988,152.05" VerticalAlignment="Bottom"/>
+                                    <Separator Background="#FFB2B2B2" Margin="245.25,91.5,255.988,0" VerticalAlignment="Top"/>
+                                    <Label Content="Q       Q：" Height="28" Margin="457.5,206.63,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
                                 </Grid>
                             </TabItem>
                             <TabItem Header="目录">
                                 <Grid>
-                                    <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,0,0"
-
-VerticalAlignment="Top" FontSize="14.667" HorizontalAlignment="Left" Width="74.595"/>
-                                    <ComboBox Margin="327.345,38.025,297.917,0" VerticalAlignment="Top" Height="28.5"
-
-IsEditable="True"/>
-                                    <Button Content="设置" HorizontalAlignment="Right" Height="26"
-
-Margin="0,40.525,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI"
-
-FontWeight="Normal"/>
-                                    <Label Content="共享目录:" Margin="248.75,99.191,0,0" FontSize="14.667"
-
-HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Top" Width="74.595"/>
-                                    <Controls:ToggleSwitch Height="42.686"  Margin="481.178,0,404.039,142.314"
-
-VerticalAlignment="Bottom" FontSize="13.333" IsChecked="{Binding SysShareSwitch}" />
+                                    <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,0,0" VerticalAlignment="Top" FontSize="14.667" HorizontalAlignment="Left" Width="74.595"/>
+                                    <ComboBox Margin="327.345,38.025,297.917,0" VerticalAlignment="Top" Height="28.5" IsEditable="True"/>
+                                    <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Label Content="共享目录:" Margin="248.75,99.191,0,0" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Top" Width="74.595"/>
+                                    <Controls:ToggleSwitch Height="42.686"  Margin="481.178,0,404.039,142.314" VerticalAlignment="Bottom" FontSize="13.333" IsChecked="{Binding SysShareSwitch}" />
                                     <Rectangle Margin="327.345,99.191,297.917,196.261" Stroke="#FFCCCCCC"/>
-                                    <ListView Margin="327.75,99.065,297.917,196.261" BorderThickness="1"
-
-BorderBrush="{x:Null}" ItemsSource="{Binding SharePath}">
+                                    <ListView Margin="327.75,99.065,297.917,196.261" BorderThickness="1" BorderBrush="{x:Null}" ItemsSource="{Binding SharePath}">
                                         <ListView.View>
                                             <GridView>
-                                                <GridViewColumn Header="共享名称" Width="70" DisplayMemberBinding="{Binding 
-
-Key}"/>
-                                                <GridViewColumn Header="路径" Width="100" DisplayMemberBinding="{Binding 
-
-Value}"/>
+                                                <GridViewColumn Header="共享名称" Width="70" DisplayMemberBinding="{Binding Key}"/>
+                                                <GridViewColumn Header="路径" Width="100" DisplayMemberBinding="{Binding Value}"/>
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
-                                    <Button Content="增加目录" HorizontalAlignment="Right" Height="26"
-
-Margin="0,99.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI"
-
-FontWeight="Normal"/>
-                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26"
-
-Margin="0,142.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI"
-
-FontWeight="Normal"/>
-                                    <Label Content="共享计算机共享目录:" Margin="327.75,0,0,148.07" FontSize="14.667"
-
-HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Bottom" Width="148.595"/>
+                                    <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,99.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,142.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Label Content="共享计算机共享目录:" Margin="327.75,0,0,148.07" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Bottom" Width="148.595"/>
                                 </Grid>
                             </TabItem>
                             <Grid Margin="0,0,-470.738,-247.235">
-                                <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,0,0" VerticalAlignment="Top"
-
-FontSize="14.667" HorizontalAlignment="Left" Width="74.595"/>
-                                <ComboBox Margin="327.345,38.025,330.655,0" VerticalAlignment="Top" Height="28.5"
-
-IsEditable="True"/>
-                                <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,225.878,0"
-
-VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
-                                <Label Content="共享目录:" Margin="248.75,99.191,0,0" FontSize="14.667"
-
-HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Top" Width="74.595"/>
-                                <Controls:ToggleSwitch Height="75"  Margin="415.845,0,412.155,92.735"  Header="共享计算机共
-
-享目录" VerticalAlignment="Bottom" FontSize="13.333" d:LayoutOverrides="Height" />
+                                <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,0,0" VerticalAlignment="Top" FontSize="14.667" HorizontalAlignment="Left" Width="74.595"/>
+                                <ComboBox Margin="327.345,38.025,330.655,0" VerticalAlignment="Top" Height="28.5" IsEditable="True"/>
+                                <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                <Label Content="共享目录:" Margin="248.75,99.191,0,0" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Top" Width="74.595"/>
+                                <Controls:ToggleSwitch Height="75"  Margin="415.845,0,412.155,92.735"  Header="共享计算机共享目录" VerticalAlignment="Bottom" FontSize="13.333" d:LayoutOverrides="Height" />
                                 <Rectangle Margin="327.345,99.191,330.655,200.754" Stroke="#FFCCCCCC"/>
-                                <ListBox Margin="328.178,99.191,330.655,200.754"
-
-ScrollViewer.VerticalScrollBarVisibility="Visible" BorderBrush="{x:Null}"/>
-                                <Button Content="增加目录" HorizontalAlignment="Right" Height="26"
-
-Margin="0,156.065,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI"
-
-FontWeight="Normal"/>
-                                <Button Content="删除目录" HorizontalAlignment="Right" Height="26"
-
-Margin="0,199.065,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI"
-
-FontWeight="Normal"/>
+                                <ListBox Margin="328.178,99.191,330.655,200.754" ScrollViewer.VerticalScrollBarVisibility="Visible" BorderBrush="{x:Null}"/>
+                                <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,156.065,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,199.065,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
                             </Grid>
                         </TabControl>
-                        <Button Content="应用" Height="34.5" Margin="0,19.253,177.745,0" VerticalAlignment="Top"
-
-FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
-                        <Button Content="保存" Height="34.5" Margin="0,19.253,96.745,0" VerticalAlignment="Top"
-
-FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
-                        <Button Content="取消" Height="34.5" Margin="0,19.253,17.245,0" VerticalAlignment="Top"
-
-FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
+                        <Button Content="应用" Height="34.5" Margin="0,19.253,177.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
+                        <Button Content="保存" Height="34.5" Margin="0,19.253,96.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
+                        <Button Content="取消" Height="34.5" Margin="0,19.253,17.245,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
                     </Grid>
                 </TabItem>
             </TabControl>

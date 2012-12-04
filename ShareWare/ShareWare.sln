@@ -21,10 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServer", "ConsoleServer\ConsoleServer.csproj", "{1673AFB1-62FD-4C16-B363-98B002A724A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{37E98F14-7060-4FC4-91C0-844E9D4177D1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketLibrary", "SocketLibrary\SocketLibrary.csproj", "{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMetro", "ShareMetro\ShareMetro.csproj", "{56E8080F-FFEB-47CD-ADB9-92245F92565B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{15B3E0D2-6217-493A-A690-158C497F5318} = {15B3E0D2-6217-493A-A690-158C497F5318}
@@ -44,7 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{5EFE021E-7A7
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://amos402.tfspreview.com/defaultcollection
 		SccLocalPath0 = .
@@ -66,24 +62,18 @@ Global
 		SccProjectUniqueName6 = ShareWareServiceLibrary\\ShareWareServiceLibrary.csproj
 		SccProjectName6 = ShareWareServiceLibrary
 		SccLocalPath6 = ShareWareServiceLibrary
-		SccProjectUniqueName7 = WpfApplication1\\WpfApplication1.csproj
-		SccProjectName7 = WpfApplication1
-		SccLocalPath7 = WpfApplication1
-		SccProjectUniqueName8 = Client\\Client.csproj
-		SccProjectName8 = Client
-		SccLocalPath8 = Client
-		SccProjectUniqueName9 = SocketLibrary\\SocketLibrary.csproj
-		SccProjectName9 = SocketLibrary
-		SccLocalPath9 = SocketLibrary
-		SccProjectUniqueName10 = ShareMetro\\ShareMetro.csproj
-		SccProjectName10 = ShareMetro
-		SccLocalPath10 = ShareMetro
-		SccProjectUniqueName11 = MahApps.Metro\\MahApps.Metro.csproj
-		SccProjectName11 = MahApps.Metro
-		SccLocalPath11 = MahApps.Metro
-		SccProjectUniqueName12 = MahApps.Metro.Resources\\MahApps.Metro.Resources.csproj
-		SccProjectName12 = MahApps.Metro.Resources
-		SccLocalPath12 = MahApps.Metro.Resources
+		SccProjectUniqueName7 = Client\\Client.csproj
+		SccProjectName7 = Client
+		SccLocalPath7 = Client
+		SccProjectUniqueName8 = ShareMetro\\ShareMetro.csproj
+		SccProjectName8 = ShareMetro
+		SccLocalPath8 = ShareMetro
+		SccProjectUniqueName9 = MahApps.Metro\\MahApps.Metro.csproj
+		SccProjectName9 = MahApps.Metro
+		SccLocalPath9 = MahApps.Metro
+		SccProjectUniqueName10 = MahApps.Metro.Resources\\MahApps.Metro.Resources.csproj
+		SccProjectName10 = MahApps.Metro.Resources
+		SccLocalPath10 = MahApps.Metro.Resources
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,26 +152,6 @@ Global
 		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|x86.ActiveCfg = Release|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{37E98F14-7060-4FC4-91C0-844E9D4177D1}.Release|x86.ActiveCfg = Release|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{14A4CC8B-1F3B-407D-BFDC-DF8A55D2ADC2}.Release|x86.ActiveCfg = Release|Any CPU
 		{56E8080F-FFEB-47CD-ADB9-92245F92565B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{56E8080F-FFEB-47CD-ADB9-92245F92565B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56E8080F-FFEB-47CD-ADB9-92245F92565B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

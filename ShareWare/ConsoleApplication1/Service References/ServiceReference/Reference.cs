@@ -508,16 +508,22 @@ namespace ConsoleApplication1.ServiceReference {
         System.Threading.Tasks.Task RemoveOldFileAsync(System.Collections.Generic.List<ShareWare.ShareFile.FileInfoTransfer> fileList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        System.Collections.Generic.List<ShareWare.FileInfoData> SearchFile(System.Collections.Generic.List<string> nameList);
+        System.Collections.Generic.List<ShareWare.ShareFile.FileInfoData> SearchFile(System.Collections.Generic.List<string> nameList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/SearchFile", ReplyAction="http://tempuri.org/IShareService/SearchFileResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileInfoData>> SearchFileAsync(System.Collections.Generic.List<string> nameList);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.ShareFile.FileInfoData>> SearchFileAsync(System.Collections.Generic.List<string> nameList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
         int DownloadRequest(ConsoleApplication1.ServiceReference.FileOwner fileOnwer, int nPort);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
         System.Threading.Tasks.Task<int> DownloadRequestAsync(ConsoleApplication1.ServiceReference.FileOwner fileOnwer, int nPort);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadImage")]
+        void UploadImage(System.Drawing.Bitmap image);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadImage")]
+        System.Threading.Tasks.Task UploadImageAsync(System.Drawing.Bitmap image);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -636,11 +642,11 @@ namespace ConsoleApplication1.ServiceReference {
             return base.Channel.RemoveOldFileAsync(fileList);
         }
         
-        public System.Collections.Generic.List<ShareWare.FileInfoData> SearchFile(System.Collections.Generic.List<string> nameList) {
+        public System.Collections.Generic.List<ShareWare.ShareFile.FileInfoData> SearchFile(System.Collections.Generic.List<string> nameList) {
             return base.Channel.SearchFile(nameList);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.FileInfoData>> SearchFileAsync(System.Collections.Generic.List<string> nameList) {
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.ShareFile.FileInfoData>> SearchFileAsync(System.Collections.Generic.List<string> nameList) {
             return base.Channel.SearchFileAsync(nameList);
         }
         
@@ -650,6 +656,14 @@ namespace ConsoleApplication1.ServiceReference {
         
         public System.Threading.Tasks.Task<int> DownloadRequestAsync(ConsoleApplication1.ServiceReference.FileOwner fileOnwer, int nPort) {
             return base.Channel.DownloadRequestAsync(fileOnwer, nPort);
+        }
+        
+        public void UploadImage(System.Drawing.Bitmap image) {
+            base.Channel.UploadImage(image);
+        }
+        
+        public System.Threading.Tasks.Task UploadImageAsync(System.Drawing.Bitmap image) {
+            return base.Channel.UploadImageAsync(image);
         }
     }
 }

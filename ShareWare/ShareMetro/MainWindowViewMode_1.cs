@@ -1,22 +1,18 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Threading;
-using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
 using ShareMetro.ServiceReference;
 using ShareWare.ShareFile;
-using System.ServiceModel;
-using System.Windows.Input;
-using System.Management;
-using System.Threading.Tasks;
-using ShareWare;
 using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Management;
+using System.Security.Cryptography;
+using System.ServiceModel;
+using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows;
-using Socket_Library;
+using System.Windows.Threading;
 
 namespace ShareMetro
 {
@@ -38,46 +34,71 @@ namespace ShareMetro
         public MainWindowViewModel(Dispatcher dispatcher)
         {
             _dispatcher = dispatcher;
-            LoginTab = new LoginPage() { ButtonVisiable = true };
-            MainTab = new MainPage();
+
+
+            LoginAble = true;
+            UserName = string.Empty;
+            Password = string.Empty;
+
+            OnlineUser = new ObservableCollection<string>();
+            IsBusy_Main = false;
+
             LoginCmd = new DelegateCommand<object>(OnLogin, arg => true);
             SearchCmd = new DelegateCommand<object>(OnSearch, arg => true);
-            _callBack = new CallBack(MainTab);
+            UploadImageCmd = new DelegateCommand<object>(OnUploadImage, arg => true);
+            DownLoadCmd = new DelegateCommand<object>(OnDownLoad, arg => true);
+
+            _callBack = new CallBack(this);
             _client = new ShareServiceClient(new InstanceContext(_callBack));
+
             _client.InnerChannel.Closing += InnerChannel_Closing;
             ErrorOccur += OnErrorOccur;
             LoginSuccess += GetShareInfo;
             LoginSuccess += ClientTick;
+            LoginSuccess += GetClientInfo;
             LoginFailed += OnLoginFailed;
 
+            _defaultImage = _imagePath + "default.jpg";
+            ImageSource = _defaultImage;
         }
 
-        void OnErrorOccur(object sender, ModelEvent e)
+        private string _defaultImage;
+
+        private string _imageSource;
+        public string ImageSource
         {
-            switch (e.Type)
+            get { return _imageSource; }
+            set
             {
-                case ModelEventType.Exception:
-                    MessageBox.Show(e.ModelException.Message);
-                    break;
+                if (File.Exists(value))
+                {
+                    _imageSource = value;
+                }
+                else
+                {
+                    _imageSource = _defaultImage;
+                }
 
-                case ModelEventType.Meesage:
-                    _loginTab.FailedMessage = e.FailedMessage;
-                    break;
-
-                default:
-                    break;
             }
         }
 
+        private string _shareInfoPath = @"config\known.met";
 
+        private ShareFiles _sh;
 
-        void OnLoginFailed(object sender, ModelEvent e)
+        public ShareFiles Sh
         {
-
+            get { return _sh; }
+            set { _sh = value; }
         }
 
+        private int _id;
 
-        private string _shareInfoPath = @"config\known.met";
+        public string _imagePath = @"C:\Users\Amos\Documents\Visual Studio 2012\Projects\ShareWare\ShareMetro\bin\Debug\image\";
+
+        public int Index { get; set; }
+        public bool HideMenu { get; set; }
+
         private static Mutex searchMut = new Mutex();
         private static int _tickTime = 60000;
         private static System.Timers.Timer _tickTimer;
@@ -89,226 +110,29 @@ namespace ShareMetro
 
         private CallBack _callBack;
         private ShareServiceClient _client;
-        internal ShareServiceClient Client
+
+        void OnErrorOccur(object sender, ModelEvent e)
         {
-            get { return _client; }
-            set { _client = value; }
-        }
-
-        private int _id;
-
-        public int Index { get; set; }
-        public bool HideMenu { get; set; }
-
-        private ShareFiles _sh;
-
-        private ObservableCollection<FileInfoData> _fileList = new ObservableCollection<FileInfoData>();
-        public ObservableCollection<FileInfoData> FileList
-        {
-            get { return _fileList; }
-            set
+            switch (e.Type)
             {
-                _fileList = value;
-                OnPropertyChanged("FileList");
+                case ModelEventType.Exception:
+                    MessageBox.Show(e.ModelException.Message);
+                    break;
+
+                case ModelEventType.Meesage:
+                    FailedMessage = e.FailedMessage;
+                    break;
+
+                default:
+                    break;
             }
         }
 
-        private ObservableCollection<FileInfoDataList> _fileItemInfo = new ObservableCollection<FileInfoDataList>();
-        public ObservableCollection<FileInfoDataList> FileItemInfo
-        {
-            get { return _fileItemInfo; }
-            set
-            {
-                _fileItemInfo = value;
-                OnPropertyChanged("FileItemInfo");
-            }
-        }
-
-        private bool _sysShareSwitch;
-
-        public bool SysShareSwitch
-        {
-            get { return _sysShareSwitch; }
-            set
-            {
-                _sysShareSwitch = value;
-                if (_sh != null)
-                {
-                    if (_sysShareSwitch)
-                    {
-
-                        _sh.AddSystemSharePath();
-
-                    }
-                    else
-                    {
-                        foreach (var item in _sh.SystemShareNameList)
-                        {
-                            _sh.RemoveSharePath(item);
-                        }
-
-                    }
-                }
-            }
-        }
-
-        public Dictionary<string, string> SharePath
-        {
-            get
-            {
-                if (_sh != null)
-                {
-                    return _sh.SharePath;
-                }
-                return null;
-            }
-            set
-            {
-                _sh.SharePath = value;
-                OnPropertyChanged("SharePath");
-            }
-        }
-
-        #region Commands
-        public ICommand LoginCmd { get; set; }
-        public ICommand SearchCmd { get; set; }
-        public ICommand AddSearchPathCmd { get; set; }
-
-        #endregion
-
-        private LoginPage _loginTab;
-        public LoginPage LoginTab
-        {
-            get { return _loginTab; }
-            set
-            {
-                _loginTab = value;
-                OnPropertyChanged("LoginTab");
-            }
-        }
-
-        private MainPage _mainTab;
-        public MainPage MainTab
-        {
-            get { return _mainTab; }
-            set
-            {
-                _mainTab = value;
-                OnPropertyChanged("MainTab");
-            }
-        }
-
-
-        private void OnLogin(object obj)
-        {
-            _loginTab.IsBusy = true;
-            _loginTab.LoginAble = false;
-            _loginTab.FailedMessage = string.Empty;
-            try
-            {
-                Task<int> task = _client.LoginAsync(_loginTab.UserName, _loginTab.Password, GetFirstMac());
-
-                task.ContinueWith(T =>
-                {
-                    AggregateException ex = T.Exception;
-                    if (ex != null)
-                    {
-                        if (ex.InnerExceptions.Count > 0)
-                        {
-                            ErrorOccur(this, new ModelEvent(ModelEventType.Meesage) { FailedMessage = "连接服务器出错" });
-                            _loginTab.IsBusy = false;
-                            _loginTab.LoginAble = true;
-                            return;
-                        }
-                    }
-                    if (T.Result < 0)
-                    {
-                        ErrorOccur(this, new ModelEvent(ModelEventType.Meesage) { FailedMessage = "用户名或密码错误" });
-                        _loginTab.IsBusy = false;
-                        _loginTab.LoginAble = true;
-                        return;
-                    }
-
-                    _id = T.Result;
-                    HideMenu = true;
-                    Index = 1;
-                    if (LoginSuccess != null)
-                    {
-                        ExecuteEventAsync(this, null, LoginSuccess, null);
-                    }
-                    _loginTab.IsBusy = false;
-                    _loginTab.LoginAble = true;
-
-                });
-            }
-            catch (Exception e)
-            {
-
-                if (ErrorOccur != null)
-                {
-                    ErrorOccur(this, new ModelEvent(ModelEventType.Exception) { ModelException = e });
-                }
-            }
-
-        }
-
-        private void OnSearch(object obj)
-        {
-            _mainTab.IsBusy = true;
-            try
-            {
-                string[] sp = MainTab.FileName.Split(' ');
-                List<string> nameList = new List<string>();
-                nameList.AddRange(sp);
-                Task<List<FileInfoData>> task = _client.SearchFileAsync(nameList);
-                FileList.Clear();
-                task.ContinueWith(T =>
-                    {
-                        ThreadPool.QueueUserWorkItem(delegate
-                        {
-                            searchMut.WaitOne();
-                            _mainTab.IsBusy = false;
-                            if (T.Result != null)
-                            {
-                                foreach (var item in T.Result)
-                                {
-                                    FileInfoDataList f = new FileInfoDataList(item);
-                                    try
-                                    {
-                                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
-                                            (ThreadStart)delegate
-                                        {
-                                            if (item != null)
-                                            {
-                                                FileItemInfo.Add(f);
-                                            }
-                                            Thread.Sleep(30);
-                                        });
-                                    }
-                                    catch (Exception)
-                                    {
-
-                                        //throw;
-                                    }
-                                }
-                            }
-                            searchMut.ReleaseMutex();
-                        });
-                    });
-            }
-            catch (Exception e)
-            {
-                if (ErrorOccur != null)
-                {
-                    ErrorOccur(this, new ModelEvent(ModelEventType.Exception) { ModelException = e });
-                }
-            }
-        }
-
-        private void OnAddSharePath(object obj)
+        void OnLoginFailed(object sender, ModelEvent e)
         {
 
         }
+
 
         private void InnerChannel_Closing(object sender, EventArgs e)
         {
@@ -349,7 +173,7 @@ namespace ShareMetro
         private void GetShareInfo(object sender, ModelEvent e)
         {
             _sh = ShareFiles.Deserialize(_shareInfoPath);
-            _sh.AddSharePath("RamDisk", @"D:\eclipse");
+            _sh.AddSharePath("RamDisk", @"R:\");
             //_sh.AddSharePath("damn", @"D:\TDDOWNLOAD");
             Thread t = _sh.ListFile();
             t.Join();
@@ -358,6 +182,33 @@ namespace ShareMetro
             // _sh.SetUploaded(_sh.FileList);
 
             SaveShareInfo();
+        }
+
+        private void GetClientInfo(object sender, ModelEvent e)
+        {
+            MD5 md5 = MD5.Create();
+            byte[] data = md5.ComputeHash((Encoding.UTF8.GetBytes(UserName)));
+            StringBuilder hash = new StringBuilder();
+            foreach (var item in data)
+            {
+                hash.Append(item.ToString("x2"));
+            }
+            md5.Clear();
+            ImageSource = _imagePath + hash.ToString() + ".jpeg";
+
+        }
+
+        private string GetImageSource()
+        {
+            MD5 md5 = MD5.Create();
+            byte[] data = md5.ComputeHash((Encoding.UTF8.GetBytes(UserName)));
+            StringBuilder hash = new StringBuilder();
+            foreach (var item in data)
+            {
+                hash.Append(item.ToString("x2"));
+            }
+            md5.Clear();
+            return _imagePath + hash.ToString() + ".jpeg";
         }
 
         private void SaveShareInfo()

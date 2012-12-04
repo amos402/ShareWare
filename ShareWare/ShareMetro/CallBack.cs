@@ -11,29 +11,28 @@ namespace ShareMetro
     public class CallBack : IShareServiceCallback
     {
 
-        private ShareFiles _shFile;
-        private MainPage _mainTab;
-        public CallBack(MainPage mainTab)
+        private MainWindowViewModel _vm;
+        public CallBack(MainWindowViewModel vm)
         {
             //_shFile = shFile;
-            
-            _mainTab = mainTab;
+            _vm = vm;
+         
         }
 
         public void DownloadPerformance(string szHash, string szIp, int nPort)
         {
-            //  Console.WriteLine("send to {0} {1} {2}", szHash, szIp, nPort);
-            var file = _shFile.FindFile(szHash);
+            var file = _vm.Sh.FindFile(szHash);
             if (file != null)
             {
-                //    Console.WriteLine(file.File.FullName);
+                //
             }
         }
 
 
         public void NewUser(int id, string name)
         {
-            _mainTab.OnlineUser.Add(name);
+            _vm.OnlineUser.Add(name);
+
         }
 
         public void RefreshUserList(List<string> userList)
@@ -41,13 +40,13 @@ namespace ShareMetro
             // Console.WriteLine("Online users :");
             foreach (var item in userList)
             {
-                _mainTab.OnlineUser.Add(item);
+                _vm.OnlineUser.Add(item);
             }
         }
 
         public void UserLeave(string name)
         {
-            _mainTab.OnlineUser.Remove(name);
+            _vm.OnlineUser.Remove(name);
             //  Console.WriteLine("{0} Leave", name);
         }
     }

@@ -18,6 +18,7 @@
     <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
     <ReferencedAssemblies>
       <ReferencedAssembly AssemblyName="ShareFile" />
+      <ReferencedAssembly AssemblyName="System.Drawing" />
     </ReferencedAssemblies>
     <ReferencedDataContractTypes />
     <ServiceContractMappings />
@@ -33,6 +34,7 @@
     <MetadataFile FileName="ShareWare.ShareFile.xsd" MetadataType="Schema" ID="b756278d-e860-44c8-b1ce-1fd2cf259774" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="afe04025-74ae-4dc1-89ae-cbc33c865444" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
     <MetadataFile FileName="ShareWare.xsd" MetadataType="Schema" ID="94ed60f8-a969-4deb-9537-4e132da0f3fb" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
+    <MetadataFile FileName="System.Drawing.xsd" MetadataType="Schema" ID="b6fc4fe9-d636-43ca-bede-3e182b4d8c29" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

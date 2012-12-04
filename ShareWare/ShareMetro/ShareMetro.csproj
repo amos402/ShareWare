@@ -81,6 +81,7 @@
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -155,6 +156,7 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\app.manifest" />
     <None Include="Properties\DataSources\ShareWare.FileInfoData.datasource" />
+    <None Include="Properties\DataSources\ShareWare.ShareFile.FileInfoData.datasource" />
     <None Include="Properties\DataSources\ShareWare.ShareFile.FileInfoTransfer.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -181,6 +183,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ServiceReference\ShareWare.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\System.Drawing.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

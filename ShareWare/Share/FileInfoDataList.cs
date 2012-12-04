@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 namespace ShareWare.ShareFile
 {
+    [Serializable]
     public class FileInfoDataList
     {
         public string Name { get; set; }

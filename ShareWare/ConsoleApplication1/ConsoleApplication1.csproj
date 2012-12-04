@@ -69,6 +69,7 @@
     <None Include="App.config" />
     <None Include="Properties\DataSources\ShareWare.FileInfoData.datasource" />
     <None Include="Properties\DataSources\ShareWare.FileOwner.datasource" />
+    <None Include="Properties\DataSources\ShareWare.ShareFile.FileInfoData.datasource" />
     <None Include="Properties\DataSources\ShareWare.ShareFile.FileInfoTransfer.datasource" />
     <None Include="Service References\ServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
@@ -90,6 +91,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ServiceReference\ShareWare.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\System.Drawing.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

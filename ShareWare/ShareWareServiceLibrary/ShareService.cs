@@ -7,9 +7,13 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
@@ -566,8 +570,8 @@ namespace ShareWare.ServiceLibrary
             foreach (var item in nameList)
             {
                 var result = (from c in _context.FileOwner
-                             where (c.Name.Contains(item))
-                             select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo, c.Users });
+                              where (c.Name.Contains(item))
+                              select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo, c.Users });
                 foreach (var file in result)
                 {
                     newList.Add(new FileInfoData()
@@ -582,7 +586,7 @@ namespace ShareWare.ServiceLibrary
                 }
             }
 
-           
+
 
             return newList.Distinct().ToList();
         }
@@ -608,7 +612,42 @@ namespace ShareWare.ServiceLibrary
             int t = 1;
 
         }
+
+
+        public void UploadImage(Bitmap image)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                var user = _context.Users.Single(T => T.UserID == id);
+                MD5 md5 =  MD5.Create();
+                byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(user.UserName));
+                StringBuilder hash = new StringBuilder();
+                foreach (var item in data)
+                {
+                    hash.Append(item.ToString("x2"));
+                }
+                IDictionary section = (IDictionary)ConfigurationManager.GetSection("ImagePath");
+                string imagePath = section["Path"].ToString();
+                if (!Directory.Exists(imagePath))
+                {
+                    Directory.CreateDirectory(imagePath);
+                }
+
+                image.Save(imagePath + @"\" + hash.ToString() + ".jpeg", ImageFormat.Jpeg);
+
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+
+        }
     }
 }
-
-
