@@ -25,6 +25,7 @@ namespace ShareMetro
 
         public ICommand SearchCmd { get; set; }
         public ICommand DownLoadCmd { get; set; }
+        public ICommand HeadIConCmd { get; set; }
 
         private ObservableCollection<FileInfoData> _fileList = new ObservableCollection<FileInfoData>();
         public ObservableCollection<FileInfoData> FileList
@@ -48,7 +49,8 @@ namespace ShareMetro
             }
         }
 
-        public ObservableCollection<string> OnlineUser { get; set; }
+        public ObservableCollection<OnlineUserData> OnlineUser { get; private set; }
+
         private void OnSearch(object obj)
         {
             IsBusy_Main = true;
@@ -106,5 +108,12 @@ namespace ShareMetro
         {
 
         }
+
+        private void OnClickHeadIcon(object obj)
+        {
+            Index = 4;
+            OptinIndex = 0;
+        }
+
     }
 }

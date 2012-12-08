@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows;
+using System.Windows.Media.Imaging;
+using System.Windows.Resources;
 using System.Windows.Threading;
 
 namespace ShareMetro
@@ -40,13 +42,15 @@ namespace ShareMetro
             UserName = string.Empty;
             Password = string.Empty;
 
-            OnlineUser = new ObservableCollection<string>();
+            OnlineUser = new ObservableCollection<OnlineUserData>();
             IsBusy_Main = false;
 
             LoginCmd = new DelegateCommand<object>(OnLogin, arg => true);
+            RegisterCmd = new DelegateCommand<object>(OnRegister, arg => true);
             SearchCmd = new DelegateCommand<object>(OnSearch, arg => true);
             UploadImageCmd = new DelegateCommand<object>(OnUploadImage, arg => true);
             DownLoadCmd = new DelegateCommand<object>(OnDownLoad, arg => true);
+            HeadIConCmd = new DelegateCommand<object>(OnClickHeadIcon, arg => true);
 
             _callBack = new CallBack(this);
             _client = new ShareServiceClient(new InstanceContext(_callBack));
@@ -58,27 +62,39 @@ namespace ShareMetro
             LoginSuccess += GetClientInfo;
             LoginFailed += OnLoginFailed;
 
-            _defaultImage = _imagePath + "default.jpg";
-            ImageSource = _defaultImage;
+            try
+            {
+                StreamResourceInfo resourceInfo = Application.GetResourceStream(new Uri(@"images\icon.jpg", UriKind.Relative));
+                _defaultImage = new BitmapImage();
+                _defaultImage.BeginInit();
+                _defaultImage.StreamSource = resourceInfo.Stream;
+                _defaultImage.EndInit();
+                _defaultImage.Freeze();
+                ImageSource = _defaultImage;
+            }
+            catch (Exception)
+            {
+                ImageSource = null;
+            }
         }
 
-        private string _defaultImage;
 
-        private string _imageSource;
-        public string ImageSource
+        private string _imagePath = System.Environment.CurrentDirectory + @"\image\";
+
+        public string ImagePath
+        {
+            get { return _imagePath; }
+        }
+        private BitmapImage _defaultImage;
+
+        private BitmapImage _imageSource;
+        public BitmapImage ImageSource
         {
             get { return _imageSource; }
             set
             {
-                if (File.Exists(value))
-                {
-                    _imageSource = value;
-                }
-                else
-                {
-                    _imageSource = _defaultImage;
-                }
-
+                _imageSource = value;
+                OnPropertyChanged("ImageSource");
             }
         }
 
@@ -94,7 +110,6 @@ namespace ShareMetro
 
         private int _id;
 
-        public string _imagePath = @"C:\Users\Amos\Documents\Visual Studio 2012\Projects\ShareWare\ShareMetro\bin\Debug\image\";
 
         public int Index { get; set; }
         public bool HideMenu { get; set; }
@@ -110,6 +125,12 @@ namespace ShareMetro
 
         private CallBack _callBack;
         private ShareServiceClient _client;
+
+        internal ShareServiceClient Client
+        {
+            get { return _client; }
+            set { _client = value; }
+        }
 
         void OnErrorOccur(object sender, ModelEvent e)
         {
@@ -194,8 +215,54 @@ namespace ShareMetro
                 hash.Append(item.ToString("x2"));
             }
             md5.Clear();
-            ImageSource = _imagePath + hash.ToString() + ".jpeg";
+           // ImageSource = _imagePath + hash.ToString() + ".jpeg";
 
+        }
+
+        private BitmapImage GetBitmapImageSource()
+        {
+            MD5 md5 = MD5.Create();
+            byte[] data = md5.ComputeHash((Encoding.UTF8.GetBytes(UserName)));
+            StringBuilder hash = new StringBuilder();
+            foreach (var item in data)
+            {
+                hash.Append(item.ToString("x2"));
+            }
+            md5.Clear();
+            //BitmapImage bitMap = new BitmapImage();
+            //bitMap.BeginInit();
+            //bitMap.CacheOption = BitmapCacheOption.
+            //return _imagePath + hash.ToString() + ".jpeg";
+            string path = _imagePath + hash.ToString() + ".jpeg";
+            if (File.Exists(path))
+            {
+                try
+                {
+                    var image = new BitmapImage();
+                    FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    byte[] buf = new byte[fs.Length];
+                    fs.Read(buf, 0, (int)fs.Length);
+                    fs.Close();
+                    MemoryStream ms = new MemoryStream(buf);
+                    
+                    image.BeginInit();
+                    //image.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
+                    image.StreamSource = ms;
+                    image.DecodePixelWidth = 200;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+                    image.Freeze();
+                    return image;
+                }
+                catch (Exception)
+                {
+
+                    return null;
+                }
+            }
+
+            return null;
+            
         }
 
         private string GetImageSource()
@@ -208,7 +275,9 @@ namespace ShareMetro
                 hash.Append(item.ToString("x2"));
             }
             md5.Clear();
-            return _imagePath + hash.ToString() + ".jpeg";
+         
+            return _imagePath + hash.ToString() + ".jpg";
+          
         }
 
         private void SaveShareInfo()

@@ -8,7 +8,10 @@ using System.Management;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace ShareMetro
 {
@@ -17,8 +20,8 @@ namespace ShareMetro
 
         public bool IsBusy_Login { get; set; }
 
-        public ICommand LoginCmd { get; set; }
-        public ICommand RegisterCmd { get; set; }
+        public ICommand LoginCmd { get; private set; }
+        public ICommand RegisterCmd { get; private set; }
 
         public bool LoginAble { get; set; }
         private string _userName;
@@ -31,12 +34,28 @@ namespace ShareMetro
             set
             {
                 _userName = value;
-                _cts.Cancel();
-                Task<string> imageTask = new Task<string>((T) => GetImageSource(), _cts);
+                if (_userName == string.Empty)
+                {
+                    return;
+                }
+                //_cts.Cancel();
+                Task<BitmapImage> imageTask = new Task<BitmapImage>((T) => GetBitmapImageSource(), _cts);
                 imageTask.Start();
                 imageTask.ContinueWith(T =>
                     {
-                        ImageSource = T.Result;
+                        if (T.Result != null)
+                        {
+                            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                          (ThreadStart)delegate
+                                          {
+                                              ImageSource = T.Result;
+                                          });
+                        }
+                        else
+                        {
+                            ImageSource = _defaultImage;
+                        }
+
                     });
 
                 OnPropertyChanged("UserName");
@@ -93,6 +112,16 @@ namespace ShareMetro
                 {
                     ErrorOccur(this, new ModelEvent(ModelEventType.Exception) { ModelException = e });
                 }
+            }
+
+        }
+        private void OnRegister(object obj)
+        {
+            Register dlg = new Register();
+            dlg.Owner = Application.Current.MainWindow;
+            if (dlg.ShowDialog() == true)
+            {
+                
             }
 
         }

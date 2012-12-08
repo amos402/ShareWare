@@ -109,8 +109,18 @@
     <Compile Include="MainWindowViewModel_2.cs" />
     <Compile Include="MainWindowViewMode_1.cs" />
     <Compile Include="ModelEvent.cs" />
+    <Compile Include="OnlineUserData.cs" />
     <Compile Include="OptionPage.cs" />
     <Compile Include="PasswordHelper.cs" />
+    <Compile Include="Register.xaml.cs">
+      <DependentUpon>Register.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterVM.cs" />
+    <Compile Include="Service References\RegisterServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -133,6 +143,10 @@
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
     </Page>
+    <Page Include="Register.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -148,6 +162,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\RegisterServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\RegisterServiceReference\configuration.svcinfo" />
+    <None Include="Service References\RegisterServiceReference\configuration91.svcinfo" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -155,16 +175,33 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="font\MSYH.TTC">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\app.manifest" />
     <None Include="Properties\DataSources\ShareWare.FileInfoData.datasource" />
     <None Include="Properties\DataSources\ShareWare.ShareFile.FileInfoData.datasource" />
     <None Include="Properties\DataSources\ShareWare.ShareFile.FileInfoTransfer.datasource" />
+    <None Include="Properties\DataSources\System.Drawing.Bitmap.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\RegisterServiceReference\service.wsdl" />
+    <None Include="Service References\RegisterServiceReference\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RegisterServiceReference\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RegisterServiceReference\ShareWare.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RegisterServiceReference\System.Drawing.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -229,15 +266,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\placeholder_person.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\blank-cd.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\RegisterServiceReference\" />
     <WCFMetadataStorage Include="Service References\ServiceReference\" />
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +298,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\sharewareicon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\defaultImage.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\icon.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

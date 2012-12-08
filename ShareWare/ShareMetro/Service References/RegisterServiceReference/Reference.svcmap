@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="fa773b43-cbed-4ca1-b5dc-8fd977347dbd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies>
+      <ReferencedAssembly AssemblyName="ShareFile" />
+      <ReferencedAssembly AssemblyName="System.Drawing" />
+    </ReferencedAssemblies>
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="dfc35cbc-f36f-4c6a-86ad-6ccb9402ead1" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="7c6a7b8f-f585-4034-b7ff-7363a823db31" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="617b4920-5995-4b73-92b3-95fc48f23337" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
+    <MetadataFile FileName="ShareWare.xsd" MetadataType="Schema" ID="ddf38eec-7696-4cba-9d51-6e71c54a0437" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
+    <MetadataFile FileName="System.Drawing.xsd" MetadataType="Schema" ID="44f05009-4bf9-43d5-8f34-f9ecd74fb73d" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -156,6 +156,27 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="RequestConversation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="localPort" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RequestOpenShareFolder">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="localPort" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RequestOpenShareFolderResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="DownloadPerformance">
     <xs:complexType>
       <xs:sequence>
@@ -183,6 +204,22 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="userList" nillable="true" type="q12:ArrayOfOnlineUserInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConversationPerformance">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="remoteIp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="remotePort" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OpenShareFolderPerfromance">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="remoteIp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="remotePort" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

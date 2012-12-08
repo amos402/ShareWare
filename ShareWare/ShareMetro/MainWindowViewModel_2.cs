@@ -15,6 +15,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Socket_Library;
 using ShareWare.ShareFile;
+using System.Threading.Tasks;
 
 namespace ShareMetro
 {
@@ -155,6 +156,7 @@ namespace ShareMetro
                     {
                         Directory = Directory + "\\";
                     }
+
                     D = Directory;
                 }
                 if (ShowSharefile.NewSock == null)
@@ -229,24 +231,29 @@ namespace ShareMetro
 
         private void CreatDowndLoadThread()
         {
-           // if (SeleteInfo == null) return;
+            if (SeleteInfo == null) return;
             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (ThreadStart)delegate
             {
                 DownLoad d = new DownLoad();
                 LoadInfo l = new LoadInfo();
-                l.name = @"DriverGenius2012";
-                l.type = "文件夹";
-                //l.name = SeleteInfo.Name;
-                //l.size = (long)SeleteInfo.Size;
-                //l.type = SeleteInfo.Type;
+                //l.name = @"DriverGenius2012";
+                //l.type = "文件夹";
+                l.name = SeleteInfo.Name;
+              //  l.size = (long)SeleteInfo.Size;
+                l.type = SeleteInfo.Type;
                 DownListInfo sm = d.CreatDownLoad(l);
                 if (sm == null) return;
                 sm.ID = Down_d.Count;
                 sm.State = "下载";
                 DownInfo.Add(sm);
                 Down_d.Add(d);
-                
-                //Serialization(@".\ImportDownLoadInfo",DownInfo);
+                Task<int> task =  _client.DownloadRequestAsync(SeleteInfo.Hash, d.Port);
+                task.ContinueWith(T =>
+                    {
+
+                    });
+
+                Serialization(@".\ImportDownLoadInfo",DownInfo);
             });
         }
 
@@ -276,7 +283,7 @@ namespace ShareMetro
             GarbageInfo.Add(Down_list_Selete);
             Down_d[Down_list_Selete.ID].Stop_DownLoad = true;
             Down_d[Down_list_Selete.ID].AllDone.Set();
-            Down_d[Down_list_Selete.ID].DeleteDownLoad();
+           // Down_d[Down_list_Selete.ID].DeleteDownLoad();
             Down_d.RemoveAt(Down_list_Selete.ID);
             DownInfo.RemoveAt(Down_list_Selete.ID);
             Serialization(@"./GarbageInfo", GarbageInfo);

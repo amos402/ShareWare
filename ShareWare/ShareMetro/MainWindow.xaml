@@ -10,8 +10,8 @@
         Width="1019.5"
         ShowTitleBar="True"
         ShowIconOnTitleBar="true"
-        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="images/sharewareicon.jpg">
-
+        d:DataContext="{d:DesignInstance MetroDemo:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="images/sharewareicon.jpg"  FontFamily="/ShareMetro;component/font/#Microsoft YaHei UI">
+    
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -99,11 +99,11 @@
                             </ComboBox>
                             <CheckBox Content="记住密码" Margin="0,0,359.803,258.495" HorizontalAlignment="Right" Width="79.277" VerticalAlignment="Bottom"/>
                             <CheckBox Content="自动登录" HorizontalAlignment="Right" Margin="0,0,269.803,258.495" Width="79.277" VerticalAlignment="Bottom"/>
-                            <Button Content="注册" Height="27.96" Margin="0,0,400.53,204" VerticalAlignment="Bottom" Foreground="#FF686868" FontFamily="Microsoft YaHei UI" FontSize="14.667" FontWeight="Normal" HorizontalAlignment="Right" Width="90.775"/>
+                            <Button Content="注册" Height="27.96" Margin="0,0,400.53,204" VerticalAlignment="Bottom" Foreground="#FF686868" FontFamily="Microsoft YaHei UI" FontSize="14.667" FontWeight="Normal" HorizontalAlignment="Right" Width="90.775" Command="{Binding RegisterCmd}"/>
                             <Button Content="登陆" HorizontalAlignment="Right" Height="27.96" Margin="0,0,277.303,204" VerticalAlignment="Bottom" Width="82.775" Foreground="#FF686868" FontFamily="Microsoft JhengHei UI" FontSize="14.667"  Command="{Binding LoginCmd}" IsEnabled="{Binding  LoginAble}"/>
                             <TextBlock Margin="453.999,229.578,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1" d:LayoutOverrides="VerticalAlignment"><Run Language="zh-cn" Text="密   码:"/></TextBlock>
                             <TextBlock Margin="452.999,177.413,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1"><Run Language="zh-cn" Text="用户名"/><Run Language="zh-cn" Text=":"/></TextBlock>
-                            <Controls:ProgressRing IsActive="{Binding  IsBusy}" HorizontalAlignment="Stretch" Margin="464.195,0,475.305,109.315" VerticalAlignment="Bottom" d:LayoutOverrides="Width"/>
+                            <Controls:ProgressRing IsActive="{Binding  IsBusy_Login}" HorizontalAlignment="Stretch" Margin="464.195,0,475.305,109.315" VerticalAlignment="Bottom" d:LayoutOverrides="Width"/>
                             <TextBlock Margin="399.196,144.354,390.794,0" TextWrapping="Wrap" Text="{Binding  FailedMessage}" RenderTransformOrigin="0.5,0.5" Foreground="Red" Height="15.24" VerticalAlignment="Top">
                                 <TextBlock.RenderTransform>
                                     <TransformGroup>
@@ -124,7 +124,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <ListView ItemsSource="{Binding FileItemInfo}" BorderThickness="0" Margin="11.5,39.5,220.977,53.807" MouseDoubleClick="ListViewItem_MouseDoubleClick" SelectionChanged="ListViewItem_SelectionClick">
+                        <ListView ItemsSource="{Binding FileItemInfo}" BorderThickness="0" Margin="12,40,221,54.315" MouseDoubleClick="ListViewItem_MouseDoubleClick" SelectionChanged="ListViewItem_SelectionClick">
                             <ListView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="下载"/>
@@ -199,7 +199,7 @@
                         <Button Content="搜" HorizontalAlignment="Right" Height="32" Margin="0,1,2,0" VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" Opacity="0.2" FontSize="17.333" FontFamily="Microsoft YaHei UI"   Command="{Binding SearchCmd}"/>
                         <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="48.5,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding DownLoadCommand}"/>
                         <Button Content="暂          停" HorizontalAlignment="Left" Height="32.5" Margin="257,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
-                        <Controls:ProgressRing  HorizontalAlignment="Left" Margin="346.023,224.977,0,268.338" VerticalAlignment="Stretch" d:LayoutOverrides="Height" IsActive="{Binding  IsBusy}"/>
+                        <Controls:ProgressRing  HorizontalAlignment="Left" Margin="346.023,224.977,0,268.338" VerticalAlignment="Stretch" d:LayoutOverrides="Height" IsActive="{Binding  IsBusy_Main}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header=" 下载DowN">
@@ -413,7 +413,7 @@
                                     <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,175.053" Width="178.553" VerticalAlignment="Bottom"/>
                                     <Label Content="修改密码：" Margin="457.5,0,0,222.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
                                     <Label Content="确认密码：" Margin="457.5,0,0,175.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
-                                    <Button Content="上传头像" HorizontalAlignment="Left" Margin="260.25,0,0,175.5" Width="180" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Height="29.5" VerticalAlignment="Bottom"/>
+                                    <Button Content="上传头像" HorizontalAlignment="Left" Margin="260.25,0,0,175.5" Width="180" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Height="29.5" VerticalAlignment="Bottom" Command="{Binding UploadImageCmd}"/>
                                     <Separator Background="#FFB2B2B2" Margin="245.25,0,255.988,152.05" VerticalAlignment="Bottom"/>
                                     <Separator Background="#FFB2B2B2" Margin="245.25,91.5,255.988,0" VerticalAlignment="Top"/>
                                     <Label Content="Q       Q：" Height="28" Margin="457.5,206.63,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>

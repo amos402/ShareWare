@@ -357,6 +357,18 @@ namespace ShareMetro.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadUserImage", ReplyAction="http://tempuri.org/IShareService/DownloadUserImageResponse")]
         System.Threading.Tasks.Task<System.Drawing.Bitmap> DownloadUserImageAsync(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/RequestConversation")]
+        void RequestConversation(string userName, int localPort);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/RequestConversation")]
+        System.Threading.Tasks.Task RequestConversationAsync(string userName, int localPort);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/RequestOpenShareFolder", ReplyAction="http://tempuri.org/IShareService/RequestOpenShareFolderResponse")]
+        void RequestOpenShareFolder(string userName, int localPort);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/RequestOpenShareFolder", ReplyAction="http://tempuri.org/IShareService/RequestOpenShareFolderResponse")]
+        System.Threading.Tasks.Task RequestOpenShareFolderAsync(string userName, int localPort);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -373,6 +385,12 @@ namespace ShareMetro.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/RefreshUserList")]
         void RefreshUserList(System.Collections.Generic.List<ShareMetro.ServiceReference.OnlineUserInfo> userList);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/ConversationPerformance")]
+        void ConversationPerformance(string remoteIp, int remotePort);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/OpenShareFolderPerfromance")]
+        void OpenShareFolderPerfromance(string remoteIp, int remotePort);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -505,6 +523,22 @@ namespace ShareMetro.ServiceReference {
         
         public System.Threading.Tasks.Task<System.Drawing.Bitmap> DownloadUserImageAsync(string name) {
             return base.Channel.DownloadUserImageAsync(name);
+        }
+        
+        public void RequestConversation(string userName, int localPort) {
+            base.Channel.RequestConversation(userName, localPort);
+        }
+        
+        public System.Threading.Tasks.Task RequestConversationAsync(string userName, int localPort) {
+            return base.Channel.RequestConversationAsync(userName, localPort);
+        }
+        
+        public void RequestOpenShareFolder(string userName, int localPort) {
+            base.Channel.RequestOpenShareFolder(userName, localPort);
+        }
+        
+        public System.Threading.Tasks.Task RequestOpenShareFolderAsync(string userName, int localPort) {
+            return base.Channel.RequestOpenShareFolderAsync(userName, localPort);
         }
     }
 }
