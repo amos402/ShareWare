@@ -76,264 +76,30 @@ namespace ShareMetro.ServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FileOwner", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserInfo", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
     [System.SerializableAttribute()]
-    public partial class FileOwner : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class UserInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ShareMetro.ServiceReference.FileInfo FileInfoField;
+        private bool IsMaleField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string HashField;
+        private string MicroBlogField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int UserIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ShareMetro.ServiceReference.Users UsersField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ShareMetro.ServiceReference.FileInfo FileInfo {
-            get {
-                return this.FileInfoField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileInfoField, value) != true)) {
-                    this.FileInfoField = value;
-                    this.RaisePropertyChanged("FileInfo");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Hash {
-            get {
-                return this.HashField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.HashField, value) != true)) {
-                    this.HashField = value;
-                    this.RaisePropertyChanged("Hash");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ID {
-            get {
-                return this.IDField;
-            }
-            set {
-                if ((this.IDField.Equals(value) != true)) {
-                    this.IDField = value;
-                    this.RaisePropertyChanged("ID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Name {
-            get {
-                return this.NameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NameField, value) != true)) {
-                    this.NameField = value;
-                    this.RaisePropertyChanged("Name");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int UserID {
-            get {
-                return this.UserIDField;
-            }
-            set {
-                if ((this.UserIDField.Equals(value) != true)) {
-                    this.UserIDField = value;
-                    this.RaisePropertyChanged("UserID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ShareMetro.ServiceReference.Users Users {
-            get {
-                return this.UsersField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.UsersField, value) != true)) {
-                    this.UsersField = value;
-                    this.RaisePropertyChanged("Users");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FileInfo", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
-    [System.SerializableAttribute()]
-    public partial class FileInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.List<ShareMetro.ServiceReference.FileOwner> FileOwnerField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string HashField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsFolderField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<bool> PassField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<long> SizeField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<ShareMetro.ServiceReference.FileOwner> FileOwner {
-            get {
-                return this.FileOwnerField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileOwnerField, value) != true)) {
-                    this.FileOwnerField = value;
-                    this.RaisePropertyChanged("FileOwner");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Hash {
-            get {
-                return this.HashField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.HashField, value) != true)) {
-                    this.HashField = value;
-                    this.RaisePropertyChanged("Hash");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsFolder {
-            get {
-                return this.IsFolderField;
-            }
-            set {
-                if ((this.IsFolderField.Equals(value) != true)) {
-                    this.IsFolderField = value;
-                    this.RaisePropertyChanged("IsFolder");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<bool> Pass {
-            get {
-                return this.PassField;
-            }
-            set {
-                if ((this.PassField.Equals(value) != true)) {
-                    this.PassField = value;
-                    this.RaisePropertyChanged("Pass");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<long> Size {
-            get {
-                return this.SizeField;
-            }
-            set {
-                if ((this.SizeField.Equals(value) != true)) {
-                    this.SizeField = value;
-                    this.RaisePropertyChanged("Size");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Users", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
-    [System.SerializableAttribute()]
-    public partial class Users : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.List<ShareMetro.ServiceReference.FileOwner> FileOwnerField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MACField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MailField;
+        private string NickNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PasswordField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int UserIDField;
+        private string QQField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string UserIPField;
+        private string SignatureField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UserNameField;
@@ -349,40 +115,40 @@ namespace ShareMetro.ServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<ShareMetro.ServiceReference.FileOwner> FileOwner {
+        public bool IsMale {
             get {
-                return this.FileOwnerField;
+                return this.IsMaleField;
             }
             set {
-                if ((object.ReferenceEquals(this.FileOwnerField, value) != true)) {
-                    this.FileOwnerField = value;
-                    this.RaisePropertyChanged("FileOwner");
+                if ((this.IsMaleField.Equals(value) != true)) {
+                    this.IsMaleField = value;
+                    this.RaisePropertyChanged("IsMale");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string MAC {
+        public string MicroBlog {
             get {
-                return this.MACField;
+                return this.MicroBlogField;
             }
             set {
-                if ((object.ReferenceEquals(this.MACField, value) != true)) {
-                    this.MACField = value;
-                    this.RaisePropertyChanged("MAC");
+                if ((object.ReferenceEquals(this.MicroBlogField, value) != true)) {
+                    this.MicroBlogField = value;
+                    this.RaisePropertyChanged("MicroBlog");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Mail {
+        public string NickName {
             get {
-                return this.MailField;
+                return this.NickNameField;
             }
             set {
-                if ((object.ReferenceEquals(this.MailField, value) != true)) {
-                    this.MailField = value;
-                    this.RaisePropertyChanged("Mail");
+                if ((object.ReferenceEquals(this.NickNameField, value) != true)) {
+                    this.NickNameField = value;
+                    this.RaisePropertyChanged("NickName");
                 }
             }
         }
@@ -401,27 +167,88 @@ namespace ShareMetro.ServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int UserID {
+        public string QQ {
             get {
-                return this.UserIDField;
+                return this.QQField;
             }
             set {
-                if ((this.UserIDField.Equals(value) != true)) {
-                    this.UserIDField = value;
-                    this.RaisePropertyChanged("UserID");
+                if ((object.ReferenceEquals(this.QQField, value) != true)) {
+                    this.QQField = value;
+                    this.RaisePropertyChanged("QQ");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string UserIP {
+        public string Signature {
             get {
-                return this.UserIPField;
+                return this.SignatureField;
             }
             set {
-                if ((object.ReferenceEquals(this.UserIPField, value) != true)) {
-                    this.UserIPField = value;
-                    this.RaisePropertyChanged("UserIP");
+                if ((object.ReferenceEquals(this.SignatureField, value) != true)) {
+                    this.SignatureField = value;
+                    this.RaisePropertyChanged("Signature");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserName {
+            get {
+                return this.UserNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserNameField, value) != true)) {
+                    this.UserNameField = value;
+                    this.RaisePropertyChanged("UserName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OnlineUserInfo", Namespace="http://schemas.datacontract.org/2004/07/ShareWare")]
+    [System.SerializableAttribute()]
+    public partial class OnlineUserInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ImageHashField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ImageHash {
+            get {
+                return this.ImageHashField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImageHashField, value) != true)) {
+                    this.ImageHashField = value;
+                    this.RaisePropertyChanged("ImageHash");
                 }
             }
         }
@@ -472,10 +299,10 @@ namespace ShareMetro.ServiceReference {
         System.Threading.Tasks.Task TickTackAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Register", ReplyAction="http://tempuri.org/IShareService/RegisterResponse")]
-        bool Register(string userName, string passWord, string mail);
+        bool Register(ShareMetro.ServiceReference.UserInfo userInfo);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Register", ReplyAction="http://tempuri.org/IShareService/RegisterResponse")]
-        System.Threading.Tasks.Task<bool> RegisterAsync(string userName, string passWord, string mail);
+        System.Threading.Tasks.Task<bool> RegisterAsync(ShareMetro.ServiceReference.UserInfo userInfo);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/Login", ReplyAction="http://tempuri.org/IShareService/LoginResponse")]
         int Login(string userName, string passWord, string mac);
@@ -514,16 +341,22 @@ namespace ShareMetro.ServiceReference {
         System.Threading.Tasks.Task<System.Collections.Generic.List<ShareWare.ShareFile.FileInfoData>> SearchFileAsync(System.Collections.Generic.List<string> nameList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
-        int DownloadRequest(ShareMetro.ServiceReference.FileOwner fileOnwer, int nPort);
+        int DownloadRequest(string hash, int nPort);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadRequest", ReplyAction="http://tempuri.org/IShareService/DownloadRequestResponse")]
-        System.Threading.Tasks.Task<int> DownloadRequestAsync(ShareMetro.ServiceReference.FileOwner fileOnwer, int nPort);
+        System.Threading.Tasks.Task<int> DownloadRequestAsync(string hash, int nPort);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadImage")]
         void UploadImage(System.Drawing.Bitmap image);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UploadImage")]
         System.Threading.Tasks.Task UploadImageAsync(System.Drawing.Bitmap image);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadUserImage", ReplyAction="http://tempuri.org/IShareService/DownloadUserImageResponse")]
+        System.Drawing.Bitmap DownloadUserImage(string name);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadUserImage", ReplyAction="http://tempuri.org/IShareService/DownloadUserImageResponse")]
+        System.Threading.Tasks.Task<System.Drawing.Bitmap> DownloadUserImageAsync(string name);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -533,13 +366,13 @@ namespace ShareMetro.ServiceReference {
         void DownloadPerformance(string szHash, string szIp, int nPort);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/NewUser")]
-        void NewUser(int id, string name);
+        void NewUser(ShareMetro.ServiceReference.OnlineUserInfo user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/UserLeave")]
         void UserLeave(string name);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/RefreshUserList")]
-        void RefreshUserList(System.Collections.Generic.List<string> userList);
+        void RefreshUserList(System.Collections.Generic.List<ShareMetro.ServiceReference.OnlineUserInfo> userList);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -594,12 +427,12 @@ namespace ShareMetro.ServiceReference {
             return base.Channel.TickTackAsync();
         }
         
-        public bool Register(string userName, string passWord, string mail) {
-            return base.Channel.Register(userName, passWord, mail);
+        public bool Register(ShareMetro.ServiceReference.UserInfo userInfo) {
+            return base.Channel.Register(userInfo);
         }
         
-        public System.Threading.Tasks.Task<bool> RegisterAsync(string userName, string passWord, string mail) {
-            return base.Channel.RegisterAsync(userName, passWord, mail);
+        public System.Threading.Tasks.Task<bool> RegisterAsync(ShareMetro.ServiceReference.UserInfo userInfo) {
+            return base.Channel.RegisterAsync(userInfo);
         }
         
         public int Login(string userName, string passWord, string mac) {
@@ -650,12 +483,12 @@ namespace ShareMetro.ServiceReference {
             return base.Channel.SearchFileAsync(nameList);
         }
         
-        public int DownloadRequest(ShareMetro.ServiceReference.FileOwner fileOnwer, int nPort) {
-            return base.Channel.DownloadRequest(fileOnwer, nPort);
+        public int DownloadRequest(string hash, int nPort) {
+            return base.Channel.DownloadRequest(hash, nPort);
         }
         
-        public System.Threading.Tasks.Task<int> DownloadRequestAsync(ShareMetro.ServiceReference.FileOwner fileOnwer, int nPort) {
-            return base.Channel.DownloadRequestAsync(fileOnwer, nPort);
+        public System.Threading.Tasks.Task<int> DownloadRequestAsync(string hash, int nPort) {
+            return base.Channel.DownloadRequestAsync(hash, nPort);
         }
         
         public void UploadImage(System.Drawing.Bitmap image) {
@@ -664,6 +497,14 @@ namespace ShareMetro.ServiceReference {
         
         public System.Threading.Tasks.Task UploadImageAsync(System.Drawing.Bitmap image) {
             return base.Channel.UploadImageAsync(image);
+        }
+        
+        public System.Drawing.Bitmap DownloadUserImage(string name) {
+            return base.Channel.DownloadUserImage(name);
+        }
+        
+        public System.Threading.Tasks.Task<System.Drawing.Bitmap> DownloadUserImageAsync(string name) {
+            return base.Channel.DownloadUserImageAsync(name);
         }
     }
 }

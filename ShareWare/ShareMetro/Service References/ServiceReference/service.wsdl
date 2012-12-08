@@ -15,9 +15,9 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ServiceLibrary" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ShareFile" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.Drawing" />
     </xsd:schema>
   </wsdl:types>
@@ -81,6 +81,12 @@
   <wsdl:message name="IShareService_UploadImage_InputMessage">
     <wsdl:part name="parameters" element="tns:UploadImage" />
   </wsdl:message>
+  <wsdl:message name="IShareService_DownloadUserImage_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadUserImage" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_DownloadUserImage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadUserImageResponse" />
+  </wsdl:message>
   <wsdl:message name="IShareService_DownloadPerformance_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:DownloadPerformance" />
   </wsdl:message>
@@ -137,6 +143,10 @@
     </wsdl:operation>
     <wsdl:operation name="UploadImage">
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/UploadImage" message="tns:IShareService_UploadImage_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadUserImage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/DownloadUserImage" message="tns:IShareService_DownloadUserImage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/DownloadUserImageResponse" message="tns:IShareService_DownloadUserImage_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="DownloadPerformance">
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/DownloadPerformance" message="tns:IShareService_DownloadPerformance_OutputCallbackMessage" />
@@ -250,6 +260,15 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadUserImage">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/DownloadUserImage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DownloadPerformance">
       <soap12:operation soapAction="http://tempuri.org/IShareService/DownloadPerformance" style="document" />
