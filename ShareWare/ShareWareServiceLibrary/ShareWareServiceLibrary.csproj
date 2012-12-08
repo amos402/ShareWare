@@ -68,9 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IClient.cs" />
+    <Compile Include="IRegisterService.cs" />
     <Compile Include="IShareService.cs" />
+    <Compile Include="OnlineUserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterService.cs" />
     <Compile Include="ShareService.cs" />
+    <Compile Include="UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

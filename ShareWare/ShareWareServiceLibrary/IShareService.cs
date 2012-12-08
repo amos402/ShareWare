@@ -25,7 +25,7 @@ namespace ShareWare.ServiceLibrary
         void TickTack();
 
         [OperationContract(IsOneWay = false)]
-        bool Register(string userName, string passWord, string mail);
+        bool Register(UserInfo userInfo);
 
         [OperationContract(IsOneWay = false)]
         int Login(string userName, string passWord, string mac);
@@ -45,10 +45,19 @@ namespace ShareWare.ServiceLibrary
         List<FileInfoData> SearchFile(List<string> nameList);
 
         [OperationContract]
-        int DownloadRequest(FileOwner fileOnwer, int nPort);
+        int DownloadRequest(string hash, int nPort);
 
         [OperationContract(IsOneWay = true)]
         void UploadImage(Bitmap image);
+
+        [OperationContract]
+        Bitmap DownloadUserImage(string name);
+
+        [OperationContract(IsOneWay = true)]
+        void RequestConversation(string userName, int localPort);
+
+        [OperationContract]
+        void RequestOpenShareFolder(string userName, int localPort);
 
     }
 

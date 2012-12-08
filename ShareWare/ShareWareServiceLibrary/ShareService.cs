@@ -45,6 +45,7 @@ namespace ShareWare.ServiceLibrary
             set { ShareService._clientCallbackList = value; }
         }
 
+        private readonly string EmptyIp = "0.0.0.0";
 
         public ShareService()
         {
@@ -69,7 +70,11 @@ namespace ShareWare.ServiceLibrary
             {
                 if (item.Key != user)
                 {
-                    item.Value.NewUser(user.UserID, user.UserName);
+                    item.Value.NewUser(new OnlineUserInfo()
+                    {
+                        UserName = user.UserName,
+                        ImageHash = user.ImageHash
+                    });
                 }
             }
         }
@@ -139,7 +144,7 @@ namespace ShareWare.ServiceLibrary
             }
             else
             {
-                return "0.0.0.0";
+                return EmptyIp;
             }
         }
 
@@ -167,7 +172,7 @@ namespace ShareWare.ServiceLibrary
 
         }
 
-        public bool Register(string userName, string passWord, string mail)
+        public bool Register(UserInfo userInfo)
         {
             using (TransactionScope transaction = new TransactionScope())
             {
@@ -175,8 +180,18 @@ namespace ShareWare.ServiceLibrary
                 {
                     try
                     {
-                        context.Users.Add(new Users() { UserName = userName, Password = passWord, Mail = mail });
+                        context.Users.Add(new Users()
+                        {
+                            UserName = userInfo.UserName,
+                            Password = userInfo.Password,
+                            NickName = userInfo.NickName,
+                            IsMale = userInfo.IsMale,
+                            QQ = userInfo.QQ,
+                            MicroBlog = userInfo.MicroBlog,
+                            Signature = userInfo.Signature
+                        });
                         context.SaveChanges();
+
                         transaction.Complete();
                     }
                     catch (Exception)
@@ -211,17 +226,13 @@ namespace ShareWare.ServiceLibrary
 
             try
             {
-                lock (_userDict)
-                {
-                    _userDict.Add(user, client);
-                }
-
+                _userDict.Add(user, client);
             }
             catch (Exception)
             {
                 if (_userDict.ContainsKey(user))
                 {
-                    Channel_Closing(_userDict[user], new ServerEventArgs() { Message = "You have lognin at another location.", User = user });
+                    Channel_Closing(_userDict[user], new ServerEventArgs() { Message = "你已经在其他位置登陆", User = user });
                     _userDict[user] = client;
                 }
             }
@@ -239,7 +250,14 @@ namespace ShareWare.ServiceLibrary
 
             BroadcastEvent(this, new ServerEventArgs() { User = user }, UserLogin);
 
-            List<string> userList = (from c in _userDict.Keys select c.UserName).ToList();
+            var userList = (from c in _userDict.Keys
+                            select new OnlineUserInfo()
+                            {
+                                UserName = c.UserName,
+                                ImageHash = c.ImageHash
+                            }).ToList();
+
+
             client.RefreshUserList(userList);
 
             return user.UserID;
@@ -589,20 +607,26 @@ namespace ShareWare.ServiceLibrary
             return newList.Distinct().ToList();
         }
 
-        public int DownloadRequest(FileOwner fileOnwer, int nPort)
+        public int DownloadRequest(string hash, int nPort)
         {
-            var users = from c in _context.Users
-                        where (fileOnwer.UserID == c.UserID)
-                        select c;
+            //var users = from c in _context.Users
+            //            where (fileOnwer.UserID == c.UserID)
+            //            select c;
+            var users = from c in _context.FileOwner
+                        where (c.Hash == hash)
+                        select c.Users;
+
             string ip = GetClientIp();
             foreach (var item in users)
             {
-                _userDict[item].DownloadPerformance(fileOnwer.Hash, ip, nPort);
+                if (_userDict.ContainsKey(item))
+                {
+                    _userDict[item].DownloadPerformance(hash, ip, nPort);
+                }
             }
 
             return users.Count();
         }
-
 
 
         public void TickTack()
@@ -611,6 +635,38 @@ namespace ShareWare.ServiceLibrary
 
         }
 
+        internal static string ComputeStringMd5(string str)
+        {
+            MD5 md5 = MD5.Create();
+            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
+            StringBuilder hash = new StringBuilder();
+            foreach (var item in data)
+            {
+                hash.Append(item.ToString("x2"));
+            }
+            return hash.ToString();
+        }
+
+        internal static string ComputeFileMd5(string path)
+        {
+            try
+            {
+                MD5 md5 = MD5.Create();
+                FileStream fs = File.OpenRead(path);
+                byte[] data = md5.ComputeHash(fs);
+                fs.Close();
+                StringBuilder hash = new StringBuilder();
+                foreach (var item in data)
+                {
+                    hash.Append(item.ToString("x2"));
+                }
+                return hash.ToString();
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
 
         public void UploadImage(Bitmap image)
         {
@@ -620,16 +676,10 @@ namespace ShareWare.ServiceLibrary
                 return;
             }
 
-            try
+            using (ShareWareEntities context = new ShareWareEntities())
             {
-                var user = _context.Users.Single(T => T.UserID == id);
-                MD5 md5 =  MD5.Create();
-                byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(user.UserName));
-                StringBuilder hash = new StringBuilder();
-                foreach (var item in data)
-                {
-                    hash.Append(item.ToString("x2"));
-                }
+                var user = context.Users.Single(T => T.UserID == id);
+                string nameHash = ComputeStringMd5(user.UserName);
                 IDictionary section = (IDictionary)ConfigurationManager.GetSection("ImagePath");
                 string imagePath = section["Path"].ToString();
                 if (!Directory.Exists(imagePath))
@@ -637,15 +687,101 @@ namespace ShareWare.ServiceLibrary
                     Directory.CreateDirectory(imagePath);
                 }
 
-                image.Save(imagePath + @"\" + hash.ToString() + ".jpeg", ImageFormat.Jpeg);
+                string filePath = imagePath + nameHash.ToString() + ".jpg";
+                image.Save(filePath, ImageFormat.Jpeg);
+                string fileHash = ComputeFileMd5(filePath);
 
+                user.ImageHash = fileHash;
+                context.SaveChanges();
+            }
+        }
+
+
+        public Bitmap DownloadUserImage(string name)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return null;
+            }
+
+            IDictionary section = (IDictionary)ConfigurationManager.GetSection("ImagePath");
+            string imagePath = section["Path"].ToString();
+            string hash = ComputeStringMd5(name);
+            string path = imagePath + hash + "jpg";
+            if (File.Exists(path))
+            {
+                try
+                {
+                    Bitmap image = new Bitmap(path);
+                    return image;
+                }
+                catch (Exception)
+                {
+
+                    return null;
+                }
+
+            }
+            return null;
+        }
+
+
+        public void RequestConversation(string userName, int localPort)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                Users user = _context.Users.Single(T => T.UserName == userName);
+                if (_userDict.ContainsKey(user))
+                {
+                    string ip = GetClientIp();
+                    if (ip != EmptyIp)
+                    {
+                        _userDict[user].ConversationPerformance(ip, localPort);
+                    }
+
+                }
             }
             catch (Exception)
             {
 
                 //throw;
             }
+        }
 
+
+        public void RequestOpenShareFolder(string userName, int localPort)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                Users user = _context.Users.Single(T => T.UserName == userName);
+                if (_userDict.ContainsKey(user))
+                {
+                    string ip = GetClientIp();
+                    if (ip != EmptyIp)
+                    {
+                        _userDict[user].OpenShareFolderPerfromance(ip, localPort);
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
         }
     }
 }

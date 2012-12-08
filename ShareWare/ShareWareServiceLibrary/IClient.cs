@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShareWare
+namespace ShareWare.ServiceLibrary
 {
     public interface IClient
     {
@@ -13,13 +13,19 @@ namespace ShareWare
         void DownloadPerformance(string szHash, string szIp, int nPort);
 
         [OperationContract(IsOneWay = true)]
-        void NewUser(int id, string name);
+        void NewUser(OnlineUserInfo user);
 
         [OperationContract(IsOneWay = true)]
         void UserLeave(string name);
 
         [OperationContract(IsOneWay = true)]
-        void RefreshUserList(List<string> userList);
+        void RefreshUserList(List<OnlineUserInfo> userList);
+
+        [OperationContract(IsOneWay = true)]
+        void ConversationPerformance(string remoteIp, int remotePort);
+
+        [OperationContract(IsOneWay = true)]
+        void OpenShareFolderPerfromance(string remoteIp, int remotePort);
     }
 
 }
