@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ShareWareModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ShareWareModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="ShareWareModelStoreContainer">
           <EntitySet Name="FileInfo" EntityType="ShareWareModel.Store.FileInfo" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FileOwner" EntityType="ShareWareModel.Store.FileOwner" store:Type="Tables" Schema="dbo" />
@@ -41,11 +41,18 @@
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="NickName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="UserIP" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImageHash" Type="nvarchar" MaxLength="50" />
           <Property Name="MAC" Type="varchar" MaxLength="20" />
-          <Property Name="Mail" Type="varchar" MaxLength="50" />
-          <Property Name="UserIP" Type="varchar" MaxLength="20" />
+          <Property Name="IsAdmin" Type="bit" />
+          <Property Name="IsMale" Type="bit" />
+          <Property Name="QQ" Type="nvarchar" MaxLength="20" />
+          <Property Name="Mail" Type="nvarchar" MaxLength="320" />
+          <Property Name="MicroBlog" Type="nvarchar" MaxLength="320" />
+          <Property Name="Signature" Type="text" />
         </EntityType>
         <Association Name="FK_FileOwner_FileInfo">
           <End Role="FileInfo" Type="ShareWareModel.Store.FileInfo" Multiplicity="0..1" />
@@ -72,8 +79,7 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="InsertToFileInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ShareWareModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -117,12 +123,19 @@
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="NickName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="UserIP" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="MAC" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
-          <Property Name="Mail" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="UserIP" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="IsAdmin" Type="Boolean" />
+          <Property Name="IsMale" Type="Boolean" />
+          <Property Name="QQ" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Mail" Type="String" MaxLength="320" Unicode="true" FixedLength="false" />
+          <Property Name="MicroBlog" Type="String" MaxLength="320" Unicode="true" FixedLength="false" />
+          <Property Name="Signature" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="FileOwner" Relationship="ShareWareModel.FK_FileOwner_Users" FromRole="Users" ToRole="FileOwner" />
+          <Property Type="String" Name="ImageHash" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_FileOwner_FileInfo">
           <End Role="FileInfo" Type="ShareWareModel.FileInfo" Multiplicity="0..1" />
@@ -177,12 +190,19 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ShareWareModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ImageHash" ColumnName="ImageHash" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="MAC" ColumnName="MAC" />
-                <ScalarProperty Name="Mail" ColumnName="Mail" />
                 <ScalarProperty Name="UserIP" ColumnName="UserIP" />
+                <ScalarProperty Name="MAC" ColumnName="MAC" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="IsMale" ColumnName="IsMale" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="MicroBlog" ColumnName="MicroBlog" />
+                <ScalarProperty Name="Signature" ColumnName="Signature" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -203,7 +223,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

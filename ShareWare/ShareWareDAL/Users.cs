@@ -21,10 +21,17 @@ namespace ShareWare
     
         public int UserID { get; set; }
         public string UserName { get; set; }
+        public string NickName { get; set; }
         public string Password { get; set; }
-        public string MAC { get; set; }
-        public string Mail { get; set; }
         public string UserIP { get; set; }
+        public string MAC { get; set; }
+        public Nullable<bool> IsAdmin { get; set; }
+        public Nullable<bool> IsMale { get; set; }
+        public string QQ { get; set; }
+        public string Mail { get; set; }
+        public string MicroBlog { get; set; }
+        public string Signature { get; set; }
+        public string ImageHash { get; set; }
     
         public virtual ICollection<FileOwner> FileOwner { get; set; }
     }

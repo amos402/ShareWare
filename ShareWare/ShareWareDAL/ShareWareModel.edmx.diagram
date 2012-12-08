@@ -4,10 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e13a1b450479412cbd66574b27ad4b82" Name="关系图1">
+      <Diagram DiagramId="b15598a0fe9f463da0764caad9c6d9a1" Name="Diagram1">
         <EntityTypeShape EntityType="ShareWareModel.FileInfo" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="ShareWareModel.FileOwner" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShareWareModel.Users" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShareWareModel.Users" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
         <AssociationConnector Association="ShareWareModel.FK_FileOwner_FileInfo" ManuallyRouted="false" />
         <AssociationConnector Association="ShareWareModel.FK_FileOwner_Users" ManuallyRouted="false" />
       </Diagram>
