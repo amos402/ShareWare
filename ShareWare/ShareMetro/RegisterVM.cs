@@ -6,11 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace ShareMetro
 {
@@ -55,6 +58,46 @@ namespace ShareMetro
 
         //public Bitmap Image { get; set; }
 
+        public bool IsBusy { get; set; }
+
+        public string ErrorInfo { get; set; }
+
+        private string _password2;
+
+        public string Password2
+        {
+            get { return _password2; }
+            set
+            {
+                _password2 = value;
+                if (_password2 != User.Password)
+                {
+                    ErrorInfo = "两次密码不相符";
+                    CanRegister = false;
+
+                }
+                else if (User.UserName != string.Empty)
+                {
+                    CanRegister = true;
+                }
+                else
+                {
+                    CanRegister = false;
+                }
+
+                OnPropertyChanged("Password2");
+            }
+        }
+
+        private BitmapImage _image;
+
+        public BitmapImage Image
+        {
+            get { return _image; }
+            set { _image = value; }
+        }
+        public bool CanRegister { get; set; }
+
         public ICommand RegisterCmd { get; set; }
         public ICommand Reset { get; set; }
         public ICommand UploadImageCmd { get; set; }
@@ -64,11 +107,31 @@ namespace ShareMetro
             // Register dlg = Application.Current.Dispatcher as Register;
             var asd = Application.Current.Dispatcher;
             RegisterServiceClient client = new RegisterServiceClient();
-            {
-                client.Register(User);
-                client.Close();
-            }
+
+            User.Image = new Bitmap(Image.StreamSource);
+            Task<RegError> task = client.RegisterAsync(User);
+            task.ContinueWith(T =>
+                {
+                    switch (T.Result)
+                    {
+                        case RegError.NoError:
+
+                            break;
+                        case RegError.UserExist:
+                            ErrorInfo = "用户已存在";
+                            break;
+                        case RegError.Ohter:
+                            ErrorInfo = "注册失败，发生未知错误";
+                            break;
+                        default:
+                            break;
+                    }
+                    IsBusy = false;
+                    client.Close();
+                });
+
         }
+
 
         private void OnReset(object obj)
         {
@@ -78,6 +141,8 @@ namespace ShareMetro
             User.QQ = string.Empty;
             User.MicroBlog = string.Empty;
             User.Signature = string.Empty;
+            Password2 = string.Empty;
+            Image = null;
         }
 
         private void OnUploadImage(object obj)
@@ -86,21 +151,38 @@ namespace ShareMetro
             bool? success = dlg.ShowDialog();
             if (success == true)
             {
-                User.Image = new Bitmap(dlg.FileName);
+
+                try
+                {
+                    FileStream fs = File.OpenRead(dlg.FileName);
+                    byte[] buf = new byte[fs.Length];
+                    fs.Read(buf, 0, buf.Length);
+                    fs.Close();
+                    MemoryStream ms = new MemoryStream(buf);
+                    _image = new BitmapImage();
+                    _image.BeginInit();
+                    _image.StreamSource = ms;
+                    _image.CacheOption = BitmapCacheOption.OnLoad;
+                    _image.EndInit();
+                    _image.Freeze();
+                    OnPropertyChanged("Image");
+                }
+                catch (Exception)
+                {
+                    
+                    //throw;
+                }
             }
         }
 
-        public ShareMetro.RegisterServiceReference.UserInfo GetUserInfo()
+        private void CloseWindow()
         {
-            var userInfo = new ShareMetro.RegisterServiceReference.UserInfo();
-            //userInfo.UserName = UserName;
-            //userInfo.NickName = NickName;
-            //userInfo.IsMale = IsMale;
-            //userInfo.Password = Password;
-            //userInfo.QQ = QQ;
-            //userInfo.Signature = Signature;
-            return userInfo;
+            if (RequestClose != null)
+            {
+                RequestClose(this, null);
+            }
         }
+
     }
 
 }

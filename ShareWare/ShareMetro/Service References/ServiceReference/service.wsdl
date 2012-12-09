@@ -16,9 +16,9 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ServiceLibrary" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.Drawing" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/ShareWare.ShareFile" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.Drawing" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IShareService_GetData_InputMessage">
@@ -96,6 +96,21 @@
   <wsdl:message name="IShareService_RequestOpenShareFolder_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequestOpenShareFolderResponse" />
   </wsdl:message>
+  <wsdl:message name="IShareService_SendChatRoomMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendChatRoomMessage" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_DownloadUserInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadUserInfo" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_DownloadUserInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadUserInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_ChangedUserInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangedUserInfo" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_ChangedUserInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangedUserInfoResponse" />
+  </wsdl:message>
   <wsdl:message name="IShareService_DownloadPerformance_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:DownloadPerformance" />
   </wsdl:message>
@@ -113,6 +128,12 @@
   </wsdl:message>
   <wsdl:message name="IShareService_OpenShareFolderPerfromance_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OpenShareFolderPerfromance" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_ReceiveChatRoomMessage_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveChatRoomMessage" />
+  </wsdl:message>
+  <wsdl:message name="IShareService_NewChatRoomMessage_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NewChatRoomMessage" />
   </wsdl:message>
   <wsdl:portType name="IShareService">
     <wsdl:operation name="GetData">
@@ -170,6 +191,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IShareService/RequestOpenShareFolder" message="tns:IShareService_RequestOpenShareFolder_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/RequestOpenShareFolderResponse" message="tns:IShareService_RequestOpenShareFolder_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendChatRoomMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/SendChatRoomMessage" message="tns:IShareService_SendChatRoomMessage_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadUserInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/DownloadUserInfo" message="tns:IShareService_DownloadUserInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/DownloadUserInfoResponse" message="tns:IShareService_DownloadUserInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangedUserInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IShareService/ChangedUserInfo" message="tns:IShareService_ChangedUserInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/ChangedUserInfoResponse" message="tns:IShareService_ChangedUserInfo_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="DownloadPerformance">
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/DownloadPerformance" message="tns:IShareService_DownloadPerformance_OutputCallbackMessage" />
     </wsdl:operation>
@@ -187,6 +219,12 @@
     </wsdl:operation>
     <wsdl:operation name="OpenShareFolderPerfromance">
       <wsdl:output wsaw:Action="http://tempuri.org/IShareService/OpenShareFolderPerfromance" message="tns:IShareService_OpenShareFolderPerfromance_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveChatRoomMessage">
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/ReceiveChatRoomMessage" message="tns:IShareService_ReceiveChatRoomMessage_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NewChatRoomMessage">
+      <wsdl:output wsaw:Action="http://tempuri.org/IShareService/NewChatRoomMessage" message="tns:IShareService_NewChatRoomMessage_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ShareServiceEndpoint" type="tns:IShareService">
@@ -313,6 +351,30 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendChatRoomMessage">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/SendChatRoomMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadUserInfo">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/DownloadUserInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangedUserInfo">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/ChangedUserInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="DownloadPerformance">
       <soap12:operation soapAction="http://tempuri.org/IShareService/DownloadPerformance" style="document" />
       <wsdl:output>
@@ -345,6 +407,18 @@
     </wsdl:operation>
     <wsdl:operation name="OpenShareFolderPerfromance">
       <soap12:operation soapAction="http://tempuri.org/IShareService/OpenShareFolderPerfromance" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveChatRoomMessage">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/ReceiveChatRoomMessage" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewChatRoomMessage">
+      <soap12:operation soapAction="http://tempuri.org/IShareService/NewChatRoomMessage" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

@@ -112,7 +112,7 @@ namespace ShareMetro
         private void OnClickHeadIcon(object obj)
         {
             Index = 4;
-            OptinIndex = 0;
+            Index_Option = 0;
         }
 
     }

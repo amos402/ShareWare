@@ -177,6 +177,41 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="SendChatRoomMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="msg" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadUserInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadUserInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="DownloadUserInfoResult" nillable="true" type="q11:UserInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangedUserInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="userInfo" nillable="true" type="q12:UserInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangedUserInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ChangedUserInfoResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="DownloadPerformance">
     <xs:complexType>
       <xs:sequence>
@@ -189,7 +224,7 @@
   <xs:element name="NewUser">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="user" nillable="true" type="q11:OnlineUserInfo" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="user" nillable="true" type="q13:OnlineUserInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -203,7 +238,7 @@
   <xs:element name="RefreshUserList">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="userList" nillable="true" type="q12:ArrayOfOnlineUserInfo" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/ShareWare" minOccurs="0" name="userList" nillable="true" type="q14:ArrayOfOnlineUserInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -221,6 +256,20 @@
         <xs:element minOccurs="0" name="remoteIp" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="remotePort" type="xs:int" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveChatRoomMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="msg" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nickName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewChatRoomMessage">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
 </xs:schema>

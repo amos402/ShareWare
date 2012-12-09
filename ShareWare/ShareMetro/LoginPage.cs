@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Management;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,8 +24,51 @@ namespace ShareMetro
         public ICommand LoginCmd { get; private set; }
         public ICommand RegisterCmd { get; private set; }
 
+        public string PasswordWatermark { get; set; }
+
         public bool LoginAble { get; set; }
         private string _userName;
+
+        private bool _isAutoLogin;
+        public bool IsAutoLogin
+        {
+            get { return _isAutoLogin; }
+            set
+            {
+                _isAutoLogin = value;
+                OnPropertyChanged("IsAutoLogin");
+                ShareWareSettings.Default.AutoLogin = IsAutoLogin;
+                ShareWareSettings.Default.Save();
+            }
+        }
+
+
+        private bool _isRememberPwd;
+        public bool IsRememberPwd
+        {
+            get { return _isRememberPwd; }
+            set
+            {
+                _isRememberPwd = value;
+                OnPropertyChanged("IsRememberPwd");
+                ShareWareSettings.Default.RememberPwd = IsRememberPwd;
+                if (IsRememberPwd)
+                {
+                    if (UserName != string.Empty && Password != string.Empty)
+                    {
+                        ShareWareSettings.Default.UserName = UserName;
+                        ShareWareSettings.Default.Password = Password;
+                    }
+
+                }
+                else
+                {
+                    ShareWareSettings.Default.UserName = string.Empty;
+                    ShareWareSettings.Default.Password = string.Empty;
+                }
+                ShareWareSettings.Default.Save();
+            }
+        }
 
         private static CancellationTokenSource _cts = new CancellationTokenSource();
 
@@ -38,7 +82,7 @@ namespace ShareMetro
                 {
                     return;
                 }
-                //_cts.Cancel();
+                _cts.Cancel();
                 Task<BitmapImage> imageTask = new Task<BitmapImage>((T) => GetBitmapImageSource(), _cts);
                 imageTask.Start();
                 imageTask.ContinueWith(T =>
@@ -70,9 +114,11 @@ namespace ShareMetro
             IsBusy_Login = true;
             LoginAble = false;
             FailedMessage = string.Empty;
+            string md5Password = ComputeStringMd5(Password);
+
             try
             {
-                Task<int> task = _client.LoginAsync(UserName, Password, GetFirstMac());
+                Task<int> task = _client.LoginAsync(UserName, md5Password, GetFirstMac());
 
                 task.ContinueWith(T =>
                 {
@@ -119,9 +165,10 @@ namespace ShareMetro
         {
             Register dlg = new Register();
             dlg.Owner = Application.Current.MainWindow;
-            if (dlg.ShowDialog() == true)
+            bool? success = dlg.ShowDialog();
+            if (success == true)
             {
-                
+
             }
 
         }

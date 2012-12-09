@@ -30,6 +30,7 @@
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="617b4920-5995-4b73-92b3-95fc48f23337" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
     <MetadataFile FileName="ShareWare.xsd" MetadataType="Schema" ID="ddf38eec-7696-4cba-9d51-6e71c54a0437" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
     <MetadataFile FileName="System.Drawing.xsd" MetadataType="Schema" ID="44f05009-4bf9-43d5-8f34-f9ecd74fb73d" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
+    <MetadataFile FileName="ShareWare.ServiceLibrary.xsd" MetadataType="Schema" ID="c23d9cdb-f697-4003-94c8-d29b53a5ebba" SourceId="1" SourceUrl="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/mex1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

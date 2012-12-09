@@ -170,15 +170,29 @@ namespace ShareMetro.RegisterServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RegError", Namespace="http://schemas.datacontract.org/2004/07/ShareWare.ServiceLibrary")]
+    public enum RegError : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoError = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserExist = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Ohter = 2,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="RegisterServiceReference.IRegisterService")]
     public interface IRegisterService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRegisterService/Register", ReplyAction="http://tempuri.org/IRegisterService/RegisterResponse")]
-        bool Register(ShareMetro.RegisterServiceReference.UserInfo userInfo);
+        ShareMetro.RegisterServiceReference.RegError Register(ShareMetro.RegisterServiceReference.UserInfo userInfo);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRegisterService/Register", ReplyAction="http://tempuri.org/IRegisterService/RegisterResponse")]
-        System.Threading.Tasks.Task<bool> RegisterAsync(ShareMetro.RegisterServiceReference.UserInfo userInfo);
+        System.Threading.Tasks.Task<ShareMetro.RegisterServiceReference.RegError> RegisterAsync(ShareMetro.RegisterServiceReference.UserInfo userInfo);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -208,11 +222,11 @@ namespace ShareMetro.RegisterServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public bool Register(ShareMetro.RegisterServiceReference.UserInfo userInfo) {
+        public ShareMetro.RegisterServiceReference.RegError Register(ShareMetro.RegisterServiceReference.UserInfo userInfo) {
             return base.Channel.Register(userInfo);
         }
         
-        public System.Threading.Tasks.Task<bool> RegisterAsync(ShareMetro.RegisterServiceReference.UserInfo userInfo) {
+        public System.Threading.Tasks.Task<ShareMetro.RegisterServiceReference.RegError> RegisterAsync(ShareMetro.RegisterServiceReference.UserInfo userInfo) {
             return base.Channel.RegisterAsync(userInfo);
         }
     }

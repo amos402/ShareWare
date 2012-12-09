@@ -75,11 +75,42 @@ namespace ShareMetro
         {
             OnlineUserData userData = new OnlineUserData();
             userData.UserName = user.UserName;
+            userData.NickName = user.NickName;
             if (user.ImageHash != null)
             {
-                string path = _vm.ImagePath + ComputeStringMd5(user.UserName) + ".jpg";
-                File.Exists(path);
-                userData.Image = new BitmapImage(new Uri(path));
+                try
+                {
+                    string path = _vm.ImagePath + MainWindowViewModel.ComputeStringMd5(user.UserName) + ".jpg";
+                    if (File.Exists(path))
+                    {
+                        if (_vm.UserName == user.UserName)
+                        {
+                            userData.Image = new BitmapImage();
+                            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            byte[] buf = new byte[fs.Length];
+                            fs.Read(buf, 0, (int)fs.Length);
+                            fs.Close();
+                            MemoryStream ms = new MemoryStream(buf);
+
+                            userData.Image.BeginInit();
+                            //image.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
+                            userData.Image.StreamSource = ms;
+                            userData.Image.DecodePixelWidth = 200;
+                            userData.Image.CacheOption = BitmapCacheOption.OnLoad;
+                            userData.Image.EndInit();
+                            userData.Image.Freeze(); 
+                        }
+                        else
+                        {
+                            userData.Image = new BitmapImage(new Uri(path));
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e);
+                }
             }
             _vm.OnlineUser.Add(userData);
         }
@@ -100,56 +131,35 @@ namespace ShareMetro
 
         private void RefreshImage(string userName, string imageHash)
         {
-            string hash = ComputeStringMd5(userName);
+            string hash = MainWindowViewModel.ComputeStringMd5(userName);
             string filePath = _vm.ImagePath + hash + ".jpg";
 
             if (File.Exists(filePath))
             {
-                string fileHash = ComputeFileMd5(filePath);
+                string fileHash = MainWindowViewModel.ComputeFileMd5(filePath);
                 if (fileHash != imageHash)
                 {
                     Task<Bitmap> task = _vm.Client.DownloadUserImageAsync(userName);
                     task.ContinueWith(T =>
                     {
-
                         T.Result.Save(filePath);
-
                     });
                 }
             }
         }
 
-        private static string ComputeStringMd5(string str)
+
+
+
+        public void ReceiveChatRoomMessage(string msg, string userName, string nickName)
         {
-            MD5 md5 = MD5.Create();
-            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
-            StringBuilder hash = new StringBuilder();
-            foreach (var item in data)
-            {
-                hash.Append(item.ToString("x2"));
-            }
-            return hash.ToString();
+            _vm.ChatRoomMsg += string.Format("{0}({1})说：{2}", userName, nickName, msg);
         }
 
-        private static string ComputeFileMd5(string path)
+
+        public void NewChatRoomMessage()
         {
-            try
-            {
-                MD5 md5 = MD5.Create();
-                FileStream fs = File.OpenRead(path);
-                byte[] data = md5.ComputeHash(fs);
-                fs.Close();
-                StringBuilder hash = new StringBuilder();
-                foreach (var item in data)
-                {
-                    hash.Append(item.ToString("x2"));
-                }
-                return hash.ToString();
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
+            throw new NotImplementedException();
         }
     }
 }

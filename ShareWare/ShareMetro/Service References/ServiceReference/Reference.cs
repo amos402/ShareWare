@@ -84,6 +84,9 @@ namespace ShareMetro.ServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Drawing.Bitmap ImageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsMaleField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -111,6 +114,19 @@ namespace ShareMetro.ServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Drawing.Bitmap Image {
+            get {
+                return this.ImageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImageField, value) != true)) {
+                    this.ImageField = value;
+                    this.RaisePropertyChanged("Image");
+                }
             }
         }
         
@@ -228,6 +244,9 @@ namespace ShareMetro.ServiceReference {
         private string ImageHashField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NickNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UserNameField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -249,6 +268,19 @@ namespace ShareMetro.ServiceReference {
                 if ((object.ReferenceEquals(this.ImageHashField, value) != true)) {
                     this.ImageHashField = value;
                     this.RaisePropertyChanged("ImageHash");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NickName {
+            get {
+                return this.NickNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NickNameField, value) != true)) {
+                    this.NickNameField = value;
+                    this.RaisePropertyChanged("NickName");
                 }
             }
         }
@@ -369,6 +401,24 @@ namespace ShareMetro.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/RequestOpenShareFolder", ReplyAction="http://tempuri.org/IShareService/RequestOpenShareFolderResponse")]
         System.Threading.Tasks.Task RequestOpenShareFolderAsync(string userName, int localPort);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/SendChatRoomMessage")]
+        void SendChatRoomMessage(string msg);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/SendChatRoomMessage")]
+        System.Threading.Tasks.Task SendChatRoomMessageAsync(string msg);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadUserInfo", ReplyAction="http://tempuri.org/IShareService/DownloadUserInfoResponse")]
+        ShareMetro.ServiceReference.UserInfo DownloadUserInfo(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/DownloadUserInfo", ReplyAction="http://tempuri.org/IShareService/DownloadUserInfoResponse")]
+        System.Threading.Tasks.Task<ShareMetro.ServiceReference.UserInfo> DownloadUserInfoAsync(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/ChangedUserInfo", ReplyAction="http://tempuri.org/IShareService/ChangedUserInfoResponse")]
+        bool ChangedUserInfo(ShareMetro.ServiceReference.UserInfo userInfo);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IShareService/ChangedUserInfo", ReplyAction="http://tempuri.org/IShareService/ChangedUserInfoResponse")]
+        System.Threading.Tasks.Task<bool> ChangedUserInfoAsync(ShareMetro.ServiceReference.UserInfo userInfo);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -391,6 +441,12 @@ namespace ShareMetro.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/OpenShareFolderPerfromance")]
         void OpenShareFolderPerfromance(string remoteIp, int remotePort);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/ReceiveChatRoomMessage")]
+        void ReceiveChatRoomMessage(string msg, string userName, string nickName);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IShareService/NewChatRoomMessage")]
+        void NewChatRoomMessage();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -539,6 +595,30 @@ namespace ShareMetro.ServiceReference {
         
         public System.Threading.Tasks.Task RequestOpenShareFolderAsync(string userName, int localPort) {
             return base.Channel.RequestOpenShareFolderAsync(userName, localPort);
+        }
+        
+        public void SendChatRoomMessage(string msg) {
+            base.Channel.SendChatRoomMessage(msg);
+        }
+        
+        public System.Threading.Tasks.Task SendChatRoomMessageAsync(string msg) {
+            return base.Channel.SendChatRoomMessageAsync(msg);
+        }
+        
+        public ShareMetro.ServiceReference.UserInfo DownloadUserInfo(int userId) {
+            return base.Channel.DownloadUserInfo(userId);
+        }
+        
+        public System.Threading.Tasks.Task<ShareMetro.ServiceReference.UserInfo> DownloadUserInfoAsync(int userId) {
+            return base.Channel.DownloadUserInfoAsync(userId);
+        }
+        
+        public bool ChangedUserInfo(ShareMetro.ServiceReference.UserInfo userInfo) {
+            return base.Channel.ChangedUserInfo(userInfo);
+        }
+        
+        public System.Threading.Tasks.Task<bool> ChangedUserInfoAsync(ShareMetro.ServiceReference.UserInfo userInfo) {
+            return base.Channel.ChangedUserInfoAsync(userInfo);
         }
     }
 }
