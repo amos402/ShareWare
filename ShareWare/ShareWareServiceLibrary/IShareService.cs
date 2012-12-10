@@ -59,6 +59,14 @@ namespace ShareWare.ServiceLibrary
         [OperationContract]
         void RequestOpenShareFolder(string userName, int localPort);
 
+        [OperationContract(IsOneWay = true)]
+        void SendChatRoomMessage(string msg);
+
+        [OperationContract]
+        UserInfo DownloadUserInfo(int userId);
+
+        [OperationContract]
+        bool ChangedUserInfo(UserInfo userInfo);
     }
 
 

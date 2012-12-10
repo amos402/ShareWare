@@ -167,6 +167,38 @@ namespace ShareWare.ServiceLibrary
             return id;
         }
 
+        private string GetClientName()
+        {
+            var client = OperationContext.Current.GetCallbackChannel<IClient>();
+            try
+            {
+                var keyPair = _userDict.Single(item => (item.Value == client));
+                string name = keyPair.Key.UserName;
+                return name;
+            }
+            catch (Exception)
+            {
+
+                return string.Empty;
+            }
+        }
+
+        private Users GetClientUser()
+        {
+            var client = OperationContext.Current.GetCallbackChannel<IClient>();
+            try
+            {
+                var keyPair = _userDict.Single(item => (item.Value == client));
+
+                return keyPair.Key;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
+
         public void BroadcastEvent(ServerEventArgs e, ServerEventHandler handler)
         {
 
@@ -254,7 +286,8 @@ namespace ShareWare.ServiceLibrary
                             select new OnlineUserInfo()
                             {
                                 UserName = c.UserName,
-                                ImageHash = c.ImageHash
+                                ImageHash = c.ImageHash,
+                                NickName = c.NickName
                             }).ToList();
 
 
@@ -583,28 +616,34 @@ namespace ShareWare.ServiceLibrary
             {
                 return null;
             }
-            List<FileInfoData> newList = new List<FileInfoData>();
 
+            List<FileInfoData> newList = new List<FileInfoData>();
+            List<IQueryable<FileInfoData>> resultList = new List<IQueryable<FileInfoData>>();
             foreach (var item in nameList)
             {
                 var result = (from c in _context.FileOwner
                               where (c.Name.Contains(item))
-                              select new { c.ID, c.UserID, c.Name, c.Hash, c.FileInfo, c.Users });
-                foreach (var file in result)
-                {
-                    newList.Add(new FileInfoData()
-                    {
-                        Name = file.Name,
-                        Hash = file.Hash,
-                        UserId = file.UserID,
-                        UserName = file.Users.UserName,
-                        Size = file.FileInfo.Size,
-                        IsFolder = file.FileInfo.IsFolder
-                    });
-                }
+                              select new FileInfoData()
+                              {
+                                  UserId = c.UserID,
+                                  Name = c.Name,
+                                  Hash = c.Hash,
+                                  Size = c.FileInfo.Size,
+                                  UserName = c.Users.UserName
+                              });
+                resultList.Add(result);
             }
 
-            return newList.Distinct().ToList();
+            var inter = from c in resultList[0]
+                        select c;
+
+            for (int i = 1; i < resultList.Count; i++)
+            {
+                inter = inter.Intersect(resultList[i]);
+            }
+
+
+            return inter.Distinct().ToList();
         }
 
         public int DownloadRequest(string hash, int nPort)
@@ -612,9 +651,9 @@ namespace ShareWare.ServiceLibrary
             //var users = from c in _context.Users
             //            where (fileOnwer.UserID == c.UserID)
             //            select c;
-            var users = from c in _context.FileOwner
-                        where (c.Hash == hash)
-                        select c.Users;
+            var users = (from c in _context.FileOwner
+                         where (c.Hash == hash)
+                         select c.Users).Distinct();
 
             string ip = GetClientIp();
             foreach (var item in users)
@@ -782,6 +821,79 @@ namespace ShareWare.ServiceLibrary
 
                 //throw;
             }
+        }
+
+        public void SendChatRoomMessage(string msg)
+        {
+            Users user = GetClientUser();
+
+            foreach (var item in _userDict.Values)
+            {
+                item.ReceiveChatRoomMessage(msg, user.UserName, user.NickName);
+            }
+        }
+
+        string _chatMsg;
+        public string GetChatRoomMessage()
+        {
+
+            return _chatMsg;
+        }
+
+        public UserInfo DownloadUserInfo(int userId)
+        {
+            int id = GetClientId();
+            if (id != userId)
+            {
+                return null;
+            }
+
+            try
+            {
+                Users user = _context.Users.Single(T => userId == T.UserID);
+
+                UserInfo userInfo = new UserInfo()
+                             {
+                                 NickName = user.NickName,
+                                 IsMale = user.IsMale,
+                                 QQ = user.QQ,
+                                 MicroBlog = user.MicroBlog,
+                                 Signature = user.Signature,
+                                 Password = user.Password
+                             };
+
+                return userInfo;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
+
+
+
+        public bool ChangedUserInfo(UserInfo userInfo)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return false;
+            }
+
+            using (ShareWareEntities context = new ShareWareEntities())
+            {
+                Users user = context.Users.Single(T => T.UserID == id);
+                user.NickName = userInfo.NickName;
+                user.IsMale = userInfo.IsMale;
+                user.QQ = userInfo.QQ;
+                user.MicroBlog = userInfo.MicroBlog;
+                user.Signature = userInfo.Signature;
+                user.Password = userInfo.Password;
+                context.SaveChanges();
+            }
+
+            return true;
         }
     }
 }

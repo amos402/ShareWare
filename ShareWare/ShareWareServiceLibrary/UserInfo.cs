@@ -18,9 +18,6 @@ namespace ShareWare
         public string NickName { get; set; }
 
         [DataMember]
-        public string Password { get; set; }
-
-        [DataMember]
         public bool IsMale { get; set; }
 
         [DataMember]
@@ -31,6 +28,9 @@ namespace ShareWare
 
         [DataMember]
         public string Signature { get; set; }
+
+        [DataMember]
+        public string Password { get; set; }
 
         [DataMember]
         public Bitmap Image { get; set; }

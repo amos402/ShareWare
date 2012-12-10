@@ -14,6 +14,9 @@ namespace ShareWare
         public string UserName { get; set; }
 
         [DataMember]
+        public string NickName { get; set; }
+
+        [DataMember]
         public string ImageHash { get; set; }
     }
 }

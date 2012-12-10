@@ -13,10 +13,10 @@ using System.Transactions;
 
 namespace ShareWare.ServiceLibrary
 {
-     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class RegisterService : IRegisterService
     {
-        public bool Register(UserInfo userInfo)
+        public RegError Register(UserInfo userInfo)
         {
             using (TransactionScope transaction = new TransactionScope())
             {
@@ -24,6 +24,14 @@ namespace ShareWare.ServiceLibrary
                 {
                     try
                     {
+                        var result = from c in context.Users
+                                     where c.UserName == userInfo.UserName
+                                     select c;
+                        if (result.Count() > 0)
+                        {
+                            return RegError.UserExist;
+                        }
+
                         Users newUser = new Users()
                         {
                             UserName = userInfo.UserName,
@@ -63,14 +71,16 @@ namespace ShareWare.ServiceLibrary
                     catch (Exception)
                     {
 
-                        return false;
+                        return RegError.Ohter;
                     }
                 }
 
             }
 
-            return true;
+            return RegError.NoError;
         }
 
     }
+
+
 }
