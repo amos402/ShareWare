@@ -23,6 +23,12 @@ namespace ShareMetro
             var shit = new Flyout();
             shit.Header = "fuck";
             Flyouts.Add(shit);
+            this.Closing += MainWindow_Closing;
+        }
+
+        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            
         }
 
         void Tick(object sender, EventArgs e)
@@ -112,6 +118,7 @@ namespace ShareMetro
             this.IgnoreTaskbarOnMaximize = !this.IgnoreTaskbarOnMaximize;
         }
 
+        #region ACE写的
         private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             ListView item = sender as ListView;
@@ -161,10 +168,19 @@ namespace ShareMetro
         private void Garbage_listview_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedItem(sender, e);
+        }      
+
+        private void ListBox_Mouse_Double_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListBox item = sender as ListBox;
+            if (item.DataContext != null)
+            {
+                OnlineUserData model = item.SelectedItem as OnlineUserData;
+                (this.DataContext as MainWindowViewModel).CallLoad(model.UserName);
+            }
         }
 
-    
+        #endregion
 
-        
     }
 }

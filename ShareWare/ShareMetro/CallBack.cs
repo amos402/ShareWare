@@ -30,7 +30,7 @@ namespace ShareMetro
             if (file != null && file.File.Exists)
             {
                 Upload up = new Upload();
-                up.CreatUpload(file.File.FullName, szIp, 1, nPort);
+                up.CreatUpload(file.File.FullName, szIp, nPort, file.Hash, file.HashList);
 
             }
         }
@@ -57,14 +57,14 @@ namespace ShareMetro
         }
 
 
-        public void ConversationPerformance(string remoteIp, int remotePort)
+        public void ConversationPerformance(string remoteIp, int remotePort)////////////
         {
             throw new NotImplementedException();
         }
 
 
 
-        public void OpenShareFolderPerfromance(string remoteIp, int remotePort)
+        public void OpenShareFolderPerfromance(string remoteIp, int remotePort)////////
         {
             throw new NotImplementedException();
         }

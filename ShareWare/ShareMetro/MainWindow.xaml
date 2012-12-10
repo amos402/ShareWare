@@ -45,14 +45,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-
-            <DataTemplate x:Key="DataTemplate1">
-                <Grid HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="96">
-                    <Image Source="{Binding Image}" Height="20" Width="20" RenderTransformOrigin="0.5,0.45" Margin="4,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                    <TextBlock Text="{Binding NickName}" HorizontalAlignment="Left" Margin="29,3,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.132,0.192" Width="68" Height="20" FontSize="15"/>
-                </Grid>
-            </DataTemplate>
-
         </ResourceDictionary>
     </Window.Resources>
 
@@ -93,7 +85,7 @@
                         		Margin="0,174.63,260.803,0"
                         		VerticalAlignment="Top"
                         		VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="214.002" />
-                            <PasswordBox Controls:TextboxHelper.Watermark="{Binding PasswordWatermark}"
+                            <PasswordBox Controls:TextboxHelper.Watermark="Enter Password"
                         		Margin="0,226.795,260.804,0"
                         		VerticalAlignment="Top"
                         		VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="214.001"
@@ -105,8 +97,8 @@
                                 <ComboBoxItem Content="ComboBoxItem" />
                                 <ComboBoxItem Content="ComboBoxItem" />
                             </ComboBox>
-                            <CheckBox Content="记住密码" Margin="0,0,359.803,258.495" HorizontalAlignment="Right" Width="79.277" VerticalAlignment="Bottom" IsChecked="{Binding IsRememberPwd}"/>
-                            <CheckBox Content="自动登录" HorizontalAlignment="Right" Margin="0,0,269.803,258.495" Width="79.277" VerticalAlignment="Bottom" IsChecked="{Binding IsAutoLogin}"/>
+                            <CheckBox Content="记住密码" Margin="0,0,359.803,258.495" HorizontalAlignment="Right" Width="79.277" VerticalAlignment="Bottom"/>
+                            <CheckBox Content="自动登录" HorizontalAlignment="Right" Margin="0,0,269.803,258.495" Width="79.277" VerticalAlignment="Bottom"/>
                             <Button Content="注册" Height="27.96" Margin="0,0,400.53,204" VerticalAlignment="Bottom" Foreground="#FF686868" FontFamily="Microsoft YaHei UI" FontSize="14.667" FontWeight="Normal" HorizontalAlignment="Right" Width="90.775" Command="{Binding RegisterCmd}"/>
                             <Button Content="登陆" HorizontalAlignment="Right" Height="27.96" Margin="0,0,277.303,204" VerticalAlignment="Bottom" Width="82.775" Foreground="#FF686868" FontFamily="Microsoft JhengHei UI" FontSize="14.667"  Command="{Binding LoginCmd}" IsEnabled="{Binding  LoginAble}"/>
                             <TextBlock Margin="453.999,229.578,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1" d:LayoutOverrides="VerticalAlignment"><Run Language="zh-cn" Text="密   码:"/></TextBlock>
@@ -158,7 +150,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <ListBox Grid.Row="0" Margin="0,244.977,0,48.807" HorizontalAlignment="Right" Width="207.977"  ItemsSource="{Binding OnlineUser}" ItemTemplate="{DynamicResource DataTemplate1}">
+                        <ListBox Grid.Row="0" Margin="0,244.977,0,53.807" HorizontalAlignment="Right" Width="207.977"  ItemsSource="{Binding  OnlineUser}" MouseDoubleClick="ListBox_Mouse_Double_Click">
                             <ListBox.ContextMenu>
                                 <ContextMenu>
                                     <ContextMenu.ItemBindingGroup>
@@ -206,7 +198,7 @@
                         <Button Content="GO" HorizontalAlignment="Right" Height="32.5" Margin="0,0,221.31,0" VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.205" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding GoCommand}"/>
                         <Button Content="搜" HorizontalAlignment="Right" Height="32" Margin="0,1,2,0" VerticalAlignment="Top" Width="39.023" Style="{DynamicResource SquareButtonStyle}" Opacity="0.2" FontSize="17.333" FontFamily="Microsoft YaHei UI"   Command="{Binding SearchCmd}"/>
                         <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="48.5,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding DownLoadCommand}"/>
-                        <Button Content="暂          停" HorizontalAlignment="Left" Height="32.5" Margin="257,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
+                        <Button Content="聊          天" HorizontalAlignment="Left" Height="32.5" Margin="257,0,0,8" VerticalAlignment="Bottom" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding ChatTalkCommand}"/>
                         <Controls:ProgressRing  HorizontalAlignment="Left" Margin="346.023,224.977,0,268.338" VerticalAlignment="Stretch" d:LayoutOverrides="Height" IsActive="{Binding  IsBusy_Main}"/>
                     </Grid>
                 </TabItem>
@@ -253,9 +245,9 @@
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
-                                    <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
-                                    <Button Content="暂          停" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023"/>
-                                    <Button Content="删          除" Height="32.5" Margin="0,6.13,183.497,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right" Width="173.023" d:LayoutOverrides="HorizontalAlignment"/>
+                                    <Button Content="下          载" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding Go_DownLoadCommand}"/>
+                                    <Button Content="暂          停" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023" Command="{Binding Stop_DownLoadCommand}"/>
+                                    <Button Content="删          除" Height="32.5" Margin="0,6.13,183.497,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right" Width="173.023" d:LayoutOverrides="HorizontalAlignment" Command="{Binding Detelet_DownListViewInfoCommand}"/>
                                 </Grid>
                             </TabItem>
                             <TabItem Header=" 已下载isH">
@@ -283,13 +275,13 @@
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
-                                    <Button Content="打          开" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
-                                    <Button Content="删          除" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023"/>
+                                    <Button Content="打          开" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding Open_FileCommand}"/>
+                                    <Button Content="删          除" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023" Command="{Binding Detelet_HistoryListViewInfoCommand}"/>
                                 </Grid>
                             </TabItem>
                             <TabItem Header=" 回收站clE">
                                 <Grid>
-                                    <ListView BorderThickness="0" IsSynchronizedWithCurrentItem="False" HorizontalAlignment="Left" Width="759.5" Height="452.8" VerticalAlignment="Bottom" ItemsSource="{Binding GarbageInfo}">
+                                    <ListView BorderThickness="0" IsSynchronizedWithCurrentItem="False" HorizontalAlignment="Left" Width="759.5" Height="452.8" VerticalAlignment="Bottom" ItemsSource="{Binding GarbageInfo}" SelectionChanged="Garbage_listview_SelectionChanged">
                                         <ListView.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="下载" FontSize="12"/>
@@ -312,8 +304,8 @@
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
-                                    <Button Content="删          除" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI"/>
-                                    <Button Content="还          原" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023"/>
+                                    <Button Content="删          除" HorizontalAlignment="Left" Height="32.5" Margin="5.5,6.13,0,0" VerticalAlignment="Top" Width="173.023" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.5" FontSize="14.667" FontFamily="Microsoft YaHei UI" Command="{Binding Detelet_FileCommand}"/>
+                                    <Button Content="还          原" Height="32.5" Margin="204.5,6.13,0,0" VerticalAlignment="Top" Style="{DynamicResource SquareButtonStyle}" BorderBrush="{x:Null}" Foreground="Black" BorderThickness="1" Background="{x:Null}" Opacity="0.2" FontSize="14.667" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Left" Width="173.023" Command="{Binding Reduction_GarbageInfoCommand}"/>
                                 </Grid>
                             </TabItem>
                         </TabControl>
@@ -399,7 +391,7 @@
                         </StackPanel>
                         <CheckBox Content="全选" HorizontalAlignment="Right" Margin="0,22.883,314.557,0" VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
                         <CheckBox Content="反选" HorizontalAlignment="Right" Margin="0,22.883,248.557,0" VerticalAlignment="Top" RenderTransformOrigin="0.581,0.153" FontFamily="Microsoft YaHei UI"/>
-                        <TextBox Height="106.7" Margin="18.5,0,228.5,14" TextWrapping="Wrap" Text="{Binding ShareLog}" VerticalAlignment="Bottom" BorderBrush="#FFE9E9E9" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto"/>
+                        <TextBox Height="106.7" Margin="18.5,0,228.5,14" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Bottom" BorderBrush="#FFE9E9E9" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto"/>
                     </Grid>
                 </TabItem>
                 <TabItem Width="132" Header=" 设置 SeT">
@@ -407,20 +399,18 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TabControl Margin="8,8,0,0" Height="547" VerticalAlignment="Top" SelectedIndex="{Binding Index_Option}">
+                        <TabControl Margin="8,8,0,0" Height="547" VerticalAlignment="Top">
                             <TabItem Header="个人资料">
                                 <Grid Margin="0,0,-6,-6.5">
                                     <Image HorizontalAlignment="Left" Margin="260.25,108.63,0,215" Width="180" Source="{Binding ImageSource}"/>
                                     <Label Content="昵       称：" Height="28" Margin="457.5,114.63,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
-                                    <TextBox Margin="545.501,116.63,0,0" TextWrapping="Wrap" Text="{Binding NickName_Option}" HorizontalAlignment="Left" Width="178.553" VerticalAlignment="Top"/>
+                                    <TextBox Margin="545.501,116.63,0,0" TextWrapping="Wrap" Text="TextBox" HorizontalAlignment="Left" Width="178.553" VerticalAlignment="Top"/>
                                     <Label Content="性       别：" Height="28" Margin="457.5,165.13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84.001" FontSize="14.667"/>
-                                    <CheckBox Content="男.MaN" HorizontalAlignment="Right" Margin="0,171.076,379.317,0" VerticalAlignment="Top" IsChecked="{Binding IsMale_Option}"/>
+                                    <CheckBox Content="男.MaN" HorizontalAlignment="Right" Margin="0,171.076,379.317,0" VerticalAlignment="Top"/>
                                     <CheckBox Content="女.WomaN" HorizontalAlignment="Right" Margin="0,171.076,278.317,0" VerticalAlignment="Top"/>
-                                    <TextBox HorizontalAlignment="Right" Margin="0,208.63,272.184,0" TextWrapping="Wrap" Text="{Binding QQ_Option}" VerticalAlignment="Top" Width="178.553"/>
-                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,222.053" Width="178.553" VerticalAlignment="Bottom"    MetroDemo:PasswordHelper.Attach="True"
-                                         MetroDemo:PasswordHelper.Password="{Binding  Password_Option, Mode=TwoWay}"/>
-                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,175.053" Width="178.553" VerticalAlignment="Bottom"    MetroDemo:PasswordHelper.Attach="True"
-                                         MetroDemo:PasswordHelper.Password="{Binding  Password2_Option, Mode=TwoWay}"/>
+                                    <TextBox HorizontalAlignment="Right" Margin="0,208.63,272.184,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="178.553"/>
+                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,222.053" Width="178.553" VerticalAlignment="Bottom"/>
+                                    <PasswordBox HorizontalAlignment="Right" Margin="0,0,272.184,175.053" Width="178.553" VerticalAlignment="Bottom"/>
                                     <Label Content="修改密码：" Margin="457.5,0,0,222.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
                                     <Label Content="确认密码：" Margin="457.5,0,0,175.053" HorizontalAlignment="Left" Width="84.001" FontSize="14.667" Height="28" VerticalAlignment="Bottom"/>
                                     <Button Content="上传头像" HorizontalAlignment="Left" Margin="260.25,0,0,175.5" Width="180" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Height="29.5" VerticalAlignment="Bottom" Command="{Binding UploadImageCmd}"/>
@@ -432,28 +422,22 @@
                             <TabItem Header="目录">
                                 <Grid>
                                     <Label Content="下载目录:" Height="28.5" Margin="248.75,38.025,0,0" VerticalAlignment="Top" FontSize="14.667" HorizontalAlignment="Left" Width="74.595"/>
-                                    <ComboBox Margin="327.345,38.025,297.917,0" VerticalAlignment="Top" Height="28.5" IsEditable="True" ItemsSource="{Binding DownloadPathList}" SelectedItem="{Binding CurrentDownloadPath}"/>
-                                    <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Command="{Binding SetDownloadPathCmd}"/>
+                                    <ComboBox Margin="327.345,38.025,297.917,0" VerticalAlignment="Top" Height="28.5" IsEditable="True"/>
+                                    <Button Content="设置" HorizontalAlignment="Right" Height="26" Margin="0,40.525,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
                                     <Label Content="共享目录:" Margin="248.75,99.191,0,0" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Top" Width="74.595"/>
                                     <Controls:ToggleSwitch Height="42.686"  Margin="481.178,0,404.039,142.314" VerticalAlignment="Bottom" FontSize="13.333" IsChecked="{Binding SysShareSwitch}" />
                                     <Rectangle Margin="327.345,99.191,297.917,196.261" Stroke="#FFCCCCCC"/>
-                                    <!--<ListView Margin="327.75,99.065,297.917,196.261" BorderThickness="1" BorderBrush="{x:Null}" ItemsSource="{Binding SharePath}">
+                                    <ListView Margin="327.75,99.065,297.917,196.261" BorderThickness="1" BorderBrush="{x:Null}" ItemsSource="{Binding SharePath}">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="共享名称" Width="70" DisplayMemberBinding="{Binding Key}"/>
                                                 <GridViewColumn Header="路径" Width="100" DisplayMemberBinding="{Binding Value}"/>
                                             </GridView>
                                         </ListView.View>
-                                    </ListView>-->
-                                    <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,99.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Command="{Binding AddSharePathCmd}"/>
-                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,142.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}" Command="{Binding RemoveSharePathCmd}"/>
+                                    </ListView>
+                                    <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,99.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,142.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
                                     <Label Content="共享计算机共享目录:" Margin="327.75,0,0,148.07" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Bottom" Width="148.595"/>
-                                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="328,99,0,0" VerticalAlignment="Top" Height="198" Width="356" ItemsSource="{Binding SharePath}" AutoGenerateColumns="False">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding ShareName}"  Header="共享名称"/>
-                                            <DataGridTextColumn Binding="{Binding Path}"  Header="路径"/>
-                                        </DataGrid.Columns>
-                                    </DataGrid>
                                 </Grid>
                             </TabItem>
                             <Grid Margin="0,0,-470.738,-247.235">
@@ -468,9 +452,9 @@
                                 <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,199.065,225.878,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
                             </Grid>
                         </TabControl>
-                        <Button Content="应用" Height="34.5" Margin="0,19.253,177.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883" Command="{Binding AcceptCmd}"/>
+                        <Button Content="应用" Height="34.5" Margin="0,19.253,177.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
                         <Button Content="保存" Height="34.5" Margin="0,19.253,96.745,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
-                        <Button Content="取消" Height="34.5" Margin="0,19.253,17.245,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883" IsEnabled="{Binding IsCancelBtnEnable_Option}"/>
+                        <Button Content="取消" Height="34.5" Margin="0,19.253,17.245,0" VerticalAlignment="Top" FontSize="14.667" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="59.883"/>
                     </Grid>
                 </TabItem>
             </TabControl>

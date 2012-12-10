@@ -41,18 +41,8 @@ namespace ShareMetro
             LoginAble = true;
             UserName = string.Empty;
             Password = string.Empty;
-            PasswordWatermark = "Enter Password";
 
             OnlineUser = new ObservableCollection<OnlineUserData>();
-            DownloadPathList = new ObservableCollection<string>();
-            AddSharePathCmd = new DelegateCommand<object>(OnAddSharePath, arg => true);
-            RemoveSharePathCmd = new DelegateCommand<object>(OnRemoveSharePath, arg => true);
-
-            AcceptCmd = new DelegateCommand<object>(OnAcceptOpiton, arg => true);
-            ConfirmCmd = new DelegateCommand<object>(OnConfirmOpiton, arg => true);
-            CancelCmd = new DelegateCommand<object>(OnCancelOpiton, arg => true);
-
-
             IsBusy_Main = false;
 
             LoginCmd = new DelegateCommand<object>(OnLogin, arg => true);
@@ -61,8 +51,6 @@ namespace ShareMetro
             UploadImageCmd = new DelegateCommand<object>(OnUploadImage, arg => true);
             DownLoadCmd = new DelegateCommand<object>(OnDownLoad, arg => true);
             HeadIConCmd = new DelegateCommand<object>(OnClickHeadIcon, arg => true);
-
-            SetDownloadPathCmd = new DelegateCommand<object>(OnSetDownloadPath, arg => true);
 
             _callBack = new CallBack(this);
             _client = new ShareServiceClient(new InstanceContext(_callBack));
@@ -88,45 +76,8 @@ namespace ShareMetro
             {
                 ImageSource = null;
             }
-
-            IsAutoLogin = ShareWareSettings.Default.AutoLogin;
-            IsRememberPwd = ShareWareSettings.Default.RememberPwd;
-            if (IsRememberPwd)
-            {
-                UserName = ShareWareSettings.Default.UserName;
-                Password = ShareWareSettings.Default.Password;
-                PasswordWatermark = string.Empty;
-            }
-
-            _sharePath = new ObservableCollection<SharePathData>();
-            if ( ShareWareSettings.Default.DownloadPathList != null)
-            {
-                foreach (var item in ShareWareSettings.Default.DownloadPathList)
-                {
-                    DownloadPathList.Add(item);
-                } 
-            }
-
-            DownloadPathList.CollectionChanged += ((sender, e) =>
-            {
-                if (ShareWareSettings.Default.DownloadPathList == null)
-                {
-                    ShareWareSettings.Default.DownloadPathList = new System.Collections.Specialized.StringCollection();
-                }
-                else
-                {
-                    ShareWareSettings.Default.DownloadPathList.Clear();
-                }
-                
-                foreach (var item in DownloadPathList)
-                {
-                    ShareWareSettings.Default.DownloadPathList.Add(item);
-                    ShareWareSettings.Default.Save();
-                }
-            });
-
+            Inti();
         }
-
 
 
         private string _imagePath = System.Environment.CurrentDirectory + @"\image\";
@@ -160,31 +111,8 @@ namespace ShareMetro
 
         private int _id;
 
-        private int _preIndex;
-        private int _index;
 
-        public int Index
-        {
-            get { return _index; }
-            set
-            {
-                _preIndex = _index;
-                _index = value;
-                OnPropertyChanged("Index");
-                switch (Index)
-                {
-                    case 4:
-                        Index_Option = 0;
-                        IsConfirmBtnEnable_Option = true;
-                        IsAcceptBtnEnable_Option = true;
-                        IsCancelBtnEnable_Option = false;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
+        public int Index { get; set; }
         public bool HideMenu { get; set; }
 
         private static Mutex searchMut = new Mutex();
@@ -267,14 +195,7 @@ namespace ShareMetro
         private void GetShareInfo(object sender, ModelEvent e)
         {
             _sh = ShareFiles.Deserialize(_shareInfoPath);
-            _sh.SharePathChanged += ((sender1, eventArg) => OnPropertyChanged("SharePath"));
-            _sh.HashingPath += ((sender1, arg) => AddHashingInfo(arg.Path));
-            _sh.OnePathComplete += ((sender1, arg) => AddHashCompleteInfo(arg.Path));
-            //_sh.SharePathChanged += ((sender1, arg) =>
-            //    _sharePath.Add(new SharePathData() { ShareName = arg.FileName, Path = arg.Path }));
-
-            _sh.AddSharePath("RamDisk", @"R:\");
-            // OnPropertyChanged("SharePath");
+            _sh.AddSharePath("eclipse", @"D:\DriverGenius2012\");
             //_sh.AddSharePath("damn", @"D:\TDDOWNLOAD");
             Thread t = _sh.ListFile();
             t.Join();
@@ -295,7 +216,7 @@ namespace ShareMetro
                 hash.Append(item.ToString("x2"));
             }
             md5.Clear();
-            // ImageSource = _imagePath + hash.ToString() + ".jpeg";
+           // ImageSource = _imagePath + hash.ToString() + ".jpeg";
 
         }
 
@@ -313,7 +234,7 @@ namespace ShareMetro
             //bitMap.BeginInit();
             //bitMap.CacheOption = BitmapCacheOption.
             //return _imagePath + hash.ToString() + ".jpeg";
-            string path = _imagePath + hash.ToString() + ".jpg";
+            string path = _imagePath + hash.ToString() + ".jpeg";
             if (File.Exists(path))
             {
                 try
@@ -324,11 +245,11 @@ namespace ShareMetro
                     fs.Read(buf, 0, (int)fs.Length);
                     fs.Close();
                     MemoryStream ms = new MemoryStream(buf);
-
+                    
                     image.BeginInit();
                     //image.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
                     image.StreamSource = ms;
-                    //image.DecodePixelWidth = 200;
+                    image.DecodePixelWidth = 200;
                     image.CacheOption = BitmapCacheOption.OnLoad;
                     image.EndInit();
                     image.Freeze();
@@ -342,7 +263,7 @@ namespace ShareMetro
             }
 
             return null;
-
+            
         }
 
         private string GetImageSource()
@@ -355,9 +276,9 @@ namespace ShareMetro
                 hash.Append(item.ToString("x2"));
             }
             md5.Clear();
-
+         
             return _imagePath + hash.ToString() + ".jpg";
-
+          
         }
 
         private void SaveShareInfo()
@@ -384,37 +305,6 @@ namespace ShareMetro
             return (mac);
         }
 
-        public static string ComputeStringMd5(string str)
-        {
-            MD5 md5 = MD5.Create();
-            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
-            StringBuilder hash = new StringBuilder();
-            foreach (var item in data)
-            {
-                hash.Append(item.ToString("x2"));
-            }
-            return hash.ToString();
-        }
 
-        public static string ComputeFileMd5(string path)
-        {
-            try
-            {
-                MD5 md5 = MD5.Create();
-                FileStream fs = File.OpenRead(path);
-                byte[] data = md5.ComputeHash(fs);
-                fs.Close();
-                StringBuilder hash = new StringBuilder();
-                foreach (var item in data)
-                {
-                    hash.Append(item.ToString("x2"));
-                }
-                return hash.ToString();
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
     }
 }

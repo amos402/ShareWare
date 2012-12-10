@@ -104,7 +104,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CallBack.cs" />
-    <Compile Include="ChatRoomPage.cs" />
     <Compile Include="ICom.cs" />
     <Compile Include="LoginPage.cs" />
     <Compile Include="MainPage.cs" />
@@ -128,13 +127,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="SharePage.cs" />
-    <Compile Include="SharePathData.cs" />
-    <Compile Include="ShareWareSettings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>ShareWareSettings.settings</DependentUpon>
+    <Compile Include="talkwin.xaml.cs">
+      <DependentUpon>talkwin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="talkwinMVVMcs.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -153,6 +149,10 @@
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
     </Page>
     <Page Include="Register.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="talkwin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -205,12 +205,6 @@
     <None Include="Service References\RegisterServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\RegisterServiceReference\ShareMetro.RegisterServiceReference.RegError.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\RegisterServiceReference\ShareWare.ServiceLibrary.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\RegisterServiceReference\ShareWare.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -230,9 +224,6 @@
     <None Include="Service References\ServiceReference\ShareMetro.ServiceReference.CompositeType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\ServiceReference\ShareMetro.ServiceReference.UserInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\ServiceReference\ShareWare.ServiceLibrary.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -244,10 +235,6 @@
     </None>
     <None Include="Service References\ServiceReference\System.Drawing.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="ShareWareSettings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>ShareWareSettings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
