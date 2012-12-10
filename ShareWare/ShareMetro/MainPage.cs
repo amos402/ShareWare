@@ -51,6 +51,8 @@ namespace ShareMetro
 
         public ObservableCollection<OnlineUserData> OnlineUser { get; private set; }
 
+        private static CancellationTokenSource _ctsSearch = new CancellationTokenSource();
+
         private void OnSearch(object obj)
         {
             IsBusy_Main = true;
@@ -61,37 +63,45 @@ namespace ShareMetro
                 nameList.AddRange(sp);
                 Task<List<FileInfoData>> task = _client.SearchFileAsync(nameList);
                 FileItemInfo.Clear();
+                _ctsSearch.Cancel();
+
                 task.ContinueWith(T =>
                 {
                     ThreadPool.QueueUserWorkItem(delegate
                     {
-                        searchMut.WaitOne();
+                        // searchMut.WaitOne();
                         IsBusy_Main = false;
                         if (T.Result != null)
                         {
-                            foreach (var item in T.Result)
-                            {
-                                FileInfoDataList f = new FileInfoDataList(item);
-                                try
+                            _ctsSearch = new CancellationTokenSource();
+                            Task listTask = new Task(() =>
                                 {
-                                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
-                                        (ThreadStart)delegate
+                                    foreach (var item in T.Result)
+                                    {
+                                        FileInfoDataList f = new FileInfoDataList(item);
+                                        try
                                         {
-                                            if (item != null)
-                                            {
-                                                FileItemInfo.Add(f);
-                                            }
-                                            Thread.Sleep(30);
-                                        });
-                                }
-                                catch (Exception)
-                                {
+                                            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                                (ThreadStart)delegate
+                                                {
+                                                    if (item != null)
+                                                    {
+                                                        FileItemInfo.Add(f);
+                                                    }
+                                                    Thread.Sleep(30);
+                                                });
+                                        }
+                                        catch (Exception)
+                                        {
 
-                                    //throw;
-                                }
-                            }
+                                            //throw;
+                                        }
+                                    }
+                                }, _ctsSearch.Token);
+                            listTask.Start();
+                            //listTask.Wait();
                         }
-                        searchMut.ReleaseMutex();
+                        //searchMut.ReleaseMutex();
                     });
                 });
             }

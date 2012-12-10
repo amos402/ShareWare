@@ -22,6 +22,7 @@ namespace ShareMetro
     {
 
         public ICommand AddSharePathCmd { get; set; }
+        public ICommand RemoveSharePathCmd { get; set; }
 
         public ICommand UploadImageCmd { get; set; }
         public ICommand SetDownloadPathCmd { get; set; }
@@ -156,6 +157,8 @@ namespace ShareMetro
             }
         }
 
+        private List<SharePathData> _removePathList = new List<SharePathData>();
+
         private ObservableCollection<SharePathData> _sharePath;
         public ObservableCollection<SharePathData> SharePath
         {
@@ -266,6 +269,11 @@ namespace ShareMetro
         private void ChangeSharePath()
         {
             // _sh.SharePath.Clear();
+            foreach (var item in _removePathList)
+            {
+                _sh.RemoveSharePath(item.ShareName);
+            }
+
             foreach (var item in _sharePath)
             {
                 if (!_sh.SharePath.ContainsKey(item.ShareName))
@@ -273,14 +281,6 @@ namespace ShareMetro
                     _sh.AddSharePath(item.ShareName, item.Path);
                 }
             }
-
-            //foreach (var item in _sh.SharePath)
-            //{
-            //    if (_sharePath.Contains()
-            //    {
-                    
-            //    }
-            //}
         }
 
         private void OnUploadImage(object obj)
@@ -320,11 +320,22 @@ namespace ShareMetro
             var success = dlg.ShowDialog();
             if (success == System.Windows.Forms.DialogResult.OK)
             {
-                //SharePath.Add(new SharePathData() { Path = dlg.SelectedPath, ShareName = dlg.SelectedPath });
-                _sh.SharePath.Add(dlg.SelectedPath, dlg.SelectedPath);
-
+                SharePath.Add(new SharePathData() { Path = dlg.SelectedPath, ShareName = dlg.SelectedPath });
+                //_sh.SharePath.Add(dlg.SelectedPath, dlg.SelectedPath);
+                
                 //OnPropertyChanged("SharePath");
                 // CurrentDownloadPath = dlg.SelectedPath;
+            }
+        }
+
+        private void OnRemoveSharePath(object obj)
+        {
+            SharePathData pathData = obj as SharePathData;
+            if (pathData != null)
+            {
+                _sharePath.Remove(pathData);
+                _removePathList.Add(pathData);
+                _removePathList.Distinct();
             }
         }
 

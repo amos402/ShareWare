@@ -46,6 +46,7 @@ namespace ShareMetro
             OnlineUser = new ObservableCollection<OnlineUserData>();
             DownloadPathList = new ObservableCollection<string>();
             AddSharePathCmd = new DelegateCommand<object>(OnAddSharePath, arg => true);
+            RemoveSharePathCmd = new DelegateCommand<object>(OnRemoveSharePath, arg => true);
 
             AcceptCmd = new DelegateCommand<object>(OnAcceptOpiton, arg => true);
             ConfirmCmd = new DelegateCommand<object>(OnConfirmOpiton, arg => true);
@@ -98,8 +99,34 @@ namespace ShareMetro
             }
 
             _sharePath = new ObservableCollection<SharePathData>();
+            if ( ShareWareSettings.Default.DownloadPathList != null)
+            {
+                foreach (var item in ShareWareSettings.Default.DownloadPathList)
+                {
+                    DownloadPathList.Add(item);
+                } 
+            }
+
+            DownloadPathList.CollectionChanged += ((sender, e) =>
+            {
+                if (ShareWareSettings.Default.DownloadPathList == null)
+                {
+                    ShareWareSettings.Default.DownloadPathList = new System.Collections.Specialized.StringCollection();
+                }
+                else
+                {
+                    ShareWareSettings.Default.DownloadPathList.Clear();
+                }
+                
+                foreach (var item in DownloadPathList)
+                {
+                    ShareWareSettings.Default.DownloadPathList.Add(item);
+                    ShareWareSettings.Default.Save();
+                }
+            });
 
         }
+
 
 
         private string _imagePath = System.Environment.CurrentDirectory + @"\image\";
@@ -249,8 +276,8 @@ namespace ShareMetro
             _sh.AddSharePath("RamDisk", @"R:\");
             // OnPropertyChanged("SharePath");
             //_sh.AddSharePath("damn", @"D:\TDDOWNLOAD");
-             Thread t = _sh.ListFile();
-              t.Join();
+            Thread t = _sh.ListFile();
+            t.Join();
             _client.UploadShareInfo(_sh.FileList);
             _client.RemoveOldFile(_sh.RemoveList);
             // _sh.SetUploaded(_sh.FileList);

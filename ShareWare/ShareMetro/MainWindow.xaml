@@ -446,9 +446,9 @@
                                         </ListView.View>
                                     </ListView>-->
                                     <Button Content="增加目录" HorizontalAlignment="Right" Height="26" Margin="0,99.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal" Command="{Binding AddSharePathCmd}"/>
-                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,142.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal"/>
+                                    <Button Content="删除目录" HorizontalAlignment="Right" Height="26" Margin="0,142.065,197.14,0" VerticalAlignment="Top" Width="84.75" FontSize="12" FontFamily="Microsoft YaHei UI" FontWeight="Normal" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}" Command="{Binding RemoveSharePathCmd}"/>
                                     <Label Content="共享计算机共享目录:" Margin="327.75,0,0,148.07" FontSize="14.667" HorizontalAlignment="Left" Height="28.5" VerticalAlignment="Bottom" Width="148.595"/>
-                                    <DataGrid HorizontalAlignment="Left" Margin="328,99,0,0" VerticalAlignment="Top" Height="198" Width="356" ItemsSource="{Binding SharePath}" AutoGenerateColumns="False">
+                                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="328,99,0,0" VerticalAlignment="Top" Height="198" Width="356" ItemsSource="{Binding SharePath}" AutoGenerateColumns="False">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding ShareName}"  Header="共享名称"/>
                                             <DataGridTextColumn Binding="{Binding Path}"  Header="路径"/>
