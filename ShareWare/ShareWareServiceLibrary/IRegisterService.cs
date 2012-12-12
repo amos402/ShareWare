@@ -13,8 +13,6 @@ namespace ShareWare.ServiceLibrary
     {
         [OperationContract]
         RegError Register(UserInfo userInfo);
-
-
     }
 
     public enum RegError

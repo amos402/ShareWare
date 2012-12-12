@@ -73,7 +73,8 @@ namespace ShareWare.ServiceLibrary
                     item.Value.NewUser(new OnlineUserInfo()
                     {
                         UserName = user.UserName,
-                        ImageHash = user.ImageHash
+                        ImageHash = user.ImageHash,
+                        NickName = user.NickName
                     });
                 }
             }
@@ -110,24 +111,6 @@ namespace ShareWare.ServiceLibrary
                     Console.WriteLine(ex);
                 }
             }
-        }
-
-        public string GetData(int value)
-        {
-            return string.Format("You entered: {0}", value);
-        }
-
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
-        {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
         }
 
         private string GetClientIp()
@@ -204,39 +187,6 @@ namespace ShareWare.ServiceLibrary
 
         }
 
-        public bool Register(UserInfo userInfo)
-        {
-            using (TransactionScope transaction = new TransactionScope())
-            {
-                using (ShareWareEntities context = new ShareWareEntities())
-                {
-                    try
-                    {
-                        context.Users.Add(new Users()
-                        {
-                            UserName = userInfo.UserName,
-                            Password = userInfo.Password,
-                            NickName = userInfo.NickName,
-                            IsMale = userInfo.IsMale,
-                            QQ = userInfo.QQ,
-                            MicroBlog = userInfo.MicroBlog,
-                            Signature = userInfo.Signature
-                        });
-                        context.SaveChanges();
-
-                        transaction.Complete();
-                    }
-                    catch (Exception)
-                    {
-
-                        return false;
-                    }
-                }
-
-            }
-            return true;
-        }
-
         public int Login(string userName, string passWord, string mac)
         {
             Users user = null;
@@ -247,6 +197,10 @@ namespace ShareWare.ServiceLibrary
             catch (InvalidOperationException)
             {
 
+                return -1;
+            }
+            catch (Exception)
+            {
                 return -1;
             }
 
@@ -283,6 +237,7 @@ namespace ShareWare.ServiceLibrary
             BroadcastEvent(this, new ServerEventArgs() { User = user }, UserLogin);
 
             var userList = (from c in _userDict.Keys
+                            where (c.UserID != user.UserID)
                             select new OnlineUserInfo()
                             {
                                 UserName = c.UserName,
@@ -299,8 +254,9 @@ namespace ShareWare.ServiceLibrary
 
         public void Logout()
         {
-            IClient client = OperationContext.Current.GetCallbackChannel<IClient>();
-            Channel_Closing(client, null);
+            //IClient client = OperationContext.Current.GetCallbackChannel<IClient>();
+
+            //Channel_Closing(client, null);
         }
 
         protected class CompareFileInfo : IEqualityComparer<ShareFile.FileInfoTransfer>
@@ -462,7 +418,7 @@ namespace ShareWare.ServiceLibrary
                 }
                 catch (Exception)
                 {
-
+                    return false;
                     // throw;
                 }
 
@@ -629,7 +585,8 @@ namespace ShareWare.ServiceLibrary
                                   Name = c.Name,
                                   Hash = c.Hash,
                                   Size = c.FileInfo.Size,
-                                  UserName = c.Users.UserName
+                                  UserName = c.Users.UserName,
+                                  IsFolder = c.FileInfo.IsFolder
                               });
                 resultList.Add(result);
             }
@@ -651,9 +608,9 @@ namespace ShareWare.ServiceLibrary
             //var users = from c in _context.Users
             //            where (fileOnwer.UserID == c.UserID)
             //            select c;
-            var users = (from c in _context.FileOwner
-                         where (c.Hash == hash)
-                         select c.Users).Distinct();
+            var users = from c in _context.FileOwner
+                        where (c.Hash == hash)
+                        select c.Users;
 
             string ip = GetClientIp();
             foreach (var item in users)
@@ -747,7 +704,7 @@ namespace ShareWare.ServiceLibrary
             IDictionary section = (IDictionary)ConfigurationManager.GetSection("ImagePath");
             string imagePath = section["Path"].ToString();
             string hash = ComputeStringMd5(name);
-            string path = imagePath + hash + "jpg";
+            string path = imagePath + hash + ".jpg";
             if (File.Exists(path))
             {
                 try
@@ -811,7 +768,7 @@ namespace ShareWare.ServiceLibrary
                     string ip = GetClientIp();
                     if (ip != EmptyIp)
                     {
-                        _userDict[user].OpenShareFolderPerfromance(ip, localPort);
+                        _userDict[user].OpenShareFolderPerfromance(user.NickName, ip, localPort);
                     }
 
                 }
@@ -854,12 +811,14 @@ namespace ShareWare.ServiceLibrary
 
                 UserInfo userInfo = new UserInfo()
                              {
+                                 UserName = user.UserName,
                                  NickName = user.NickName,
                                  IsMale = user.IsMale,
                                  QQ = user.QQ,
                                  MicroBlog = user.MicroBlog,
                                  Signature = user.Signature,
-                                 Password = user.Password
+                                 ImageHash = user.ImageHash
+                                 // Password = user.Password
                              };
 
                 return userInfo;
@@ -873,7 +832,7 @@ namespace ShareWare.ServiceLibrary
 
 
 
-        public bool ChangedUserInfo(UserInfo userInfo)
+        public bool ChangeUserInfo(UserInfo userInfo)
         {
             int id = GetClientId();
             if (id < 0)
@@ -883,14 +842,55 @@ namespace ShareWare.ServiceLibrary
 
             using (ShareWareEntities context = new ShareWareEntities())
             {
-                Users user = context.Users.Single(T => T.UserID == id);
-                user.NickName = userInfo.NickName;
-                user.IsMale = userInfo.IsMale;
-                user.QQ = userInfo.QQ;
-                user.MicroBlog = userInfo.MicroBlog;
-                user.Signature = userInfo.Signature;
-                user.Password = userInfo.Password;
-                context.SaveChanges();
+                try
+                {
+                    Users user = context.Users.Single(T => T.UserID == id);
+                    user.NickName = userInfo.NickName;
+                    user.IsMale = userInfo.IsMale;
+                    user.QQ = userInfo.QQ;
+                    user.MicroBlog = userInfo.MicroBlog;
+                    user.Signature = userInfo.Signature;
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        public bool ChangePassword(string oldPassword, string newPassword)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return false;
+            }
+
+            using (ShareWareEntities context = new ShareWareEntities())
+            {
+                try
+                {
+                    Users user = context.Users.Single(T => T.UserID == id);
+
+                    if (user.Password == oldPassword)
+                    {
+                        user.Password = newPassword;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
 
             return true;

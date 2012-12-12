@@ -34,5 +34,8 @@ namespace ShareWare
 
         [DataMember]
         public Bitmap Image { get; set; }
+
+        [DataMember]
+        public string ImageHash { get; set; }
     }
 }

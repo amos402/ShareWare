@@ -11,26 +11,16 @@ using System.Text;
 namespace ShareWare.ServiceLibrary
 {
     // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的接口名“IService1”。
-    [ServiceContract(CallbackContract = typeof(IClient))]
+    [ServiceContract(CallbackContract = typeof(IClient), SessionMode = SessionMode.Required)]
     public interface IShareService
     {
-        [OperationContract]
-        string GetData(int value);
-
-        [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
-
-        // TODO: 在此添加您的服务操作
         [OperationContract(IsOneWay = true)]
         void TickTack();
 
-        [OperationContract(IsOneWay = false)]
-        bool Register(UserInfo userInfo);
-
-        [OperationContract(IsOneWay = false)]
+        [OperationContract(IsOneWay = false, IsInitiating = true)]
         int Login(string userName, string passWord, string mac);
 
-        [OperationContract(IsOneWay = true)]
+        [OperationContract(IsOneWay = true, IsTerminating = true)]
         void Logout();
 
         [OperationContract(IsOneWay = false)]
@@ -41,6 +31,7 @@ namespace ShareWare.ServiceLibrary
 
         [OperationContract(IsOneWay = true)]
         void RemoveOldFile(List<ShareFile.FileInfoTransfer> fileList);
+
         [OperationContract]
         List<FileInfoData> SearchFile(List<string> nameList);
 
@@ -56,7 +47,7 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void RequestConversation(string userName, int localPort);
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void RequestOpenShareFolder(string userName, int localPort);
 
         [OperationContract(IsOneWay = true)]
@@ -66,7 +57,10 @@ namespace ShareWare.ServiceLibrary
         UserInfo DownloadUserInfo(int userId);
 
         [OperationContract]
-        bool ChangedUserInfo(UserInfo userInfo);
+        bool ChangeUserInfo(UserInfo userInfo);
+
+        [OperationContract]
+        bool ChangePassword(string oldPassword, string newPassword);
     }
 
 
@@ -79,24 +73,5 @@ namespace ShareWare.ServiceLibrary
     }
 
 
-    [DataContract]
-    public class CompositeType
-    {
-        bool boolValue = true;
-        string stringValue = "Hello ";
 
-        [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
-
-        [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
-    }
 }

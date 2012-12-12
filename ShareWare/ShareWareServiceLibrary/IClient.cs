@@ -25,7 +25,7 @@ namespace ShareWare.ServiceLibrary
         void ConversationPerformance(string remoteIp, int remotePort);
 
         [OperationContract(IsOneWay = true)]
-        void OpenShareFolderPerfromance(string remoteIp, int remotePort);
+        void OpenShareFolderPerfromance(string nickName, string remoteIp, int remotePort);
 
         [OperationContract(IsOneWay = true)]
         void ReceiveChatRoomMessage(string msg, string userName, string nickName);
