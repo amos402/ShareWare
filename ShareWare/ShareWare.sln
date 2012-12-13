@@ -1,27 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareWare", "ShareWare\ShareWare.csproj", "{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareWareDAL", "ShareWareDAL\ShareWareDAL.csproj", "{94F71305-C139-4706-A053-0E588EC4CDD3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareWareServiceLibrary", "ShareWareServiceLibrary\ShareWareServiceLibrary.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareFile", "Share\ShareFile.csproj", "{8502B2AF-4C2D-4116-8D6F-27C8EDC9F94A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}"
-	ProjectSection(ProjectDependencies) = postProject
-		{15B3E0D2-6217-493A-A690-158C497F5318} = {15B3E0D2-6217-493A-A690-158C497F5318}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{914BEE16-7938-496E-BA11-7151A3B1FF98}"
-	ProjectSection(ProjectDependencies) = postProject
-		{15B3E0D2-6217-493A-A690-158C497F5318} = {15B3E0D2-6217-493A-A690-158C497F5318}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServer", "ConsoleServer\ConsoleServer.csproj", "{1673AFB1-62FD-4C16-B363-98B002A724A6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMetro", "ShareMetro\ShareMetro.csproj", "{56E8080F-FFEB-47CD-ADB9-92245F92565B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareWare", "ShareMetro\ShareWare.csproj", "{56E8080F-FFEB-47CD-ADB9-92245F92565B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{15B3E0D2-6217-493A-A690-158C497F5318} = {15B3E0D2-6217-493A-A690-158C497F5318}
 	EndProjectSection
@@ -40,45 +26,38 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{5EFE021E-7A7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Socket_Library", "Socket_Library\Socket_Library.csproj", "{760CCF43-4BDA-444A-BFE8-14272E8BB93B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareWareWindowsService", "ShareWareWindowsService\ShareWareWindowsService.csproj", "{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://amos402.tfspreview.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ConsoleApplication1\\ConsoleApplication1.csproj
-		SccProjectName1 = ConsoleApplication1
-		SccLocalPath1 = ConsoleApplication1
-		SccProjectUniqueName2 = ConsoleServer\\ConsoleServer.csproj
-		SccProjectName2 = ConsoleServer
-		SccLocalPath2 = ConsoleServer
-		SccProjectUniqueName3 = Share\\ShareFile.csproj
-		SccProjectName3 = Share
-		SccLocalPath3 = Share
-		SccProjectUniqueName4 = ShareWare\\ShareWare.csproj
-		SccProjectName4 = ShareWare
-		SccLocalPath4 = ShareWare
-		SccProjectUniqueName5 = ShareWareDAL\\ShareWareDAL.csproj
-		SccProjectName5 = ShareWareDAL
-		SccLocalPath5 = ShareWareDAL
-		SccProjectUniqueName6 = ShareWareServiceLibrary\\ShareWareServiceLibrary.csproj
-		SccProjectName6 = ShareWareServiceLibrary
-		SccLocalPath6 = ShareWareServiceLibrary
-		SccProjectUniqueName7 = Client\\Client.csproj
-		SccProjectName7 = Client
-		SccLocalPath7 = Client
-		SccProjectUniqueName8 = ShareMetro\\ShareMetro.csproj
-		SccProjectName8 = ShareMetro
-		SccLocalPath8 = ShareMetro
-		SccProjectUniqueName9 = MahApps.Metro\\MahApps.Metro.csproj
-		SccProjectName9 = MahApps.Metro
-		SccLocalPath9 = MahApps.Metro
-		SccProjectUniqueName10 = MahApps.Metro.Resources\\MahApps.Metro.Resources.csproj
-		SccProjectName10 = MahApps.Metro.Resources
-		SccLocalPath10 = MahApps.Metro.Resources
-		SccProjectUniqueName11 = Socket_Library\\Socket_Library.csproj
-		SccProjectName11 = Socket_Library
-		SccLocalPath11 = Socket_Library
+		SccProjectUniqueName0 = Share\\ShareFile.csproj
+		SccProjectName0 = Share
+		SccLocalPath0 = Share
+		SccProjectUniqueName1 = ShareWareDAL\\ShareWareDAL.csproj
+		SccProjectName1 = ShareWareDAL
+		SccLocalPath1 = ShareWareDAL
+		SccProjectUniqueName2 = ShareWareServiceLibrary\\ShareWareServiceLibrary.csproj
+		SccProjectName2 = ShareWareServiceLibrary
+		SccLocalPath2 = ShareWareServiceLibrary
+		SccProjectUniqueName3 = MahApps.Metro\\MahApps.Metro.csproj
+		SccProjectName3 = MahApps.Metro
+		SccLocalPath3 = MahApps.Metro
+		SccProjectUniqueName4 = MahApps.Metro.Resources\\MahApps.Metro.Resources.csproj
+		SccProjectName4 = MahApps.Metro.Resources
+		SccLocalPath4 = MahApps.Metro.Resources
+		SccProjectUniqueName5 = Socket_Library\\Socket_Library.csproj
+		SccProjectName5 = Socket_Library
+		SccLocalPath5 = Socket_Library
+		SccProjectUniqueName6 = ShareWareWindowsService\\ShareWareWindowsService.csproj
+		SccProjectName6 = ShareWareWindowsService
+		SccLocalPath6 = ShareWareWindowsService
+		SccProjectUniqueName7 = ShareMetro\\ShareWare.csproj
+		SccProjectName7 = ShareMetro
+		SccLocalPath7 = ShareMetro
+		SccLocalPath8 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,16 +68,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A91E9E5B-CE9C-47C9-96DE-C3331FD7B5BA}.Release|x86.ActiveCfg = Release|Any CPU
 		{94F71305-C139-4706-A053-0E588EC4CDD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{94F71305-C139-4706-A053-0E588EC4CDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94F71305-C139-4706-A053-0E588EC4CDD3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -129,34 +98,6 @@ Global
 		{8502B2AF-4C2D-4116-8D6F-27C8EDC9F94A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8502B2AF-4C2D-4116-8D6F-27C8EDC9F94A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8502B2AF-4C2D-4116-8D6F-27C8EDC9F94A}.Release|x86.ActiveCfg = Release|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{58D3F244-0DDD-4727-B9D2-7FA7CAF13E68}.Release|x86.ActiveCfg = Release|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{914BEE16-7938-496E-BA11-7151A3B1FF98}.Release|x86.ActiveCfg = Release|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1673AFB1-62FD-4C16-B363-98B002A724A6}.Release|x86.ActiveCfg = Release|Any CPU
 		{56E8080F-FFEB-47CD-ADB9-92245F92565B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{56E8080F-FFEB-47CD-ADB9-92245F92565B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56E8080F-FFEB-47CD-ADB9-92245F92565B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -197,6 +138,16 @@ Global
 		{760CCF43-4BDA-444A-BFE8-14272E8BB93B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{760CCF43-4BDA-444A-BFE8-14272E8BB93B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{760CCF43-4BDA-444A-BFE8-14272E8BB93B}.Release|x86.ActiveCfg = Release|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9E004CD3-19AC-4FD1-8A0F-A29DAC37AA15}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
