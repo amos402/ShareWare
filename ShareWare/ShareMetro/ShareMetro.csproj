@@ -39,7 +39,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>images\mahapps.metro.logo2.ico</ApplicationIcon>
+    <ApplicationIcon>images\sharewareIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -63,14 +63,6 @@
   <ItemGroup>
     <Reference Include="GrayscaleEffect">
       <HintPath>..\Lib\GrayscaleEffect.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MahApps.Metro\bin\Debug\MahApps.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro.Resources, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MahApps.Metro.Resources\bin\Debug\MahApps.Metro.Resources.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\Lib\Microsoft.Practices.Prism.dll</HintPath>
@@ -103,12 +95,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="aboutus.xaml.cs">
+      <DependentUpon>aboutus.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CallBack.cs" />
+    <Compile Include="ChatRoomPage.cs" />
     <Compile Include="ICom.cs" />
     <Compile Include="LoginPage.cs" />
     <Compile Include="MainPage.cs" />
     <Compile Include="MainWindowViewModel_2.cs" />
-    <Compile Include="MainWindowViewMode_1.cs" />
+    <Compile Include="MainWindowViewModel_1.cs" />
     <Compile Include="ModelEvent.cs" />
     <Compile Include="OnlineUserData.cs" />
     <Compile Include="OptionPage.cs" />
@@ -127,10 +123,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="SharePage.cs" />
+    <Compile Include="ShareWareSettings.cs" />
+    <Compile Include="ShareWareSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>ShareWareSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="talkwin.xaml.cs">
       <DependentUpon>talkwin.xaml</DependentUpon>
     </Compile>
     <Compile Include="talkwinMVVMcs.cs" />
+    <Page Include="aboutus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -171,6 +178,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <SplashScreen Include="images\SplashScreen1.png" />
+    <Resource Include="images\sharewareIcon.ico" />
+    <Resource Include="images\shareware.jpg" />
+    <None Include="app.config" />
     <None Include="Service References\RegisterServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -181,7 +192,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config">
+    <None Include="images\app.config">
       <SubType>Designer</SubType>
     </None>
     <Content Include="font\MSYH.TTC">
@@ -198,43 +209,50 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Service References\RegisterServiceReference\service.wsdl" />
-    <None Include="Service References\RegisterServiceReference\service.xsd">
+    <None Include="Service References\RegisterServiceReference\service1.wsdl" />
+    <None Include="Service References\RegisterServiceReference\service2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\RegisterServiceReference\service1.xsd">
+    <None Include="Service References\RegisterServiceReference\service21.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\RegisterServiceReference\ShareWare.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\RegisterServiceReference\System.Drawing.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceReference\Arrays.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceReference\service.wsdl" />
-    <None Include="Service References\ServiceReference\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceReference\service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceReference\ShareMetro.ServiceReference.CompositeType.datasource">
+    <None Include="Service References\RegisterServiceReference\ShareMetro.RegisterServiceReference.RegError.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\ServiceReference\ShareWare.ServiceLibrary.xsd">
+    <None Include="Service References\RegisterServiceReference\ShareWare.ServiceLibrary1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceReference\ShareWare.ShareFile.xsd">
+    <None Include="Service References\RegisterServiceReference\ShareWare1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceReference\ShareWare.xsd">
+    <None Include="Service References\RegisterServiceReference\System.Drawing1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceReference\System.Drawing.xsd">
+    <None Include="Service References\ServiceReference\Arrays1.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\service1.wsdl" />
+    <None Include="Service References\ServiceReference\service2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\service21.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\ShareMetro.ServiceReference.UserInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceReference\ShareWare.ShareFile1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\ShareWare1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference\System.Drawing1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ShareWareSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ShareWareSettings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -260,11 +278,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="5.jpg" />
-    <Resource Include="aa.png" />
-    <Resource Include="images\mahapps.metro.logo2.ico" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\MahApps.Metro.Resources\MahApps.Metro.Resources.csproj">
+      <Project>{e708ac99-605b-42a0-8d20-abca8fe42dd2}</Project>
+      <Name>MahApps.Metro.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MahApps.Metro\MahApps.Metro.csproj">
+      <Project>{5b1710d2-5dc8-4754-91b2-19165de49b3d}</Project>
+      <Name>MahApps.Metro</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Share\ShareFile.csproj">
       <Project>{8502b2af-4c2d-4116-8d6f-27c8edc9f94a}</Project>
       <Name>ShareFile</Name>
@@ -273,9 +294,6 @@
       <Project>{760ccf43-4bda-444a-bfe8-14272e8bb93b}</Project>
       <Name>Socket_Library</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\blank-cd.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -306,10 +324,7 @@
     <Resource Include="images\front.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\sharewareicon.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\defaultImage.gif" />
+    <Resource Include="images\sharewareIcon.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\icon.jpg" />

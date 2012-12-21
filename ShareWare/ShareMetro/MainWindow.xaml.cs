@@ -14,148 +14,91 @@ namespace ShareMetro
     public partial class MainWindow
     {
         System.Windows.Forms.NotifyIcon notifyIcon;
+        private bool _willClose = false;
+        private bool _isShowed = true;
 
         public void IconShow()
         {
             StreamResourceInfo resourceInfo = Application.GetResourceStream(new Uri(@"images\sharewareIcon.ico", UriKind.Relative));
+            System.Windows.Forms.ContextMenuStrip contextMenu = new System.Windows.Forms.ContextMenuStrip();
+            System.Windows.Forms.ToolStripMenuItem item1 = new System.Windows.Forms.ToolStripMenuItem();
+            item1.Click += item1_Click;
+            item1.Text = "显示主面板";
+            System.Windows.Forms.ToolStripMenuItem item2 = new System.Windows.Forms.ToolStripMenuItem();
+            item2.Text = "退出";
+            item2.Click += item2_Click;
+            contextMenu.Items.Add(item1);
+            contextMenu.Items.Add(item2);
+
+            this.Closing += MainWindow_Closing;
 
             this.notifyIcon = new System.Windows.Forms.NotifyIcon();
-            this.notifyIcon.BalloonTipText = "Hello, NotifyIcon!";
-            this.notifyIcon.Text = "Hello, NotifyIcon!";
+            this.notifyIcon.ContextMenuStrip = contextMenu;
+
+            this.notifyIcon.BalloonTipText = "Hello, ShareWare!";
+            this.notifyIcon.Text = "Hello, ShareWare!";
             this.notifyIcon.Icon = new System.Drawing.Icon(resourceInfo.Stream);
             this.notifyIcon.Visible = true;
             notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
-            // this.notifyIcon.ShowBalloonTip(500);
+            this.notifyIcon.ShowBalloonTip(500);
+        }
+
+        void item1_Click(object sender, EventArgs e)
+        {
+            ShowMainWindow();
+        }
+
+        void item2_Click(object sender, EventArgs e)
+        {
+            _willClose = true;
+            this.Close();
+        }
+
+
+        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_willClose)
+            {
+                notifyIcon.Visible = false;
+            }
+            else
+            {
+                e.Cancel = true;
+                this.Hide();
+                _isShowed = false;
+            }
+        }
+
+        private void ShowMainWindow()
+        {
+            this.Show();
+            _isShowed = true;
+            WindowState = System.Windows.WindowState.Normal;
         }
 
         void notifyIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-           WindowState = System.Windows.WindowState.Normal;
-           this.Visibility = System.Windows.Visibility.Visible;
-           // this.sho
-        }
-
-        void MainWindow_StateChanged(object sender, EventArgs e)
-        {
-            switch (WindowState)
+            if (_isShowed)
             {
-                case WindowState.Maximized:
-                    break;
-                case WindowState.Minimized:
-                    this.Visibility = System.Windows.Visibility.Hidden;
-                    break;
-                case WindowState.Normal:
-                    this.Visibility = System.Windows.Visibility.Visible;
-                    break;
-                default:
-                    break;
+                this.Hide();
+                _isShowed = false;
+            }
+            else
+            {
+                ShowMainWindow();
             }
         }
 
+        private MainWindowViewModel _mainVM;
         public MainWindow()
         {
-            DataContext = new MainWindowViewModel(Dispatcher);
+            DataContext = new MainWindowViewModel();
+            _mainVM = (this.DataContext as MainWindowViewModel);
             InitializeComponent();
-            var t = new DispatcherTimer();
-            t.Tick += Tick;
-            t.Interval = new TimeSpan(0, 0, 0, 1);
-            t.Start();
-            this.StateChanged += MainWindow_StateChanged;
-            this.Closing += ((sender1, e1) => notifyIcon.Visible = false);
             IconShow();
         }
 
 
-
-        void Tick(object sender, EventArgs e)
-        {
-        }
-
-        private void ButtonClick(object sender, RoutedEventArgs e)
-        {
-            // var x = pivot.Items;
-
-            //Flyouts[0].IsOpen = !Flyouts[0].IsOpen;
-            //Flyouts[2].IsOpen = !Flyouts[2].IsOpen;
-
-        }
-
-        private void MiLightRed(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Red"), Theme.Light);
-        }
-
-        private void MiDarkRed(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Red"), Theme.Dark);
-        }
-
-        private void MiLightGreen(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Green"), Theme.Light);
-        }
-
-        private void MiDarkGreen(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Green"), Theme.Dark);
-        }
-
-        private void MiLightBlue(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Light);
-        }
-
-        private void MiDarkBlue(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
-        }
-
-        private void MiLightPurple(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Purple"), Theme.Light);
-        }
-
-        private void MiDarkPurple(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Purple"), Theme.Dark);
-        }
-
-        private void BtnPanoramaClick(object sender, RoutedEventArgs e)
-        {
-            //new ChildWindow().ShowDialog();
-
-            //new Windows1().Show();
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //pivot.GoToItem(pi3);
-            //((MainWindowViewModel) this.DataContext).SelectedIndex = 2;
-        }
-
-        private void BtnVSClick(object sender, RoutedEventArgs e)
-        {
-            //new VSDemo().Show();
-        }
-
-        private void MiDarkOrange(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Orange"), Theme.Dark);
-        }
-
-        private void MiLightOrange(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Orange"), Theme.Light);
-        }
-
-        private void IgnoreTaskbarOnMaximizedClick(object sender, RoutedEventArgs e)
-        {
-            this.IgnoreTaskbarOnMaximize = !this.IgnoreTaskbarOnMaximize;
-        }
-
-
-        #region ACE写的
         private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             ListView item = sender as ListView;
@@ -163,11 +106,12 @@ namespace ShareMetro
             {
                 FileInfoDataList model = item.SelectedItem as FileInfoDataList;
                 if (model == null) return;
+                if (!_mainVM.Islist) return;
                 string name = "";
                 //if (model.Hash == null) 
                 name = model.Name;
                 //else name = model.Hash;
-                if (model.Type == "文件夹") (this.DataContext as MainWindowViewModel).LoadItems(name);
+                if (model.Type == "文件夹") _mainVM.LoadItems(name);
             }
         }
 
@@ -179,7 +123,7 @@ namespace ShareMetro
                 if (item.DataContext != null)
                 {
                     FileInfoDataList model = item.SelectedItem as FileInfoDataList;
-                    (this.DataContext as MainWindowViewModel).SeleteInfo = model;
+                    _mainVM.SeleteInfo = model;
                 }
             }
         }
@@ -192,7 +136,7 @@ namespace ShareMetro
                 if (item.DataContext != null)
                 {
                     DownListInfo model = item.SelectedItem as DownListInfo;
-                    (this.DataContext as MainWindowViewModel).Down_list_Selete = model;
+                    _mainVM.Down_list_Selete = model;
                 }
             }
         }
@@ -219,8 +163,9 @@ namespace ShareMetro
             {
                 OnlineUserData model = item.SelectedItem as OnlineUserData;
                 if (model == null) return;
-                (this.DataContext as MainWindowViewModel).Directory = "";
-                (this.DataContext as MainWindowViewModel).CallLoad(model.UserName);
+                _mainVM.Islist = true;
+                _mainVM.Directory = "";
+                _mainVM.CallLoad(model.UserName);
             }
         }
 
@@ -232,7 +177,7 @@ namespace ShareMetro
                 if (item.DataContext != null)
                 {
                     OnlineUserData model = item.SelectedItem as OnlineUserData;
-                    (this.DataContext as MainWindowViewModel).SeleteManInfo = model;
+                    _mainVM.SeleteManInfo = model;
                 }
             }
         }
@@ -244,10 +189,169 @@ namespace ShareMetro
             {
                 FileInfoDataList model = item.SelectedItem as FileInfoDataList;
                 if (model == null) return;
-                if (model.Type == "文件夹") (this.DataContext as MainWindowViewModel).Show_ShareFile(model.Name, (this.DataContext as MainWindowViewModel).ShareLoact);
+                if (model.Type == "文件夹") _mainVM.Show_ShareFile(model.Name, _mainVM.ShareLoact);
             }
         }
-        #endregion
 
+
+        private void Get_ListViewItem(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListView item = sender as ListView;
+            if (item.DataContext != null)
+            {
+                FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                if (model == null) return;
+                string name = "";
+                //if (model.Hash == null) 
+                name = model.Name;
+                //else name = model.Hash;
+                _mainVM.SeleteInfo = model;
+            }
+        }
+
+        private void Men_Down(object sender, RoutedEventArgs e)
+        {
+            _mainVM.CreatDowndLoad(null);
+        }
+
+        private void Men_OpenD(object sender, RoutedEventArgs e)
+        {
+            if (_mainVM.SeleteInfo.Type == "文件夹")
+                _mainVM.LoadItems(_mainVM.SeleteInfo.Name);
+        }
+
+
+        private void Get_ListBox_Item(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListBox item = sender as ListBox;
+            if (item.DataContext != null)
+            {
+                OnlineUserData model = item.SelectedItem as OnlineUserData;
+                if (model == null) return;
+                _mainVM.SeleteManInfo = model;
+            }
+        }
+
+        private void Men_OpenShareFile(object sender, RoutedEventArgs e)
+        {
+            _mainVM.Islist = true;
+            _mainVM.Directory = "";
+            _mainVM.CallLoad(_mainVM.SeleteManInfo.UserName);
+        }
+
+        private void Men_Talk(object sender, RoutedEventArgs e)
+        {
+            ListBox item = e.Source as ListBox;
+            if (item.DataContext != null)
+            {
+                OnlineUserData model = item.SelectedItem as OnlineUserData;
+                if (model == null) return;
+                _mainVM.SeleteManInfo = model;
+                _mainVM.Talk(model);
+            }
+        }
+
+        private void Get_Down_ListView(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListView item = e.Source as ListView;
+            if (item.DataContext != null)
+            {
+                FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                _mainVM.SeleteInfo = model;
+            }
+        }
+
+        private void Nem_Com_Down(object sender, RoutedEventArgs e)
+        {
+            _mainVM.Go_DowndLoad(null);
+        }
+
+        private void Men_Stop_Down(object sender, RoutedEventArgs e)
+        {
+
+            _mainVM.Stop_DowndLoad(null);
+        }
+
+        private void Men_Dele_Down(object sender, RoutedEventArgs e)
+        {
+
+            _mainVM.Detelet_DownListViewInfo(null);
+        }
+
+        private void Get_He_ListView(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListView item = e.Source as ListView;
+            if (item.DataContext != null)
+            {
+                FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                _mainVM.SeleteInfo = model;
+            }
+        }
+
+        private void Men_Dele_He(object sender, RoutedEventArgs e)
+        {
+
+            _mainVM.Detelet_HistoryListViewInfo(null);
+
+        }
+
+        private void Men_Open_He(object sender, RoutedEventArgs e)
+        {
+            _mainVM.Open_File(null);
+
+        }
+
+        private void Get_Ge_ListvView(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListView item = e.Source as ListView;
+            if (item.DataContext != null)
+            {
+                FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                _mainVM.SeleteInfo = model;
+                _mainVM.Reduction_GarbageInfo(null);
+            }
+        }
+
+        public void Men_Re_Ge(object sender, RoutedEventArgs e)
+        {
+
+            _mainVM.Reduction_GarbageInfo(null);
+
+        }
+
+        private void Men_Dele_Ge(object sender, RoutedEventArgs e)
+        {
+            _mainVM.Detelet_File(null);
+
+        }
+
+        private void ShareFile_SelectionChange(object sender, SelectionChangedEventArgs e)
+        {
+            ListView item = sender as ListView;
+            if (item.DataContext != null)
+            {
+                FileInfoDataList model = item.SelectedItem as FileInfoDataList;
+                if (model == null) return;
+                if (model.Type == "文件夹") _mainVM.Selection_ShareFile = model;
+            }
+        }
+
+        private void Get_ShareFile_Item(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ;
+        }
+
+        private void Men_ShareFile_Dele(object sender, RoutedEventArgs e)
+        {
+            if (_mainVM.Selection_ShareFile == null) return;
+            _mainVM.Delete_ShareFile(null);
+        }
+
+        private void Men_ShareFile_Open(object sender, RoutedEventArgs e)
+        {
+            if (_mainVM.Selection_ShareFile == null) return;
+            if (_mainVM.Selection_ShareFile.Type == "文件夹")
+                _mainVM.Open_shareFile(null);
+        }
     }
 }

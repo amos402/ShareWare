@@ -1,5 +1,4 @@
-﻿using ShareWare.DAL;
-using ShareWare.ShareFile;
+﻿using ShareWare.ShareFile;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,24 +10,21 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
+using System.Threading;
 using System.Transactions;
 
 namespace ShareWare.ServiceLibrary
 {
-    // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
-    // [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
-    //[ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class ShareService : IShareService
     {
-        // UserDAL user = new UserDAL();
-        //string m_cnStr = ConfigurationManager.ConnectionStrings["ShareWareSqlProvider"].ConnectionString;
         static ShareWareEntities _context = new ShareWareEntities();
         static List<Users> _userList = new List<Users>();
         static Dictionary<Users, IClient> _userDict = new Dictionary<Users, IClient>();
@@ -36,6 +32,8 @@ namespace ShareWare.ServiceLibrary
         public delegate void ServerEventHandler(object sender, ServerEventArgs e);
         public event ServerEventHandler UserLogin;
         public event ServerEventHandler UserLeave;
+
+
 
         private static List<IClient> _clientCallbackList = new List<IClient>();
 
@@ -50,9 +48,16 @@ namespace ShareWare.ServiceLibrary
         public ShareService()
         {
             OperationContext.Current.Channel.Closing += Channel_Closing;
+            OperationContext.Current.Channel.Faulted += Channel_Faulted;
             UserLogin += ShareService_UserLogin;
             UserLeave += ShareService_UserLeave;
 
+        }
+
+        void Channel_Faulted(object sender, EventArgs e)
+        {
+            // string id = GetClientName();
+            // throw new NotImplementedException();
         }
 
         void BroadcastEvent(object sender, ServerEventArgs e, ServerEventHandler handler)
@@ -65,28 +70,47 @@ namespace ShareWare.ServiceLibrary
 
         void ShareService_UserLogin(object sender, ServerEventArgs e)
         {
-            Users user = e.User;
-            foreach (var item in _userDict)
+            try
             {
-                if (item.Key != user)
+                Users user = e.User;
+                lock (o)
                 {
-                    item.Value.NewUser(new OnlineUserInfo()
+                    foreach (var item in _userDict)
                     {
-                        UserName = user.UserName,
-                        ImageHash = user.ImageHash,
-                        NickName = user.NickName
-                    });
+                        if (item.Key != user)
+                        {
+                            item.Value.NewUser(new OnlineUserInfo()
+                            {
+                                UserName = user.UserName,
+                                ImageHash = user.ImageHash,
+                                NickName = user.NickName
+                            });
+                            //Thread.Sleep(1000);
+                        }
+                    }
                 }
+
+            }
+            catch (Exception)
+            {
+                //throw;
             }
         }
 
+
         void ShareService_UserLeave(object sender, ServerEventArgs e)
         {
-            if (e.User.UserName != null)
+            lock (o)
             {
-                foreach (var item in _userDict.Values)
+                if (e.User.UserName != null)
                 {
-                    item.UserLeave(e.User.UserName);
+                    foreach (var item in _userDict)
+                    {
+                        if (item.Key != e.User)
+                        {
+                            item.Value.UserLeave(e.User.UserName);
+                        }
+                    }
                 }
             }
         }
@@ -102,33 +126,49 @@ namespace ShareWare.ServiceLibrary
                     ServerEventArgs sea = new ServerEventArgs();
                     sea.User = keyPair.Key;
                     BroadcastEvent(sender, sea, UserLeave);
-                    _userDict.Remove(keyPair.Key);
+                    string asd = keyPair.Key.UserName;
 
+                    lock (o)
+                    {
+                        _userDict.Remove(keyPair.Key);
+                    }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
-                    Console.WriteLine(ex);
+                    // Console.WriteLine(ex);
                 }
             }
         }
 
         private string GetClientIp()
         {
-            //提供方法执行的上下文环境
+
             OperationContext context = OperationContext.Current;
-            //获取传进的消息属性
             MessageProperties properties = context.IncomingMessageProperties;
-            //获取消息发送的远程终结点IP和端口
             RemoteEndpointMessageProperty endpoint = properties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
             if (endpoint != null)
             {
-                return endpoint.Address;
+                if (endpoint.Address == "127.0.0.1")
+                {
+                    System.Net.IPAddress[] addressList = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+                    foreach (var item in addressList)
+                    {
+                        if (item.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            return item.ToString();
+                        }
+                    }
+
+                }
+                else
+                {
+                    return endpoint.Address;
+                }
+
             }
-            else
-            {
-                return EmptyIp;
-            }
+
+            return EmptyIp;
+
         }
 
         private int GetClientId()
@@ -181,12 +221,7 @@ namespace ShareWare.ServiceLibrary
                 return null;
             }
         }
-
-        public void BroadcastEvent(ServerEventArgs e, ServerEventHandler handler)
-        {
-
-        }
-
+        private static object o = new object();
         public int Login(string userName, string passWord, string mac)
         {
             Users user = null;
@@ -212,7 +247,10 @@ namespace ShareWare.ServiceLibrary
 
             try
             {
-                _userDict.Add(user, client);
+                lock (o)
+                {
+                    _userDict.Add(user, client);
+                }
             }
             catch (Exception)
             {
@@ -234,7 +272,11 @@ namespace ShareWare.ServiceLibrary
             }
 
 
-            BroadcastEvent(this, new ServerEventArgs() { User = user }, UserLogin);
+            //BroadcastEvent(this, new ServerEventArgs() { User = user }, UserLogin);
+            if (UserLogin != null)
+            {
+                UserLogin(this, new ServerEventArgs() { User = user });
+            }
 
             var userList = (from c in _userDict.Keys
                             where (c.UserID != user.UserID)
@@ -280,6 +322,20 @@ namespace ShareWare.ServiceLibrary
             }
 
             public int GetHashCode(ShareFile.FileInfoTransfer obj)
+            {
+                return 0;
+            }
+        }
+
+
+        protected class HashAndNameCompare : IEqualityComparer<FileInfoData>
+        {
+            public bool Equals(FileInfoData x, FileInfoData y)
+            {
+                return x.Hash == y.Hash && x.Name == y.Name;
+            }
+
+            public int GetHashCode(ShareFile.FileInfoData obj)
             {
                 return 0;
             }
@@ -404,6 +460,7 @@ namespace ShareWare.ServiceLibrary
                 }
             }
 
+            bool isComplete = false;
             using (TransactionScope ts = new TransactionScope())
             {
                 try
@@ -415,54 +472,17 @@ namespace ShareWare.ServiceLibrary
                     }
 
                     ts.Complete();
+                    isComplete = true;
                 }
                 catch (Exception)
                 {
-                    return false;
+                    isComplete = false;
+                    //return false;
                     // throw;
                 }
 
             }
-            #region MyRegion
-            //try
-            //{
-
-            //    foreach (var item in fileList)
-            //    {
-            //        var info = from c in _context.FileInfo.Local where (c.Hash == item.Hash) select c;
-
-            //        if (info.Count() == 0)
-            //        {
-            //            _context.FileInfo.Local.Add(new ShareWare.FileInfo() { Hash = item.Hash, Name = item.Name, Size = (int)item.Size });
-
-            //        }
-
-            //        var info1 = from c in _context.FileOwner.Local where (c.Hash == item.Hash && c.Name == item.Name) select c;
-            //        if (info1.Count() == 0)
-            //        {
-            //            _context.FileOwner.Local.Add(new FileOwner() { Hash = item.Hash, UserID = userId, Name = item.Name });
-            //        }
-
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.InnerException.Message);
-            //}
-
-            //try
-            //{
-            //    _context.SaveChanges();
-            //}
-            //catch (Exception e)
-            //{
-
-            //    Console.WriteLine(e.InnerException.Message);
-            //}
-
-            #endregion
-            return true;
+            return isComplete;
         }
 
         private bool BulkInser(DataTable table)
@@ -507,25 +527,32 @@ namespace ShareWare.ServiceLibrary
         {
 
             int id = GetClientId();
-            foreach (var item in fileList)
+            if (id < 0)
             {
-                var res = from c in _context.FileOwner
-                          where c.UserID == id && c.Hash == item.Hash
-                          select c;
-                foreach (var file in res)
+                return;
+            }
+            using (ShareWareEntities context = new ShareWareEntities())
+            {
+                foreach (var item in fileList)
                 {
-                    _context.FileOwner.Remove(file);
-                }
-                try
-                {
-                    _context.SaveChanges();
-                }
-                catch (Exception)
-                {
+                    var res = from c in context.FileOwner
+                              where c.UserID == id && c.Hash == item.Hash
+                              select c;
+                    foreach (var file in res)
+                    {
+                        context.FileOwner.Remove(file);
+                    }
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
 
-                    // throw;
-                }
+                        // throw;
+                    }
 
+                }
             }
 
         }
@@ -537,14 +564,9 @@ namespace ShareWare.ServiceLibrary
             var result = from c in _context.FileOwner
                          where (c.UserID == id)
                          select c;
-            int nCount = 0;
+
             foreach (var item in result)
             {
-
-                if (item.FileInfo == null)
-                {
-                    nCount++;
-                }
 
                 FileInfoTransfer file = new FileInfoTransfer();
                 try
@@ -564,7 +586,7 @@ namespace ShareWare.ServiceLibrary
             return list;
         }
 
-        public List<FileInfoData> SearchFile(List<string> nameList)
+        public List<FileInfoData> SearchFile(List<string> nameList, bool mustOnline)
         {
             int id = GetClientId();
 
@@ -599,8 +621,26 @@ namespace ShareWare.ServiceLibrary
                 inter = inter.Intersect(resultList[i]);
             }
 
+            var onlineResult = (from b in _userDict.Keys
+                                group b.UserID by b into a
+                                from c in inter
+                                where a.Contains(c.UserId)
+                                select c).ToList();
 
-            return inter.Distinct().ToList();
+            var offlineResult = inter.ToList().Except(onlineResult).ToList();
+
+            foreach (var item in onlineResult)
+            {
+                item.IsOnline = true;
+            }
+
+            var re = (onlineResult.Concat(offlineResult)).Distinct(new HashAndNameCompare()).ToList();
+
+
+
+
+            return re;
+            //return inter.Distinct().ToList();
         }
 
         public int DownloadRequest(string hash, int nPort)
@@ -624,11 +664,9 @@ namespace ShareWare.ServiceLibrary
             return users.Count();
         }
 
-
         public void TickTack()
         {
-            int t = 1;
-
+            //Tick
         }
 
         internal static string ComputeStringMd5(string str)
@@ -692,7 +730,6 @@ namespace ShareWare.ServiceLibrary
             }
         }
 
-
         public Bitmap DownloadUserImage(string name)
         {
             int id = GetClientId();
@@ -714,7 +751,6 @@ namespace ShareWare.ServiceLibrary
                 }
                 catch (Exception)
                 {
-
                     return null;
                 }
 
@@ -788,13 +824,6 @@ namespace ShareWare.ServiceLibrary
             {
                 item.ReceiveChatRoomMessage(msg, user.UserName, user.NickName);
             }
-        }
-
-        string _chatMsg;
-        public string GetChatRoomMessage()
-        {
-
-            return _chatMsg;
         }
 
         public UserInfo DownloadUserInfo(int userId)
@@ -894,6 +923,69 @@ namespace ShareWare.ServiceLibrary
             }
 
             return true;
+        }
+
+
+        public void RemoveNotExistShreFile(string hash)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                using (ShareWareEntities context = new ShareWareEntities())
+                {
+                    var file = from c in context.FileOwner
+                               where (c.UserID == id && c.Hash == hash)
+                               select c;
+                    foreach (var item in file)
+                    {
+                        context.FileOwner.Remove(item);
+                    }
+                    context.SaveChanges();
+                }
+
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        public void RemoveNotExistShreFileList(List<string> hashList)
+        {
+            int id = GetClientId();
+            if (id < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                using (ShareWareEntities context = new ShareWareEntities())
+                {
+                    foreach (var hash in hashList)
+                    {
+                        var file = from c in context.FileOwner
+                                   where (c.UserID == id && c.Hash == hash)
+                                   select c;
+                        foreach (var item in file)
+                        {
+                            context.FileOwner.Remove(item);
+                        }
+                    }
+
+                    context.SaveChanges();
+                }
+
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
     }
 }

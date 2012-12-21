@@ -32,8 +32,14 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void RemoveOldFile(List<ShareFile.FileInfoTransfer> fileList);
 
+        [OperationContract(IsOneWay = true)]
+        void RemoveNotExistShreFile(string hash);
+
+        [OperationContract(IsOneWay = true)]
+        void RemoveNotExistShreFileList(List<string> hashList);
+
         [OperationContract]
-        List<FileInfoData> SearchFile(List<string> nameList);
+        List<FileInfoData> SearchFile(List<string> nameList, bool mustOnline);
 
         [OperationContract]
         int DownloadRequest(string hash, int nPort);

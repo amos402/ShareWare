@@ -49,7 +49,7 @@ namespace Socket_Library
             if (sock == null)
             {
                 sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint endpoit = new IPEndPoint(IPAddress.Any, 6000);//////////实际运行port要设置为0
+                IPEndPoint endpoit = new IPEndPoint(IPAddress.Any, 0);//////////实际运行port要设置为0
                 // sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);  //SocketOptionName.ReuseAddress是关键  
                 sock.Bind(endpoit);
                 sock.Listen(10);
@@ -62,8 +62,7 @@ namespace Socket_Library
             {
                 newsock = sock.Accept();
                 newsock.BeginReceive(b, 0, b.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), newsock);
-            }
-                );
+            });
             if (workerThreads > 0)//可用线程数>0
             {
                 ThreadPool.QueueUserWorkItem(wcb, null);
@@ -87,20 +86,20 @@ namespace Socket_Library
             Array.Copy(b1, b_s, b1.Length);
             Array.Copy(b2, 0, b_s, b1.Length, b2.Length);
             Thread t = new Thread(p =>
+            {
+                while (true)
                 {
-                    while (true)
+                    try
                     {
-                        try
-                        {
-                            newsock.Send(b_s, SocketFlags.None);
-                            break;
-                        }
-                        catch (Exception)
-                        {
-                            ;
-                        }
+                        newsock.Send(b_s, SocketFlags.None);
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        ;
                     }
                 }
+            }
             );
             t.Start();
         }
@@ -134,7 +133,7 @@ namespace Socket_Library
                 string send = System.Text.Encoding.UTF8.GetString(b2);
                 DateTime now = DateTime.Now;
                 string name = sri.Name + "  " + now;
-                if (sri.State == 2) ReceiveFile(send);
+                if (sri.State == 2 || sri.State == 3) ReceiveFile(send, sri.State);
                 //Console.WriteLine(sri.Name + "  " + now);
                 //Console.WriteLine(send);
 
@@ -199,21 +198,24 @@ namespace Socket_Library
             if (sock != null)
             {
                 sock.Close();
-                sock = null; 
+                sock = null;
             }
         }
 
-        public void SendFile(string filename)
+        public void SendFile(string filename, int id)
         {
-            State = 2;
+            State = id;
             SendChat(filename);
             State = 1;
             if (Control_DownLoadListView != null) Control_DownLoadListView.BeginInvoke(this, new EventArgs(), null, null);
         }
 
-        public void ReceiveFile(string filename)
+        public void ReceiveFile(string filename, int id)
         {
-            if (SendFile_R != null) SendFile_R.BeginInvoke(this, new MessageEventArgs() { Message = "", Name = filename }, null, null);
+            string type = "";
+            if (id == 2) type = filename.Substring(filename.LastIndexOf(".") + 1);
+            else type = "文件夹";
+            if (SendFile_R != null) SendFile_R.BeginInvoke(this, new MessageEventArgs() { Message = type, Name = filename }, null, null);
         }
     }
 

@@ -15,6 +15,9 @@ using System.Timers;
 
 namespace ShareWare.ShareFile
 {
+    /// <summary>
+    /// 包含共享文件信息与操作的类
+    /// </summary>
     [Serializable]
     public class ShareFiles
     {
@@ -56,6 +59,10 @@ namespace ShareWare.ShareFile
 
         [NonSerialized]
         private Thread _listThread;
+
+        [NonSerialized]
+        private AutoResetEvent _ret = new AutoResetEvent(true);
+
         //[NonSerialized]
 
 
@@ -70,11 +77,25 @@ namespace ShareWare.ShareFile
         int _sleepTime = 1000;
         KeyValuePair<string, string> _curPath;
 
-        static int _partSize = 16;
+        static int _partSize = 20;
 
+        [field: NonSerializedAttribute()]
+        public event EventHandler<ShareFileEvent> HashingPath;
+
+        [field: NonSerializedAttribute()]
         public event EventHandler<ShareFileEvent> OnePathComplete;
+
+        [field: NonSerializedAttribute()]
         public event EventHandler<ShareFileEvent> Hashing;
+
+        [field: NonSerializedAttribute()]
         public event EventHandler<ShareFileEvent> HashComplete;
+
+        [field: NonSerializedAttribute()]
+        public event EventHandler<ShareFileEvent> AllScanComplete;
+
+        [field: NonSerializedAttribute()]
+        public event EventHandler<ShareFileEvent> SharePathChanged;
 
         private DataTable _table;
 
@@ -102,6 +123,10 @@ namespace ShareWare.ShareFile
                         if (source.Exists)
                         {
                             _sharePath.Add(name, path);
+                            if (SharePathChanged != null)
+                            {
+                                SharePathChanged(this, new ShareFileEvent() { FileName = name, Path = path });
+                            }
                             _systemShareNameList.Add(name);
 
                         }
@@ -122,6 +147,10 @@ namespace ShareWare.ShareFile
             try
             {
                 _sharePath.Add(name, path);
+                if (SharePathChanged != null)
+                {
+                    SharePathChanged(this, new ShareFileEvent() { FileName = name, Path = path });
+                }
             }
             catch (Exception e)
             {
@@ -135,15 +164,59 @@ namespace ShareWare.ShareFile
         {
             try
             {
+                string path = _sharePath[shareName];
                 _sharePath.Remove(shareName);
+
+                if (SharePathChanged != null)
+                {
+                    SharePathChanged(this, new ShareFileEvent() { FileName = shareName, Path = path });
+                }
+
                 var pathKey = _shareFileDict.Keys.Single(T => T.Key == shareName);
+                var value = _shareFileDict[pathKey];
                 _shareFileDict.Remove(pathKey);
-               // _sharePath.Remove(pathKey.Key);
+                // _sharePath.Remove(pathKey.Key);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public bool ChangeSharePath(string oldShareName, SharePathData newPathData)
+        {
+            try
+            {
+                string path = _sharePath[oldShareName];
+                _sharePath.Remove(oldShareName);
+
+                _sharePath.Add(newPathData.ShareName, newPathData.Path);
+
+                if (SharePathChanged != null)
+                {
+                    SharePathChanged(this, new ShareFileEvent() { FileName = oldShareName, Path = path });
+                }
+
+                var pathKey = _shareFileDict.Keys.Single(T => T.Key == oldShareName);
+                var value = _shareFileDict[pathKey];
+                _shareFileDict.Remove(pathKey);
+
+                var newPathKeyPair = _sharePath.Single(T =>
+                    {
+                        return T.Key == newPathData.ShareName;
+                    });
+
+                _shareFileDict.Add(newPathKeyPair, value);
+                // _sharePath.Remove(pathKey.Key);
 
                 return true;
             }
             catch (Exception)
             {
+
                 return false;
             }
         }
@@ -154,25 +227,21 @@ namespace ShareWare.ShareFile
             _sleepTime = sleepTime;
         }
 
-        private void CheckIdle(object sender, ElapsedEventArgs e)
+        private void CheckIdle()
         {
-            //_performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
-            //Console.WriteLine("checking");
-            //float load;
-            //while ((load = _performCounter.NextValue()) > _activePercent)
-            //{
+           // _performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+            float load;
+            while ((load = _performCounter.NextValue()) > _activePercent)
+            {
             //    Console.WriteLine("{0}   sleeping", load);
-            //    //if (_listThread.ThreadState == System.Threading.ThreadState.Stopped)
-            //    //{
-                    
-            //    //}
-            //    //_listThread.Suspend();
-            //}
-           // _listThread.Resume();
-            // Console.WriteLine("working");
+                Thread.Sleep(1000);
+            }
+           
+            //Console.WriteLine("working");
         }
 
-        bool GetAll(DirectoryInfo dir, ref List<CustFileInfo> fileList)//搜索文件夹中的文件
+
+        bool GetAll(DirectoryInfo dir, ref List<CustFileInfo> fileList)
         {
             FileInfo[] allFile = dir.GetFiles();
 
@@ -202,8 +271,7 @@ namespace ShareWare.ShareFile
                             Hashing(this, sfEvent);
                         }
 
-                        //hash = HashHelper.ComputeSHA1(path);
-                        hashList = HashHelper.ComputeSHA1ByParts(path, _partSize);
+                        hashList = ComputeSHA1ByParts(path, _partSize);
                         SHA1 sha1 = SHA1.Create();
                         StringBuilder hashBuild = new StringBuilder();
 
@@ -238,20 +306,6 @@ namespace ShareWare.ShareFile
                         fileList.Add(new CustFileInfo() { File = fi, Hash = hash, HashList = hashList, Size = fi.Length, IsFolder = false });
                     }
                 }
-                //else if (!fi.Exists)
-                //{
-                //    CustFileInfo fileInfo = _shareFileDict[_curPath].Find(T => T.File.FullName == path);
-                //    if (fileInfo != null)
-                //    {
-                //        _removeList.Add(new FileInfoTransfer()
-                //        {
-                //            Hash = fileInfo.Hash,
-                //            Name = fileInfo.File.Name,
-                //            IsFolder = fileInfo.IsFolder,
-                //            Size = fileInfo.Size
-                //        });
-                //    }
-                //}
 
             }
 
@@ -268,6 +322,10 @@ namespace ShareWare.ShareFile
             return true;
         }
 
+        /// <summary>
+        /// 遍历扫描共享文件信息
+        /// </summary>
+        /// <returns>扫描线程对象</returns>
         public Thread ListFile()
         {
             _listThread = new Thread(new ThreadStart(ListFileThread));
@@ -278,21 +336,23 @@ namespace ShareWare.ShareFile
 
         private void RemoveNotExistFile()
         {
-            //_tempList = new Dictionary<KeyValuePair<string, string>, List<CustFileInfo>>();
             foreach (var item in _shareFileDict)
             {
-                var list = item.Value.FindAll(T => !T.File.Exists);
-                foreach (var file in list)
+                if (item.Value != null)
                 {
-                    _removeList.Add(new FileInfoTransfer()
+                    var list = item.Value.FindAll(T => !T.File.Exists);
+                    foreach (var file in list)
                     {
-                        Hash = file.Hash,
-                        Name = file.File.Name,
-                        IsFolder = file.IsFolder,
-                        Size = file.Size
-                    });
+                        _removeList.Add(new FileInfoTransfer()
+                        {
+                            Hash = file.Hash,
+                            Name = file.File.Name,
+                            IsFolder = file.IsFolder,
+                            Size = file.Size
+                        });
+                    }
+                    _tempList.Add(item.Key, list);
                 }
-                _tempList.Add(item.Key, list);
             }
 
             foreach (var item in _tempList.Keys)
@@ -306,19 +366,24 @@ namespace ShareWare.ShareFile
             _tempList.Clear();
         }
 
+        /// <summary>
+        /// 执行文件扫描的线程
+        /// </summary>
         private void ListFileThread()
         {
+            if (_ret == null)
+            {
+                _ret = new AutoResetEvent(true);
+            }
+            _ret.WaitOne();
+
             using (_performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total"))
             {
-                System.Timers.Timer t = new System.Timers.Timer();
-                t.Interval = 1000;
-                t.Elapsed += CheckIdle;
-                t.Start();
-
                 RemoveNotExistFile();
 
                 foreach (KeyValuePair<string, string> item in _sharePath)
                 {
+                    CheckIdle();
                     DirectoryInfo dirInfo = new DirectoryInfo(item.Value);
                     List<CustFileInfo> fileList = new List<CustFileInfo>();
                     try
@@ -329,6 +394,13 @@ namespace ShareWare.ShareFile
                         }
 
                         _curPath = item;
+
+                        ShareFileEvent arg = new ShareFileEvent() { Path = item.Value };
+                        if (HashingPath != null)
+                        {
+                            HashingPath(this, arg);
+                        }
+
                         if (GetAll(dirInfo, ref fileList))
                         {
                             if (_shareFileDict.ContainsKey(item))
@@ -347,21 +419,27 @@ namespace ShareWare.ShareFile
 
                         if (OnePathComplete != null)
                         {
-                            OnePathComplete(this, new ShareFileEvent() { Path = item.Value });
+                            OnePathComplete(this, arg);
                         }
 
                     }
                     catch (Exception e)
                     {
-                        System.Console.WriteLine("Something wrong {0}", e); //打印异常返回信息
+                        Console.WriteLine(e.Message);
 
                     }
                 }
 
+                if (AllScanComplete != null)
+                {
+                    AllScanComplete(this, null);
+                }
+
                 // t.Dispose();
                 _performCounter.Close();
-                t.Stop();
             }
+
+            _ret.Set();
         }
 
         public List<CustFileInfo> SearchFile(string fileName)
@@ -464,12 +542,18 @@ namespace ShareWare.ShareFile
             {
                 Directory.CreateDirectory(file.DirectoryName);
             }
+            try
+            {
+                FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+                BinaryFormatter bFormat = new BinaryFormatter();
+                bFormat.Serialize(stream, this);
+                stream.Close();
+            }
+            catch (Exception e)
+            {
 
-
-            FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
-            BinaryFormatter bFormat = new BinaryFormatter();
-            bFormat.Serialize(stream, this);
-            stream.Close();
+                Console.WriteLine(e.Message);
+            }
         }
 
         public static ShareFiles Deserialize(string path)
@@ -484,7 +568,14 @@ namespace ShareWare.ShareFile
             }
             catch (Exception e)
             {
-
+                try
+                {
+                    File.Delete(path);
+                }
+                catch (Exception)
+                {
+                    // throw;
+                }
                 Console.WriteLine(e);
             }
 
@@ -492,73 +583,61 @@ namespace ShareWare.ShareFile
 
         }
 
-        //private void CreateDataTable()
-        //{
-        //    DataTable fileInfo = new DataTable();
-        //    fileInfo.Columns.AddRange(new DataColumn[]{
-        //        new DataColumn("Hash", typeof(string)) {Unique = true},  
-        //        new DataColumn("Name", typeof(string)),  
-        //        new DataColumn("Size", typeof(long))}
-        //        );
 
+        public static List<string> ComputeSHA1ByParts(string fileName, int partSize)
+        {
+            List<string> hashList = null;
 
-        //    DataTable fileOwner = new DataTable();
-        //    fileOwner.Columns.AddRange(new DataColumn[]{
-        //        new DataColumn("ID", typeof(int)) { AutoIncrement = true},
-        //        new DataColumn("UserID", typeof(int)),
-        //        new DataColumn("Name", typeof(string)),
-        //        new DataColumn("Hash", typeof(string)) {AllowDBNull = true},
-        //        new DataColumn("Path", typeof(string)) {AllowDBNull = true},
-        //        new DataColumn("IsFolder", typeof(bool))
-        //    });
+            if (System.IO.File.Exists(fileName))
+            {
+                using (System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
+                {
+                    System.Security.Cryptography.SHA1 calculator = System.Security.Cryptography.SHA1.Create();
 
-        //    var fileList = GetTransferInfo();
-        //    foreach (var item in fileList)
-        //    {
-        //        string guid = null;
-        //        try
-        //        {
-        //            DataRow r1 = fileInfo.NewRow();
-        //            if (item.Hash == null && item.IsFolder == true)
-        //            {
-        //                guid = Guid.NewGuid().ToString();
-        //            }
-        //            else
-        //            {
-        //                guid = item.Hash;
-        //            }
-        //            r1[0] = guid;
-        //            r1[1] = item.Size;
-        //            fileInfo.Rows.Add(r1);
-        //        }
-        //        catch (Exception)
-        //        {
+                    long nSize = fs.Length;
 
-        //            //throw;
-        //        }
+                    hashList = new List<string>();
+                    int bufSize = partSize * 1024 * 1024;
+                    byte[] buffer = new byte[bufSize];
+                    byte[] hashBuf;
+                    int nLen = 0;
+                    int nPos = 0;
+                    int nCount = 0;
+                    StringBuilder strBuild = new StringBuilder();
 
+                    do
+                    {
+                        nLen = fs.Read(buffer, 0, bufSize);
+                        nPos += nLen;
 
-        //        try
-        //        {
-        //            DataRow r2 = fileOwner.NewRow();
-        //            r2[1] = userId;
-        //            r2[2] = item.Name;
-        //            r2[3] = guid;
-        //            r2[4] = item.Path;
-        //            r2[5] = item.IsFolder;
-        //            fileOwner.Rows.Add(r2);
-        //        }
-        //        catch (Exception)
-        //        {
+                        hashBuf = calculator.ComputeHash(buffer);
+                        strBuild.Clear();
+                        foreach (var item in hashBuf)
+                        {
+                            strBuild.Append(item.ToString("x2"));
+                        }
+                        hashList.Add(strBuild.ToString());
+                        nCount++;
 
-        //            // throw;
-        //        }
+                    } while (nPos != nSize);
 
-        //    }
-        //#endregion
+                    calculator.Clear();
+                    //hashSHA1 = stringBuilder.ToString();
+                }
+            }
 
-        //}
+            return hashList;
+        }
 
+        public string GetFileHash(string fullName)
+        {
+            var file = (from b in
+                            (from c in _shareFileDict.Values
+                             select c)
+                        select b.Find(T => T.File.FullName == fullName))
+                   .Single();
 
+            return file.Hash;
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace ShareWare.ShareFile
         public int UserId { get; set; }
         public string UserName { get; set; }
         public bool IsFolder { get; set; }
+        public bool IsOnline { get; set; }
         public string Type
         {
             get
@@ -27,15 +28,29 @@ namespace ShareWare.ShareFile
                 else return Name.Substring(Name.LastIndexOf(".") + 1);
             }
         }
+
+        public string  Online
+        {
+            get
+            {
+                if (IsOnline) return "在线资源";
+                else return "离线资源";
+            }
+        }
+        
         public int Source { get; set; }
         public ImageSource largeIcon { get; set; }
         public ImageSource smallIcon { get; set; }
 
-        public FileInfoDataList(string n, string t, long s, ImageSource l, ImageSource sm)
+        public FileInfoDataList()
+        {
+            Name = Hash = UserName = "";
+        }
+        public FileInfoDataList(string n, string t, long s, string hash, ImageSource l, ImageSource sm)
         {
             Name = n;
             Size = s;
-            Hash = "";
+            Hash = hash;
             largeIcon = l;
             smallIcon = sm;
             if (t == "文件夹") IsFolder = true;
@@ -50,6 +65,7 @@ namespace ShareWare.ShareFile
             UserName = f.UserName;
             IsFolder = f.IsFolder;
             Source = f.Source;
+            IsOnline = f.IsOnline;
         }
 
         public FileInfoDataList(FileInfoDataList f, ImageSource lar, ImageSource sma)
@@ -63,6 +79,7 @@ namespace ShareWare.ShareFile
             Source = f.Source;
             largeIcon = lar;
             smallIcon = sma;
+            IsOnline = f.IsOnline;
         }
     }
 }

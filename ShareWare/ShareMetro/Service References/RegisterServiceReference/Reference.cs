@@ -26,6 +26,9 @@ namespace ShareMetro.RegisterServiceReference {
         private System.Drawing.Bitmap ImageField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ImageHashField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsMaleField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -65,6 +68,19 @@ namespace ShareMetro.RegisterServiceReference {
                 if ((object.ReferenceEquals(this.ImageField, value) != true)) {
                     this.ImageField = value;
                     this.RaisePropertyChanged("Image");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ImageHash {
+            get {
+                return this.ImageHashField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImageHashField, value) != true)) {
+                    this.ImageHashField = value;
+                    this.RaisePropertyChanged("ImageHash");
                 }
             }
         }

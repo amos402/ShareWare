@@ -26,7 +26,7 @@ namespace ShareWare
         public string UserIP { get; set; }
         public string MAC { get; set; }
         public Nullable<bool> IsAdmin { get; set; }
-        public Nullable<bool> IsMale { get; set; }
+        public bool IsMale { get; set; }
         public string QQ { get; set; }
         public string Mail { get; set; }
         public string MicroBlog { get; set; }

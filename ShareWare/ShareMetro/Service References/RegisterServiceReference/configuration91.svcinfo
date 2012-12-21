@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="oTAudx25fPH1LV1OMYOVYawvg7k=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="WUx+CuNrN5FQtm3aO7vFSufLf5A=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="RegisterService">
       <properties>
@@ -118,10 +118,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="RegisterService" contract="RegisterServiceReference.IRegisterService" bindingType="netTcpBinding" address="net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/RegisterService" bindingConfiguration="RegisterService">
+    <endpoint name="RegisterService" contract="RegisterServiceReference.IRegisterService" bindingType="netTcpBinding" address="net.tcp://localhost:8734/ShareWareServiceLibrary/RegisterService/RegisterService" bindingConfiguration="RegisterService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:8733/Design_Time_Addresses/ShareWareServiceLibrary/Service/RegisterService</serializedValue>
+          <serializedValue>net.tcp://localhost:8734/ShareWareServiceLibrary/RegisterService/RegisterService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

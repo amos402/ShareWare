@@ -20,23 +20,12 @@ namespace ShareMetro
 
         public string FileName { get; set; }
         public bool IsBusy_Main { get; set; }
-
-
+        private DateTime _preSearchTime;
+        private TimeSpan _elapsedTime = new TimeSpan(0, 0, 3);
 
         public ICommand SearchCmd { get; set; }
         public ICommand DownLoadCmd { get; set; }
         public ICommand HeadIConCmd { get; set; }
-
-        private ObservableCollection<FileInfoData> _fileList = new ObservableCollection<FileInfoData>();
-        public ObservableCollection<FileInfoData> FileList
-        {
-            get { return _fileList; }
-            set
-            {
-                _fileList = value;
-                OnPropertyChanged("FileList");
-            }
-        }
 
         private ObservableCollection<FileInfoDataList> _fileItemInfo = new ObservableCollection<FileInfoDataList>();
         public ObservableCollection<FileInfoDataList> FileItemInfo
@@ -51,57 +40,80 @@ namespace ShareMetro
 
         public ObservableCollection<OnlineUserData> OnlineUser { get; private set; }
 
-        private static CancellationTokenSource _ctsSearch = new CancellationTokenSource();
+        private static CancellationTokenSource _ctsSearch;
 
         private void OnSearch(object obj)
         {
+            Islist = false;
+            if (_preSearchTime == null)
+            {
+                _preSearchTime = DateTime.Now;
+            }
+            else
+            {
+                var now = DateTime.Now;
+                var spanTime = now - _preSearchTime;
+                if (spanTime < _elapsedTime)
+                {
+                    MessageBox.Show(string.Format("每次搜索间隔不能超过{0}秒", _elapsedTime.Seconds.ToString()));
+                    return;
+                }
+                else
+                {
+                    _preSearchTime = DateTime.Now;
+                }
+            }
             IsBusy_Main = true;
             try
             {
                 string[] sp = FileName.Split(' ');
                 List<string> nameList = new List<string>();
                 nameList.AddRange(sp);
-                Task<List<FileInfoData>> task = _client.SearchFileAsync(nameList);
+                Task<List<FileInfoData>> task = _client.SearchFileAsync(nameList, true);
                 FileItemInfo.Clear();
-                _ctsSearch.Cancel();
-
+                if (_ctsSearch != null)
+                {
+                    if (!_ctsSearch.Token.CanBeCanceled)
+                    {
+                        _ctsSearch.Cancel();
+                    }
+                }
                 task.ContinueWith(T =>
                 {
                     ThreadPool.QueueUserWorkItem(delegate
                     {
-                        // searchMut.WaitOne();
                         IsBusy_Main = false;
                         if (T.Result != null)
                         {
                             _ctsSearch = new CancellationTokenSource();
                             Task listTask = new Task(() =>
-                                {
-                                    foreach (var item in T.Result)
-                                    {
-                                        FileInfoDataList f = new FileInfoDataList(item);
-                                        try
-                                        {
-                                            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
-                                                (ThreadStart)delegate
-                                                {
-                                                    if (item != null)
-                                                    {
-                                                        FileItemInfo.Add(f);
-                                                    }
-                                                    Thread.Sleep(30);
-                                                });
-                                        }
-                                        catch (Exception)
-                                        {
+                                 {
+                                     foreach (var item in T.Result)
+                                     {
 
-                                            //throw;
-                                        }
-                                    }
-                                }, _ctsSearch.Token);
+                                         try
+                                         {
+                                             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                                 (ThreadStart)delegate
+                                                 {
+                                                     FileInfoDataList f = new FileInfoDataList(item);
+                                                     f = ShowSharefile.GetInfo(f);
+                                                     if (item != null)
+                                                     {
+                                                         FileItemInfo.Add(f);
+                                                     }
+                                                     Thread.Sleep(30);
+                                                 });
+                                         }
+                                         catch (Exception)
+                                         {
+
+                                             //throw;
+                                         }
+                                     }
+                                 }, _ctsSearch.Token);
                             listTask.Start();
-                            //listTask.Wait();
                         }
-                        //searchMut.ReleaseMutex();
                     });
                 });
             }
@@ -109,7 +121,7 @@ namespace ShareMetro
             {
                 if (ErrorOccur != null)
                 {
-                    ErrorOccur(this, new ModelEvent(ModelEventType.Exception) { ModelException = e });
+                    ErrorOccur(this, new ModelEventArgs(ModelEventType.Exception) { ModelException = e });
                 }
             }
         }

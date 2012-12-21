@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using ShareWare.ShareFile;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,11 +33,28 @@ namespace ShareMetro
         public ICommand ConfirmCmd { get; set; }
 
         public ObservableCollection<string> DownloadPathList { get; set; }
-        public string CurrentDownloadPath { get; set; }
+
+        private string _currentDownloadPath;
+
+        public string CurrentDownloadPath
+        {
+            get { return _currentDownloadPath; }
+            set
+            {
+                _currentDownloadPath = value;
+                OnPropertyChanged("CurrentDownloadPath");
+                ShareWareSettings.Default.CurrentDownloadPath = _currentDownloadPath;
+                ShareWareSettings.Default.Save();
+            }
+        }
 
         public string ErrorInfo_Option { get; set; }
 
+        public string PasswordChangeSuccess { get; set; }
+        public bool IsShowChangedResult_Option { get; set; }
         public string NickName_Option { get; set; }
+
+        public string CurrPassword_Option { get; set; }
         public string Password_Option { get; set; }
         private string _password2_Option;
 
@@ -57,11 +75,13 @@ namespace ShareMetro
                 }
                 else if (NickName_Option != string.Empty)
                 {
+                    ErrorInfo_Option = string.Empty;
                     IsAcceptBtnEnable_Option = true;
                     IsConfirmBtnEnable_Option = true;
                 }
                 else
                 {
+                    ErrorInfo_Option = "两次密码不相符";
                     IsAcceptBtnEnable_Option = false;
                     IsConfirmBtnEnable_Option = false;
                 }
@@ -74,6 +94,7 @@ namespace ShareMetro
         public string Microblog_Option { get; set; }
         public string Signature_Option { get; set; }
         public BitmapImage Image_Option { get; set; }
+        public string ImageHash_Option { get; set; }
 
         private List<string> _systemSharePath = new List<string>();
 
@@ -91,8 +112,7 @@ namespace ShareMetro
                 {
                     case 0:
                         {
-                            var task = _client.DownloadUserInfoAsync(_id);
-                            task.ContinueWith(AfterDownloadUserInfo);
+
 
                         }
                         break;
@@ -183,17 +203,32 @@ namespace ShareMetro
             }
         }
 
+        private void GetUserInfo(object sender, ModelEventArgs e)
+        {
+            var task = _client.DownloadUserInfoAsync(_id);
+            task.ContinueWith(AfterDownloadUserInfo);
+        }
+
         private void AfterDownloadUserInfo(Task<ShareMetro.ServiceReference.UserInfo> T)
         {
             if (T.Result != null)
             {
-                NickName_Option = T.Result.NickName;
+                if (T.Result.NickName == null || T.Result.NickName == string.Empty)
+                {
+                    NickName_Option = T.Result.UserName;
+                }
+                else
+                {
+                    NickName_Option = T.Result.NickName;
+                }
+
                 QQ_Option = T.Result.QQ;
                 Microblog_Option = T.Result.MicroBlog;
                 Signature_Option = T.Result.Signature;
+                IsMale_Option = T.Result.IsMale;
+                ImageHash_Option = T.Result.ImageHash;
+
                 Image_Option = ImageSource;
-                Password_Option = T.Result.Password;
-                Password2_Option = T.Result.Password;
 
                 PropertyChanged += OptionPropertyChanged;
             }
@@ -221,13 +256,12 @@ namespace ShareMetro
             {
                 NickName = NickName_Option,
                 IsMale = IsMale_Option,
-                Password = ComputeStringMd5(Password_Option),
                 QQ = QQ_Option,
                 MicroBlog = Microblog_Option,
                 Signature = Signature_Option
             };
 
-            var task = _client.ChangedUserInfoAsync(userInfo);
+            var task = _client.ChangeUserInfoAsync(userInfo);
             task.ContinueWith(T =>
                 {
 
@@ -269,18 +303,42 @@ namespace ShareMetro
         private void ChangeSharePath()
         {
             // _sh.SharePath.Clear();
-            foreach (var item in _removePathList)
-            {
-                _sh.RemoveSharePath(item.ShareName);
-            }
-
-            foreach (var item in _sharePath)
-            {
-                if (!_sh.SharePath.ContainsKey(item.ShareName))
+            Task task = new Task(() =>
                 {
-                    _sh.AddSharePath(item.ShareName, item.Path);
-                }
-            }
+                    foreach (var item in _removePathList)
+                    {
+                        _sh.RemoveSharePath(item.ShareName);
+                    }
+
+                    foreach (var item in _sharePath)
+                    {
+                        if (!_sh.SharePath.ContainsKey(item.ShareName))
+                        {
+                            if (_sh.SharePath.ContainsValue(item.Path))
+                            {
+                                _sh.ChangeSharePath(item.ShareName, item);
+                            }
+                            else
+                            {
+                                _sh.AddSharePath(item.ShareName, item.Path);
+                            }
+                        }
+                    }
+
+                    //_sh.ChangeSharePath("asd", new SharePathData() { ShareName = "aaaaa", Path = @"R:\aaaaa" });
+                    //_sh.RemoveSharePath(@"asd");
+                    ////_sh.SharePath.Remove(@"asd");
+                    //_sh.SharePath.Add(@"asd1", @"R:\");
+
+                    _sh.ListFile().Join();
+
+                    _client.UploadShareInfo(_sh.FileList);
+                    _client.RemoveOldFile(_sh.RemoveList);
+                    _sh.SetUploaded(_sh.FileList);
+                    SaveShareInfo();
+                });
+            task.Start();
+
         }
 
         private void OnUploadImage(object obj)
@@ -320,11 +378,51 @@ namespace ShareMetro
             var success = dlg.ShowDialog();
             if (success == System.Windows.Forms.DialogResult.OK)
             {
-                SharePath.Add(new SharePathData() { Path = dlg.SelectedPath, ShareName = dlg.SelectedPath });
-                //_sh.SharePath.Add(dlg.SelectedPath, dlg.SelectedPath);
-                
-                //OnPropertyChanged("SharePath");
-                // CurrentDownloadPath = dlg.SelectedPath;
+                string[] splitStr = dlg.SelectedPath.Split('\\');
+                string shareName = splitStr[splitStr.Length - 1];
+                SharePath.Add(new SharePathData() { Path = dlg.SelectedPath, ShareName = shareName });
+            }
+        }
+
+        private void ChangeOption()
+        {
+            switch (Index_Option)
+            {
+                case 0:
+                    ChangePersonalInfo();
+                    break;
+
+                case 1:
+                    ChangeSharePath();
+                    break;
+                case 2:
+                    {
+                        ErrorInfo_Option = string.Empty;
+                        var task = _client.ChangePasswordAsync(ComputeStringMd5(CurrPassword_Option),
+                            ComputeStringMd5(Password_Option));
+
+                        task.ContinueWith(T =>
+                        {
+                            IsShowChangedResult_Option = true;
+                            if (T.Result == true)
+                            {
+                                PasswordChangeSuccess = "成功";
+                            }
+                            else
+                            {
+                                PasswordChangeSuccess = "失败";
+                            }
+                            Thread.Sleep(3000);
+                            IsShowChangedResult_Option = false;
+                            CurrPassword_Option = string.Empty;
+                            Password_Option = string.Empty;
+                            Password2_Option = string.Empty;
+                        });
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
 
@@ -341,20 +439,7 @@ namespace ShareMetro
 
         private void OnAcceptOpiton(object obj)
         {
-            switch (Index_Option)
-            {
-                case 0:
-                    ChangePersonalInfo();
-                    break;
-
-                case 1:
-                    ChangeSharePath();
-                    _sh.ListFile();
-                    break;
-
-                default:
-                    break;
-            }
+            ChangeOption();
         }
 
         private void OnCancelOpiton(object obj)
@@ -377,7 +462,8 @@ namespace ShareMetro
 
         private void OnConfirmOpiton(object obj)
         {
-
+            ChangeOption();
+            Index = _preIndex;
         }
     }
 }

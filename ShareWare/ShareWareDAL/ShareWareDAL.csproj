@@ -56,9 +56,7 @@
     <Compile Include="FileOwner.cs">
       <DependentUpon>ShareWareModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ShareConnDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShareDALDisLayer.cs" />
     <Compile Include="ShareWareModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

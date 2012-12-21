@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace ShareMetro
 {
-    public class ModelEvent : EventArgs
+    public class ModelEventArgs : EventArgs
     {
-        public ModelEvent(ModelEventType type)
+        public ModelEventArgs(ModelEventType type)
         {
             Type = type;
         }
         public ModelEventType Type { get; set; }
         public Exception ModelException { get; set; }
         public string FailedMessage { get; set; }
+        public string ErrorMessage { get; set; }
     }
 
     public enum ModelEventType
     {
         Exception,
-        Meesage
+        ErrorMessage,
+        ConnectMeesage
     }
 }

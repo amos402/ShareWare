@@ -1,13 +1,16 @@
-﻿<Controls:MetroWindow x:Class="ShareMetro.talkwin"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:local="clr-namespace:ShareMetro"
-        Title="TalK" Height="513.5" Width="565.5" xmlns:my="http://metro.mahapps.com/winfx/xaml/controls" WindowStyle="ToolWindow">
+﻿<my:MetroWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+                xmlns:my="http://metro.mahapps.com/winfx/xaml/controls" 
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                mc:Ignorable="d" x:Class="ShareMetro.talkwin"
+                xmlns:local="clr-namespace:ShareMetro"
+                Title="TalK" Height="513.5" Width="565.5" WindowStyle="ToolWindow" >
     <Window.DataContext>
         <local:talkwinMVVMcs />
     </Window.DataContext>
-    <Window.Resources>
+    <my:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
@@ -40,15 +43,11 @@
                 </Style.Triggers>
             </Style>
         </ResourceDictionary>
-    </Window.Resources>
+    </my:MetroWindow.Resources>
     <Grid x:Name="LayoutRoot">
-        <RichTextBox Margin="18,30.5,157.571,164" IsReadOnly="True">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="{Binding Message_Show}"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+        <Grid.InputBindings>
+            <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
+        </Grid.InputBindings>
         <RichTextBox Height="78" Margin="18,0,157.571,61.5" VerticalAlignment="Bottom">
             <FlowDocument>
                 <Paragraph>
@@ -59,11 +58,28 @@
         <Button Content="发送" Height="15" Margin="238,0,241.571,27" VerticalAlignment="Bottom" FontFamily="Microsoft YaHei UI" FontWeight="Normal" FontSize="10.667" Style="{DynamicResource SquareButtonStyle}" Opacity="0.595" Command="{Binding SendMessageCommand}"/>
         <Button Content="发送文件" Height="15" Margin="0,0,157.571,27" VerticalAlignment="Bottom" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Right" Width="69.929" FontSize="10.667" Style="{DynamicResource SquareButtonStyle}" Opacity="0.6" Command="{Binding SendFileCommand}"/>
         <Button Content="关闭" Height="15" Margin="151.5,0,0,27" VerticalAlignment="Bottom" FontFamily="Microsoft YaHei UI" FontWeight="Normal" HorizontalAlignment="Left" Width="69.929" FontSize="10.667" Style="{DynamicResource SquareButtonStyle}" Opacity="0.3" Command="{Binding CloseCommand}"/>
-        <Label Content="PacO_" HorizontalAlignment="Right" Height="25.5" Margin="0,157.5,49.571,0" VerticalAlignment="Top" Width="51.5"/>
-        <Label Content="男&#xd;&#xa;" HorizontalAlignment="Right" Margin="0,192,21.571,0" Width="112.5" Height="24.5" VerticalAlignment="Top"/>
-        <Label Content="XXX资源&#xa;" HorizontalAlignment="Right" Margin="0,220.5,21.571,230.5" Width="112.5"/>
-        <Label Content="拥有者&#xa;" HorizontalAlignment="Right" Margin="0,0,21.571,202" Width="112.5" Height="24.5" VerticalAlignment="Bottom"/>
+        <RichTextBox Margin="18,30.5,157.571,164" IsReadOnly="True">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding Message_Show}"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Label Content="PacO_" HorizontalAlignment="Right" Height="25.5" Margin="0,144.5,49.571,0" VerticalAlignment="Top" Width="51.5"/>
+        <Label Content="男&#xA;" HorizontalAlignment="Right" Margin="0,192,21.571,0" Width="112.5" Height="24.5" VerticalAlignment="Top"/>
+        <Label Content="XXX资源&#xA;" HorizontalAlignment="Right" Margin="0,220.5,21.571,230.5" Width="112.5"/>
+        <Label Content="拥有者&#xA;" HorizontalAlignment="Right" Margin="0,0,21.571,202" Width="112.5" Height="24.5" VerticalAlignment="Bottom"/>
         <Image HorizontalAlignment="Right" Height="112.5" Margin="0,0,21.571,27" VerticalAlignment="Bottom" Width="112.5" Source="images/placeholder_person.gif"/>
         <Image HorizontalAlignment="Right" Height="112.5" Margin="0,30.5,21.571,0" VerticalAlignment="Top" Width="112.5" Source="images/placeholder_person.gif"/>
+        <ListView HorizontalAlignment="Right" Margin="0,173.5,21.571,193" Width="112.5" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="{Binding Receiv_ListView}" SelectionChanged="DownList_ListView_SelectionChanged" ItemsSource="{Binding SendFileLsit}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="文件名字" DisplayMemberBinding="{Binding name}" Width="70" />
+                    <GridViewColumn Header="文件类型" DisplayMemberBinding="{Binding Type}" Width="70" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="接收" HorizontalAlignment="Right" Margin="0,0,83.071,164" VerticalAlignment="Bottom" Width="51" Height="16" FontWeight="Normal" FontFamily="Microsoft YaHei UI" Command="{Binding ReceivFileCommand}" Visibility ="{Binding Receiv_Buttom}"/>
+        <Button Content="拒绝" HorizontalAlignment="Right" Margin="0,0,21.571,164" VerticalAlignment="Bottom" Width="51" Height="16" FontWeight="Normal" FontFamily="Microsoft YaHei UI" Command="{Binding CancelFileCommand}" Visibility ="{Binding Cancel_Buttom}"/>
     </Grid>
-</Controls:MetroWindow>
+</my:MetroWindow>

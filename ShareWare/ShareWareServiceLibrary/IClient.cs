@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShareWare.ServiceLibrary
 {
+    
     public interface IClient
     {
         [OperationContract(IsOneWay = true)]
@@ -30,8 +31,6 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void ReceiveChatRoomMessage(string msg, string userName, string nickName);
 
-        [OperationContract(IsOneWay = true)]
-        void NewChatRoomMessage();
     }
 
 }
