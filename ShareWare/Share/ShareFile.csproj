@@ -7,7 +7,7 @@
     <ProjectGuid>{8502B2AF-4C2D-4116-8D6F-27C8EDC9F94A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ShareWare</RootNamespace>
+    <RootNamespace>ShareWare.ShareFile</RootNamespace>
     <AssemblyName>ShareFile</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,6 +55,7 @@
     <Compile Include="CustFileInfo.cs" />
     <Compile Include="FileInfoData.cs" />
     <Compile Include="FileInfoTransfer.cs" />
+    <Compile Include="HashHelper.cs" />
     <Compile Include="ShareFileEvent.cs" />
     <Compile Include="ShareFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

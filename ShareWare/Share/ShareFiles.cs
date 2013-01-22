@@ -77,7 +77,8 @@ namespace ShareWare.ShareFile
         int _sleepTime = 1000;
         KeyValuePair<string, string> _curPath;
 
-        static int _partSize = 20;
+        private static int _partSize = 20;
+        private static string _diskSerial = GetDiskSerialNumbers();
 
         [field: NonSerializedAttribute()]
         public event EventHandler<ShareFileEvent> HashingPath;
@@ -229,14 +230,14 @@ namespace ShareWare.ShareFile
 
         private void CheckIdle()
         {
-           // _performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+            // _performCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
             float load;
             while ((load = _performCounter.NextValue()) > _activePercent)
             {
-            //    Console.WriteLine("{0}   sleeping", load);
+                //    Console.WriteLine("{0}   sleeping", load);
                 Thread.Sleep(1000);
             }
-           
+
             //Console.WriteLine("working");
         }
 
@@ -271,24 +272,26 @@ namespace ShareWare.ShareFile
                             Hashing(this, sfEvent);
                         }
 
-                        hashList = ComputeSHA1ByParts(path, _partSize);
-                        SHA1 sha1 = SHA1.Create();
-                        StringBuilder hashBuild = new StringBuilder();
+                        hash = HashHelper.ComputeFileMd5(path, out hashList);
 
-                        foreach (var item in hashList)
-                        {
-                            hashBuild.Append(item);
-                        }
+                        //hashList = ComputeSHA1ByParts(path, _partSize);
+                        //SHA1 sha1 = SHA1.Create();
+                        //StringBuilder hashBuild = new StringBuilder();
 
-                        byte[] hashBuf = sha1.ComputeHash(Encoding.UTF8.GetBytes(hashBuild.ToString()));
-                        hashBuild.Clear();
+                        //foreach (var item in hashList)
+                        //{
+                        //    hashBuild.Append(item);
+                        //}
 
-                        foreach (var item in hashBuf)
-                        {
-                            hashBuild.Append(item.ToString("x2"));
-                        }
+                        //byte[] hashBuf = sha1.ComputeHash(Encoding.UTF8.GetBytes(hashBuild.ToString()));
+                        //hashBuild.Clear();
 
-                        hash = hashBuild.ToString();
+                        //foreach (var item in hashBuf)
+                        //{
+                        //    hashBuild.Append(item.ToString("x2"));
+                        //}
+
+                        //hash = hashBuild.ToString();
 
                         if (HashComplete != null)
                         {
@@ -315,7 +318,8 @@ namespace ShareWare.ShareFile
                 string path = item.FullName;
                 if (_shareFileDict[_curPath] == null || !_shareFileDict[_curPath].Exists(T => T.File.FullName == path))
                 {
-                    fileList.Add(new CustFileInfo() { File = item, Hash = Guid.NewGuid().ToString(), IsFolder = true });
+                    string hash = HashHelper.ComputeStringMd5(_diskSerial + item.FullName);
+                    fileList.Add(new CustFileInfo() { File = item, Hash = hash, IsFolder = true });
                 }
                 GetAll(item, ref fileList);
             }
@@ -639,5 +643,18 @@ namespace ShareWare.ShareFile
 
             return file.Hash;
         }
+
+        protected static string GetDiskSerialNumbers()
+        {
+            ManagementObjectSearcher s = new ManagementObjectSearcher("select * from Win32_DiskDrive");
+            ManagementObjectCollection collection = s.Get();
+            StringBuilder str = new StringBuilder();
+            foreach (var item in collection)
+            {
+                str.Append(item["SerialNumber"].ToString());
+            }
+            return str.ToString();
+        }
+
     }
 }
