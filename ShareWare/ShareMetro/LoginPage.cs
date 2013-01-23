@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.Prism.Commands;
 using ShareMetro.ServiceReference;
+using ShareWare.ShareFile;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -125,7 +126,7 @@ namespace ShareMetro
             IsBusy_Login = true;
             LoginAble = false;
             FailedMessage = string.Empty;
-            string md5Password = ComputeStringMd5(Password);
+            string md5Password = HashHelper.ComputeStringMd5(Password);
             if (IsRememberPwd)
             {
                 ShareWareSettings.Default.Password = Password;
@@ -201,7 +202,6 @@ namespace ShareMetro
 
         private void AfterLogin(object sender, ModelEventArgs e)
         {
-
             Index = 1;
             IsLoginInfoEnable = false;
             IsMenuEnable = true;
@@ -212,14 +212,22 @@ namespace ShareMetro
 
         private void MaintenanceShareInfo()
         {
-            if (ShareWareSettings.Default.LastLoginTime == null)
+            try
             {
+                if (ShareWareSettings.Default.LastLoginTime == null)
+                {
+                    ShareWareSettings.Default.LastLoginTime = DateTime.Now;
+                }
+                LastLoginTime = ShareWareSettings.Default.LastLoginTime;
+                TimeSpan timeSpan = DateTime.Now - LastLoginTime;
                 ShareWareSettings.Default.LastLoginTime = DateTime.Now;
+                ShareWareSettings.Default.Save();
             }
-            LastLoginTime = ShareWareSettings.Default.LastLoginTime;
-            TimeSpan timeSpan = DateTime.Now - LastLoginTime;
-            ShareWareSettings.Default.LastLoginTime = DateTime.Now;
-            ShareWareSettings.Default.Save();
+            catch (Exception)
+            {
+                
+               // throw;
+            }
 
             //if (timeSpan.Days >= _maintenanceDay)
             //{
@@ -255,12 +263,12 @@ namespace ShareMetro
         private int _errorCount = 0;
         private void RefreshHostUserImage(string userName, string imageHash)
         {
-            string hash = ComputeStringMd5(userName);
+            string hash = HashHelper.ComputeStringMd5(userName);
             string filePath = ImagePath + hash + ".jpg";
-
+            
             if (File.Exists(filePath))
             {
-                string fileHash = ComputeFileMd5(filePath);
+                string fileHash = HashHelper.ComputeFileMd5(filePath);
                 if (fileHash != imageHash)
                 {
                     Task<Bitmap> task = Client.DownloadUserImageAsync(userName);

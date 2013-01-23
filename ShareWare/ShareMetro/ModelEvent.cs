@@ -21,6 +21,7 @@ namespace ShareMetro
     public enum ModelEventType
     {
         Exception,
+        ServerTimeout,
         ErrorMessage,
         ConnectMeesage
     }

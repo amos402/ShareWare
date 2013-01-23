@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using ShareMetro.RegisterServiceReference;
 using ShareMetro.ServiceReference;
+using ShareWare.ShareFile;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -118,7 +119,7 @@ namespace ShareMetro
             RegisterServiceClient client = new RegisterServiceClient();
 
             User.Image = CutForSquare(new Bitmap(Image.StreamSource), 256, 100);
-            User.Password = MainWindowViewModel.ComputeStringMd5(Password);
+            User.Password = HashHelper.ComputeStringMd5(Password);
             Task<RegError> task = client.RegisterAsync(User);
             task.ContinueWith(T =>
                 {

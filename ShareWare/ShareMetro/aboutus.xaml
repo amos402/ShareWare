@@ -43,7 +43,7 @@
     <Grid>
     	<Image Margin="105,78,105,0" Source="images/shareware.jpg" Height="147.134" VerticalAlignment="Top"/>
     	<Label Content="版本 V0.9beta" Margin="198,222.134,204,218" FontSize="13.333"/>
-    	<Label Content="名称：ShareWare&#xa;功能：资源分享平台&#xa;&#xa;The Shareware team(c)   2012-2012&#xd;&#xa;&#xd;&#xa;制作人员：罗志明 蔡达 李陈聪 梁伯豪" Height="112" Margin="105,0,140,98" VerticalAlignment="Bottom"/>
+    	<Label Content="名称：ShareWare&#xa;功能：资源分享平台&#xa;&#xa;The Shareware team(c)   2012-2013&#xd;&#xa;&#xd;&#xa;制作人员：罗志明 蔡达 李陈聪 梁伯豪" Height="112" Margin="105,0,140,98" VerticalAlignment="Bottom"/>
     	<Button Content="确   定" Height="32" Margin="170,0,173,51" VerticalAlignment="Bottom" FontSize="13.333" FontWeight="Normal" FontFamily="Microsoft YaHei UI" Click="Button_Click_1"/>
     </Grid>
 </Controls:MetroWindow>

@@ -398,8 +398,8 @@ namespace ShareMetro
                 case 2:
                     {
                         ErrorInfo_Option = string.Empty;
-                        var task = _client.ChangePasswordAsync(ComputeStringMd5(CurrPassword_Option),
-                            ComputeStringMd5(Password_Option));
+                        var task = _client.ChangePasswordAsync(HashHelper.ComputeStringMd5(CurrPassword_Option),
+                            HashHelper.ComputeStringMd5(Password_Option));
 
                         task.ContinueWith(T =>
                         {

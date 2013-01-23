@@ -119,7 +119,7 @@ namespace ShareMetro
             {
                 try
                 {
-                    string path = _vm.ImagePath + MainWindowViewModel.ComputeStringMd5(user.UserName) + ".jpg";
+                    string path = _vm.ImagePath + HashHelper.ComputeStringMd5(user.UserName) + ".jpg";
                     if (File.Exists(path))
                     {
                         if (_vm.UserName == user.UserName)
@@ -189,12 +189,12 @@ namespace ShareMetro
         private static object o = new object();
         private void RefreshImage(string userName, string imageHash)
         {
-            string hash = MainWindowViewModel.ComputeStringMd5(userName);
+            string hash = HashHelper.ComputeStringMd5(userName);
             string filePath = _vm.ImagePath + hash + ".jpg";
 
             if (File.Exists(filePath))
             {
-                string fileHash = MainWindowViewModel.ComputeFileMd5(filePath);
+                string fileHash = HashHelper.ComputeFileMd5(filePath);
                 if (fileHash != imageHash)
                 {
                     Task<Bitmap> task = _vm.Client.DownloadUserImageAsync(userName);

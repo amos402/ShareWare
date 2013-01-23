@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Resources;
 using System.Windows.Threading;
+using Forms = System.Windows.Forms;
 
 namespace ShareMetro
 {
@@ -77,7 +78,6 @@ namespace ShareMetro
             LoginSuccess += AfterLogin;
             LogoutSuccess += OnAfterLogout;
             LoginFailed += OnLoginFailed;
-            ServerTimeout += OnServerTimeout;
 
             try
             {
@@ -224,7 +224,6 @@ namespace ShareMetro
 
         public event EventHandler<ModelEventArgs> LoginSuccess;
         public event EventHandler<ModelEventArgs> LoginFailed;
-        public event EventHandler ServerTimeout;
         public event EventHandler<ModelEventArgs> ErrorOccur;
 
         public ICommand AboutCmd { get; set; }
@@ -243,7 +242,7 @@ namespace ShareMetro
             switch (e.Type)
             {
                 case ModelEventType.Exception:
-                    MessageBox.Show(e.ModelException.Message);
+                    Forms.MessageBox.Show(e.ModelException.Message);
                     break;
 
                 case ModelEventType.ConnectMeesage:
@@ -251,6 +250,11 @@ namespace ShareMetro
                     break;
                 case ModelEventType.ErrorMessage:
                     MessageBox.Show(e.ErrorMessage);
+                    break;
+                case ModelEventType.ServerTimeout:
+                    _tickTimer.Stop();
+                    Forms.MessageBox.Show(e.ErrorMessage);
+                    LoginCmd.Execute(null);
                     break;
 
                 default:
@@ -263,12 +267,6 @@ namespace ShareMetro
             ErrorOccur(sender, e);
             IsBusy_Login = false;
             LoginAble = true;
-        }
-
-        void OnServerTimeout(object sender, EventArgs e)
-        {
-            OnErrorOccur(this, new ModelEventArgs(ModelEventType.ErrorMessage) { ErrorMessage = "与服务器断开连接,准备重新连接" });
-            LoginCmd.Execute(null);
         }
 
         private void InnerChannel_Closing(object sender, EventArgs e)
@@ -303,9 +301,9 @@ namespace ShareMetro
             }
             catch (Exception ex)
             {
-                if (ServerTimeout != null)
+                if (ErrorOccur != null)
                 {
-                    ServerTimeout(this, new EventArgs());
+                    ErrorOccur(this, new ModelEventArgs(ModelEventType.ServerTimeout) { ErrorMessage = "与服务器断开连接,准备重新连接" });
                 }
                 Console.WriteLine(ex);
             }
@@ -425,37 +423,7 @@ namespace ShareMetro
             return (mac);
         }
 
-        public static string ComputeStringMd5(string str)
-        {
-            MD5 md5 = MD5.Create();
-            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
-            StringBuilder hash = new StringBuilder();
-            foreach (var item in data)
-            {
-                hash.Append(item.ToString("x2"));
-            }
-            return hash.ToString();
-        }
 
-        public static string ComputeFileMd5(string path)
-        {
-            try
-            {
-                MD5 md5 = MD5.Create();
-                FileStream fs = File.OpenRead(path);
-                byte[] data = md5.ComputeHash(fs);
-                fs.Close();
-                StringBuilder hash = new StringBuilder();
-                foreach (var item in data)
-                {
-                    hash.Append(item.ToString("x2"));
-                }
-                return hash.ToString();
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
+
     }
 }

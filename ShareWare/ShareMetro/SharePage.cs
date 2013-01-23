@@ -205,11 +205,12 @@ namespace ShareMetro
                 DirectoryInfo di = new DirectoryInfo(strBaseDir);
                 DirectoryInfo[] diA = di.GetDirectories();
                 FileInfo[] files = di.GetFiles();
-                FileInfoDataList sh = new FileInfoDataList();
+               
                 foreach (var item in files)
                 {
                     Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate
                     {
+                        FileInfoDataList sh = new FileInfoDataList();
                         sh.Name = item.Name;
                         sh.IsFolder = false;
                         sh.Size = null;
@@ -221,6 +222,7 @@ namespace ShareMetro
                 {
                     Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate
                     {
+                        FileInfoDataList sh = new FileInfoDataList();
                         sh.Name = item.Name;
                         sh.IsFolder = true;
                         sh.Size = null;
