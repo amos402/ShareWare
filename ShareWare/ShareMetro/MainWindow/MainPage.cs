@@ -66,9 +66,9 @@ namespace ShareMetro
             IsBusy_Main = true;
             try
             {
-                string[] sp = FileName.Split(' ');
-                List<string> nameList = new List<string>();
-                nameList.AddRange(sp);
+                List<string> nameList = FileName.Split(' ').ToList();
+                nameList.RemoveAll(new Predicate<string>(T => T == string.Empty));
+
                 Task<List<FileInfoData>> task = _client.SearchFileAsync(nameList, true);
                 FileItemInfo.Clear();
                 if (_ctsSearch != null)

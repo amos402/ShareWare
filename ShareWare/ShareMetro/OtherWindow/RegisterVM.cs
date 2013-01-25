@@ -146,7 +146,6 @@ namespace ShareMetro
                     IsBusy = false;
                     client.Close();
                 });
-
         }
 
         private void RegisterFailed()

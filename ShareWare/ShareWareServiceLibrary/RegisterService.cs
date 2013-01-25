@@ -49,8 +49,7 @@ namespace ShareWare.ServiceLibrary
                         
                         var user = context.Users.Single(T => T.UserName == newUser.UserName);
                         string nameHash = ShareService.ComputeStringMd5(user.UserName);
-                        IDictionary section = (IDictionary)ConfigurationManager.GetSection("ImagePath");
-                        string imagePath = section["Path"].ToString();
+                        string imagePath = ConfigurationManager.AppSettings["ImagePath"];
                         if (!Directory.Exists(imagePath))
                         {
                             Directory.CreateDirectory(imagePath);

@@ -63,6 +63,7 @@ namespace ShareMetro
             IsBusy_Main = false;
 
             LoginCmd = new DelegateCommand<object>(OnLogin, arg => true);
+            ThirdLoginCmd = new DelegateCommand<object>(OnThirdLogin, arg => true);
             RegisterCmd = new DelegateCommand<object>(OnRegister, arg => true);
             SearchCmd = new DelegateCommand<object>(OnSearch, arg => true);
             UploadImageCmd = new DelegateCommand<object>(OnUploadImage, arg => true);
@@ -404,6 +405,7 @@ namespace ShareMetro
         private void OnAbout(object obj)
         {
             AboutDlg dlg = new AboutDlg();
+            dlg.Owner = Application.Current.MainWindow;
             dlg.ShowDialog();
         }
 

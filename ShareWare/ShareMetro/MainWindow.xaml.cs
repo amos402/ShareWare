@@ -11,7 +11,7 @@ using System.Windows.Resources;
 
 namespace ShareMetro
 {
-    public partial class MainWindow
+    public partial class MainWindow : MetroWindow
     {
         System.Windows.Forms.NotifyIcon notifyIcon;
         private bool _willClose = false;
@@ -57,6 +57,10 @@ namespace ShareMetro
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+#if DEBUG
+            return;
+#else
+
             if (_willClose)
             {
                 notifyIcon.Visible = false;
@@ -67,13 +71,15 @@ namespace ShareMetro
                 this.Hide();
                 _isShowed = false;
             }
+#endif
         }
 
-        private void ShowMainWindow()
+        public void ShowMainWindow()
         {
             this.Show();
             _isShowed = true;
             WindowState = System.Windows.WindowState.Normal;
+            this.Activate();
         }
 
         void notifyIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)

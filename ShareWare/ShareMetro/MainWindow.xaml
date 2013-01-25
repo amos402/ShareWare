@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:ShareMero="clr-namespace:ShareMetro" mc:Ignorable="d"
         x:Class="ShareMetro.MainWindow"
         Title="The ShareWare"
@@ -10,7 +10,7 @@
         Width="1019.5"
         ShowTitleBar="True"
         ShowIconOnTitleBar="true"
-        d:DataContext="{d:DesignInstance ShareMero:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="images/sharewareIcon.jpg"  FontFamily="/ShareMetro;component/font/#Microsoft YaHei UI">
+        d:DataContext="{d:DesignInstance ShareMero:MainWindowViewModel}" ResizeMode="CanMinimize" Icon="images/sharewareIcon.jpg"  FontFamily="/ShareMetro;component/font/#Microsoft YaHei UI" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -23,29 +23,9 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="LinkButtonForeground" Color="#1297FB"/>
-            <SolidColorBrush x:Key="LinkButtonForegroundHighlighted" Color="#55AAFF"/>
-            <Style x:Key="LinkButton" TargetType="{x:Type Button}">
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Foreground" Value="{StaticResource LinkButtonForeground}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <TextBlock><InlineUIContainer>
-        							<ContentPresenter/>
-        						</InlineUIContainer></TextBlock>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="true">
-                        <Setter Property="Foreground" Value="{StaticResource LinkButtonForegroundHighlighted}" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
 
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            
             <DataTemplate x:Key="DataTemplate1">
                 <Grid HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="96">
                     <Image Source="{Binding Image}" Height="20" Width="20" RenderTransformOrigin="0.5,0.45" Margin="4,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -61,7 +41,7 @@
             <Controls:ProgressIndicator ProgressColour="{StaticResource AccentColorBrush}" Height="6" Width="400" />
             <TextBlock Text="{Binding t_DownLoadSpeed}" Margin="3,7,5,3" Foreground="#9cd0e8" FontSize="12.333" />
             <TextBlock Text="{Binding t_UpLoadSpeed}" Margin="3,7,5,3" Foreground="#9cd0e8" FontSize="12.333" />
-            <Button Content="Set" IsTabStop="False" Command="{Binding SetBtnCmd}"/>
+            <Button Content="Settings" IsTabStop="False" Command="{Binding SetBtnCmd}"/>
             <Button Content="About us" IsTabStop="False" Command="{Binding AboutCmd}"/>
 
         </Controls:WindowCommands>
@@ -95,6 +75,7 @@
                             <CheckBox Content="自动登录" HorizontalAlignment="Right" Margin="0,0,269.803,258.495" Width="79.277" VerticalAlignment="Bottom" IsChecked="{Binding IsAutoLogin}"/>
                             <Button Content="注册" Height="27.96" Margin="0,0,400.53,204" VerticalAlignment="Bottom" Foreground="#FF686868" FontFamily="Microsoft YaHei UI" FontSize="14.667" FontWeight="Normal" HorizontalAlignment="Right" Width="90.775" Command="{Binding RegisterCmd}"/>
                             <Button Content="{Binding LoginBtnContent}" HorizontalAlignment="Right" Height="27.96" Margin="0,0,277.303,204" VerticalAlignment="Bottom" Width="90.775" Foreground="#FF686868" FontFamily="Microsoft JhengHei UI" FontSize="14.667"  Command="{Binding LoginCmd}" IsEnabled="{Binding  LoginAble}"/>
+                            <Button Content="Button" HorizontalAlignment="Left" Margin="561,390,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ThirdLoginCmd}"/>
                             <TextBlock Margin="453.999,229.578,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1" d:LayoutOverrides="VerticalAlignment"><Run Language="zh-cn" Text="密   码:"/></TextBlock>
                             <TextBlock Margin="452.999,177.413,491.805,0" TextWrapping="Wrap" Height="20.217" VerticalAlignment="Top" FontSize="14.667" Foreground="#FFA1A1A1"><Run Language="zh-cn" Text="用户名"/><Run Language="zh-cn" Text=":"/></TextBlock>
                             <Controls:ProgressRing IsActive="{Binding  IsBusy_Login}" HorizontalAlignment="Stretch" Margin="464.195,0,475.305,109.315" VerticalAlignment="Bottom" d:LayoutOverrides="Width"/>
@@ -109,6 +90,7 @@
                                 </TextBlock.RenderTransform>
                             </TextBlock>
                             <Image Width="180" HorizontalAlignment="Left" Margin="251,174.63,0,204" Height="180" Source="{Binding ImageSource}"/>
+
                         </Grid>
                         <!--<Slider Height="23" HorizontalAlignment="Left" Margin="273,119,0,0" Name="slider1" VerticalAlignment="Top" Width="218" Maximum="100" Value="50" />-->
                     </Grid>

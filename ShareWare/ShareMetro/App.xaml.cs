@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 
 namespace ShareMetro
@@ -14,21 +17,22 @@ namespace ShareMetro
     {
         public App()
         {
-            #if DEBUG
+#if DEBUG
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
-            #endif
+#endif
         }
 
-        void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             try
             {
                 HandleException(e.Exception);
                 e.Handled = true;
             }
-            catch
+            catch(IOException)
             {
-
+                MessageBox.Show(e.Exception.Message);
+                //Console.WriteLine(e.Exception.Message);
             }
         }
 
@@ -49,5 +53,56 @@ namespace ShareMetro
             System.IO.File.AppendAllText(logpath, "\r\n----------------------footer--------------------------\r\n");
 
         }
+
+        public void Activate()
+        {
+            // Reactivate application's main window
+            MainWindow win = this.MainWindow as MainWindow;
+            if (win != null)
+            {
+                win.ShowMainWindow();
+            }
+        }
+
+        [STAThread]
+        public static void Main(string[] args)
+        {
+            SingleInstanceManager manager = new SingleInstanceManager();
+            manager.Run(args);
+        }
     }
+
+
+    public class SingleInstanceManager : WindowsFormsApplicationBase
+    {
+        App app;
+
+        public SingleInstanceManager()
+        {
+#if !DEBUG
+            this.IsSingleInstance = true;
+#endif
+        }
+
+        protected override bool OnStartup(Microsoft.VisualBasic.ApplicationServices.StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            // First time app is launched
+            SplashScreen splashScreen = new SplashScreen("/images/splashscreen1.png");
+            splashScreen.Show(true);
+            app = new App();
+            app.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
+            app.Run();
+            return false;
+        }
+
+        protected override void OnStartupNextInstance(StartupNextInstanceEventArgs eventArgs)
+        {
+            // Subsequent launches
+            base.OnStartupNextInstance(eventArgs);
+            app.Activate();
+        }
+    }
+
+
 }

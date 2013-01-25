@@ -5,7 +5,7 @@
      xmlns:local="clr-namespace:ShareMetro"
         xmlns:my="http://metro.mahapps.com/winfx/xaml/controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="ShareMetro.Register"
         Title="注册" Height="621.5" Width="603" WindowStyle="ToolWindow"
-    d:DataContext="{d:DesignInstance local:RegisterVM}" Icon="images/sharewareIcon.ico" ResizeMode="NoResize">
+    d:DataContext="{d:DesignInstance local:RegisterVM}" Icon="images/sharewareIcon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     
     <my:MetroWindow.Resources>
         <ResourceDictionary>
@@ -19,27 +19,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="LinkButtonForeground" Color="#1297FB"/>
-            <SolidColorBrush x:Key="LinkButtonForegroundHighlighted" Color="#55AAFF"/>
-            <Style x:Key="LinkButton" TargetType="{x:Type Button}">
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Foreground" Value="{StaticResource LinkButtonForeground}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <TextBlock><InlineUIContainer>
-        							<ContentPresenter/>
-        						</InlineUIContainer></TextBlock>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="true">
-                        <Setter Property="Foreground" Value="{StaticResource LinkButtonForegroundHighlighted}" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+    
         </ResourceDictionary>
     </my:MetroWindow.Resources>
 

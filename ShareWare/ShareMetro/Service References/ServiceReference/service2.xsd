@@ -9,11 +9,25 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="Login">
+  <xs:element name="OldLogin">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="passWord" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="mac" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OldLoginResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="OldLoginResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Login">
+    <xs:complexType>
+      <xs:sequence>
         <xs:element minOccurs="0" name="mac" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>

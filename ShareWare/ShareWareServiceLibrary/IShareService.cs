@@ -17,8 +17,12 @@ namespace ShareWare.ServiceLibrary
         [OperationContract(IsOneWay = true)]
         void TickTack();
 
-        [OperationContract(IsOneWay = false, IsInitiating = true)]
+        [Obsolete("User verify already in Validator")]
+        [OperationContract(IsOneWay = false, IsInitiating = true, Name = "OldLogin")]
         int Login(string userName, string passWord, string mac);
+
+        [OperationContract(IsOneWay = false, IsInitiating = true)]
+        int Login(string mac);
 
         [OperationContract(IsOneWay = true, IsTerminating = true)]
         void Logout();

@@ -45,6 +45,8 @@ namespace ShareWare.ServiceLibrary
 
         private readonly string EmptyIp = "0.0.0.0";
 
+        public static string ImagePath { get { return ConfigurationManager.AppSettings["ImagePath"].ToString(); } }
+
         public ShareService()
         {
             OperationContext.Current.Channel.Closing += Channel_Closing;
@@ -56,6 +58,7 @@ namespace ShareWare.ServiceLibrary
 
         void Channel_Faulted(object sender, EventArgs e)
         {
+            ServiceErrorHandler.HandleException(new Exception("Faulted"));
             // string id = GetClientName();
             // throw new NotImplementedException();
         }
@@ -91,7 +94,7 @@ namespace ShareWare.ServiceLibrary
                 }
 
             }
-            catch (Exception)
+            catch (InvalidOperationException)
             {
                 //throw;
             }
@@ -181,7 +184,7 @@ namespace ShareWare.ServiceLibrary
                 var keyPair = _userDict.Single(item => (item.Value == client));
                 id = keyPair.Key.UserID;
             }
-            catch (Exception)
+            catch (InvalidOperationException)
             {
 
                 return -1;
@@ -222,6 +225,8 @@ namespace ShareWare.ServiceLibrary
             }
         }
         private static object o = new object();
+
+       
         public int Login(string userName, string passWord, string mac)
         {
             Users user = null;
@@ -293,6 +298,79 @@ namespace ShareWare.ServiceLibrary
             return user.UserID;
 
         }
+
+        public int Login(string mac)
+        {
+            Users user = null;
+            try
+            {
+                user = _context.Users.Single(us => us.UserName == OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
+            }
+            catch (InvalidOperationException)
+            {
+
+                return -1;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+
+            user.UserIP = GetClientIp();
+            user.MAC = mac;
+            var client = OperationContext.Current.GetCallbackChannel<IClient>();
+
+            ClientCallbackList.Add(client);
+
+            try
+            {
+                lock (o)
+                {
+                    _userDict.Add(user, client);
+                }
+            }
+            catch (Exception)
+            {
+                if (_userDict.ContainsKey(user))
+                {
+                    Channel_Closing(_userDict[user], new ServerEventArgs() { Message = "你已经在其他位置登陆", User = user });
+                    _userDict[user] = client;
+                }
+            }
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+
+
+            //BroadcastEvent(this, new ServerEventArgs() { User = user }, UserLogin);
+            if (UserLogin != null)
+            {
+                UserLogin(this, new ServerEventArgs() { User = user });
+            }
+
+            var userList = (from c in _userDict.Keys
+                            where (c.UserID != user.UserID)
+                            select new OnlineUserInfo()
+                            {
+                                UserName = c.UserName,
+                                ImageHash = c.ImageHash,
+                                NickName = c.NickName
+                            }).ToList();
+
+
+            client.RefreshUserList(userList);
+
+            return user.UserID;
+
+        }
+
 
         public void Logout()
         {
@@ -588,6 +666,7 @@ namespace ShareWare.ServiceLibrary
 
         public List<FileInfoData> SearchFile(List<string> nameList, bool mustOnline)
         {
+            Debug.Assert(nameList.Count > 0);
             int id = GetClientId();
 
             if (id < 0)
@@ -597,30 +676,30 @@ namespace ShareWare.ServiceLibrary
 
             List<FileInfoData> newList = new List<FileInfoData>();
             List<IQueryable<FileInfoData>> resultList = new List<IQueryable<FileInfoData>>();
-            foreach (var item in nameList)
+
+
+            IQueryable<FileInfoData> inter;
+            string tempStr = nameList[0];
+
+            inter = (from c in _context.FileOwner
+                     where (c.Name.Contains(tempStr))
+                     select new FileInfoData()
+                     {
+                         UserId = c.UserID,
+                         Name = c.Name,
+                         Hash = c.Hash,
+                         Size = c.FileInfo.Size,
+                         UserName = c.Users.UserName,
+                         IsFolder = c.FileInfo.IsFolder
+                     });
+
+            for (int i = 1; i < nameList.Count; i++)
             {
-                var result = (from c in _context.FileOwner
-                              where (c.Name.Contains(item))
-                              select new FileInfoData()
-                              {
-                                  UserId = c.UserID,
-                                  Name = c.Name,
-                                  Hash = c.Hash,
-                                  Size = c.FileInfo.Size,
-                                  UserName = c.Users.UserName,
-                                  IsFolder = c.FileInfo.IsFolder
-                              });
-                resultList.Add(result);
+                tempStr = nameList[i];
+                inter = (from c in inter
+                         where (c.Name.Contains(tempStr))
+                         select c);
             }
-
-            var inter = from c in resultList[0]
-                        select c;
-
-            for (int i = 1; i < resultList.Count; i++)
-            {
-                inter = inter.Intersect(resultList[i]);
-            }
-
             var onlineResult = (from b in _userDict.Keys
                                 group b.UserID by b into a
                                 from c in inter
@@ -635,8 +714,6 @@ namespace ShareWare.ServiceLibrary
             }
 
             var re = (onlineResult.Concat(offlineResult)).Distinct(new HashAndNameCompare()).ToList();
-
-
 
 
             return re;
@@ -714,8 +791,7 @@ namespace ShareWare.ServiceLibrary
             {
                 var user = context.Users.Single(T => T.UserID == id);
                 string nameHash = ComputeStringMd5(user.UserName);
-                IDictionary section = (IDictionary)ConfigurationManager.GetSection("ImagePath");
-                string imagePath = section["Path"].ToString();
+                string imagePath = ImagePath;
                 if (!Directory.Exists(imagePath))
                 {
                     Directory.CreateDirectory(imagePath);
@@ -738,10 +814,9 @@ namespace ShareWare.ServiceLibrary
                 return null;
             }
 
-            IDictionary section = (IDictionary)ConfigurationManager.GetSection("ImagePath");
-            string imagePath = section["Path"].ToString();
+            string imagePath = ImagePath;
             string hash = ComputeStringMd5(name);
-            string path = imagePath + hash + ".jpg";
+            string path = ImagePath + hash + ".jpg";
             if (File.Exists(path))
             {
                 try

@@ -376,7 +376,15 @@ namespace ShareMetro
         {
             FileInfoDataList SeleteInfo1 = (FileInfoDataList)p;
             if (SeleteInfo1 == null) return;
-            if (SeleteInfo1.Hash.Length < 36)
+            #region MyRegion
+            //if (SeleteInfo1.Hash.Length < 36)
+            //{
+            //    MessageBox.Show("根目录不能下载");
+            //    return;
+            //} 
+            #endregion
+
+            if (SeleteInfo1.IsFolder == true)
             {
                 MessageBox.Show("根目录不能下载");
                 return;

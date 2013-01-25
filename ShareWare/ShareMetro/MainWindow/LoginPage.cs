@@ -29,6 +29,7 @@ namespace ShareMetro
 
         public ICommand LoginCmd { get; private set; }
         public ICommand RegisterCmd { get; private set; }
+        public ICommand ThirdLoginCmd { get; private set; }
 
         private int _maintenanceDay = 3;
 
@@ -153,11 +154,14 @@ namespace ShareMetro
                         {
                             _callBack = new CallBack(this);
                             _client = new ShareServiceClient(new InstanceContext(_callBack));
+                            _client.ClientCredentials.UserName.UserName = UserName;
+                            _client.ClientCredentials.UserName.Password = HashHelper.ComputeStringMd5(Password);
+
                             _client.InnerChannel.Closing += InnerChannel_Closing;
 
                             try
                             {
-                                _id = _client.Login(UserName, md5Password, GetFirstMac());
+                                _id = _client.Login(GetFirstMac());
 
                                 if (_id < 0)
                                 {
@@ -176,6 +180,10 @@ namespace ShareMetro
 
                                 IsBusy_Login = false;
                                 LoginAble = true;
+                            }
+                            catch (FaultException)
+                            {
+ 
                             }
                             catch (Exception)
                             {
@@ -225,38 +233,38 @@ namespace ShareMetro
             }
             catch (Exception)
             {
-                
-               // throw;
+
+                // throw;
             }
 
             //if (timeSpan.Days >= _maintenanceDay)
             //{
-                foreach (var item in _sh.ShareFileDict.Values)
+            foreach (var item in _sh.ShareFileDict.Values)
+            {
+                foreach (var item1 in item)
                 {
-                    foreach (var item1 in item)
-                    {
-                        item1.Uploaded = false;
-                    }
+                    item1.Uploaded = false;
                 }
-                var task = _client.DownloadShareInfoAsync();
-                task.ContinueWith(T =>
+            }
+            var task = _client.DownloadShareInfoAsync();
+            task.ContinueWith(T =>
+                {
+                    if (T.Result != null)
                     {
-                        if (T.Result != null)
-                        {
-                            var result = from c in T.Result
-                                         select c.Hash;
-                            var exist = from c in _sh.ShareFileDict
-                                        from b in c.Value
-                                        select b.Hash;
-                            var notExist = result.Except(exist);
-                            // _client.RemoveNotExistShreFileList(notExist.ToList());
+                        var result = from c in T.Result
+                                     select c.Hash;
+                        var exist = from c in _sh.ShareFileDict
+                                    from b in c.Value
+                                    select b.Hash;
+                        var notExist = result.Except(exist);
+                        // _client.RemoveNotExistShreFileList(notExist.ToList());
 
-                            foreach (var item in notExist)
-                            {
-                                _client.RemoveNotExistShreFile(item);
-                            }
+                        foreach (var item in notExist)
+                        {
+                            _client.RemoveNotExistShreFile(item);
                         }
-                    });
+                    }
+                });
             //}
         }
 
@@ -265,7 +273,7 @@ namespace ShareMetro
         {
             string hash = HashHelper.ComputeStringMd5(userName);
             string filePath = ImagePath + hash + ".jpg";
-            
+
             if (File.Exists(filePath))
             {
                 string fileHash = HashHelper.ComputeFileMd5(filePath);
@@ -282,9 +290,13 @@ namespace ShareMetro
                                 ImageSource = GetBitmapImageSource();
                             }
                         }
-                        catch (Exception)
+                        catch (System.Xml.XmlException ex)
                         {
-                            //throw;
+                            Console.WriteLine(ex.Message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
                         }
                     });
                 }
@@ -328,6 +340,13 @@ namespace ShareMetro
         private void OnRegister(object obj)
         {
             Register dlg = new Register();
+            dlg.Owner = Application.Current.MainWindow;
+            dlg.ShowDialog();
+        }
+
+        private void OnThirdLogin(object sender)
+        {
+            ThirdLogin dlg = new ThirdLogin();
             dlg.Owner = Application.Current.MainWindow;
             dlg.ShowDialog();
         }

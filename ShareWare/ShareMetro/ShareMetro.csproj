@@ -64,9 +64,15 @@
     <Reference Include="GrayscaleEffect">
       <HintPath>..\Lib\GrayscaleEffect.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\Lib\Microsoft.mshtml.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\Lib\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -91,11 +97,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <None Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="OtherWindow\aboutus.xaml.cs">
+    </None>
+    <Compile Include="aboutus.xaml.cs">
       <DependentUpon>aboutus.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow\CallBack.cs" />
@@ -109,7 +115,7 @@
     <Compile Include="Models\OnlineUserData.cs" />
     <Compile Include="MainWindow\OptionPage.cs" />
     <Compile Include="Models\PasswordHelper.cs" />
-    <Compile Include="OtherWindow\Register.xaml.cs">
+    <Compile Include="Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
     <Compile Include="OtherWindow\RegisterVM.cs" />
@@ -130,15 +136,18 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>ShareWareSettings.settings</DependentUpon>
     </Compile>
-    <Compile Include="OtherWindow\talkwin.xaml.cs">
+    <Compile Include="talkwin.xaml.cs">
       <DependentUpon>talkwin.xaml</DependentUpon>
     </Compile>
     <Compile Include="OtherWindow\talkwinMVVMcs.cs" />
-    <Page Include="OtherWindow\aboutus.xaml">
+    <Compile Include="ThirdLogin.xaml.cs">
+      <DependentUpon>ThirdLogin.xaml</DependentUpon>
+    </Compile>
+    <Page Include="aboutus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow\MainWindow.xaml">
+    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -146,7 +155,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow\MainWindow.xaml.cs">
+    <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -155,13 +164,17 @@
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
     </Page>
-    <Page Include="OtherWindow\Register.xaml">
+    <Page Include="Register.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="OtherWindow\talkwin.xaml">
+    <Page Include="talkwin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ThirdLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +191,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <SplashScreen Include="images\SplashScreen1.png" />
+    <Resource Include="images\SplashScreen1.png" />
     <Resource Include="images\sharewareIcon.ico" />
     <Resource Include="images\shareware.jpg" />
     <None Include="app.config" />
