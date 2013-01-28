@@ -19,7 +19,7 @@ namespace ShareMetro
     {
 
         public string FileName { get; set; }
-        public bool IsBusy_Main { get; set; }
+        public bool IsBusy_Main { get; private set; }
         private DateTime _preSearchTime;
         private TimeSpan _elapsedTime = new TimeSpan(0, 0, 3);
 
@@ -45,6 +45,7 @@ namespace ShareMetro
         private void OnSearch(object obj)
         {
             Islist = false;
+
             if (_preSearchTime == null)
             {
                 _preSearchTime = DateTime.Now;
